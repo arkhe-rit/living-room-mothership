@@ -1,0 +1,52 @@
+{
+    "name": "living-room",
+    "version": "1.0.0",
+    "description": "",
+    "type": "module",
+    "source": [
+        "src/index.html"
+    ],
+    "scripts": {
+        "start": "cross-env ENV=DEV PORT=5555 NODE_OPTIONS='--experimental-specifier-resolution=node' node src/translator/server.js",
+        "test": "cross-env NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest",
+        "format": "bash scripts/format.sh",
+        "format-check": "prettier --check . && python -m black . --check --include=\"\\.py\" --exclude=\"\\.(json|sh)\"",
+        "attach-githooks": "git config core.hooksPath gitHooks",
+        "prestart-translator": "npm install",
+        "pretest": "npm install",
+        "build": "parcel build"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/arkhe-rit/living-room.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/arkhe-rit/living-room/issues"
+    },
+    "homepage": "https://github.com/arkhe-rit/living-room#readme",
+    "devDependencies": {
+        "assert": "^2.0.0",
+        "events": "^3.3.0",
+        "jest": "^28.1.1",
+        "prettier": "^2.6.2",
+        "process": "^0.11.10",
+        "querystring-es3": "^0.2.1",
+        "stream-http": "^3.2.0",
+        "url": "^0.11.0",
+        "util": "^0.12.4"
+    },
+    "dependencies": {
+        "buffer": "^6.0.3",
+        "cross-env": "^7.0.3",
+        "express": "^4.18.1",
+        "koa": "^2.13.4",
+        "lodash": "^4.17.21",
+        "socket.io": "^4.5.1",
+        "socket.io-client": "^4.5.1"
+    },
+    "jest": {
+        "transform": {}
+    }
+}

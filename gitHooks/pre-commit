@@ -1,0 +1,15 @@
+#!/bin/sh
+FILES=$(git diff --cached --name-only --diff-filter=ACMR | sed 's| |\\ |g')
+[ -z "$FILES" ] && exit 0
+
+echo "$FILES"
+
+# Prettify all selected files
+echo "$FILES" | xargs npm run format --
+
+# Add back the modified/prettified files to staging
+echo "$FILES" | xargs git add
+
+npm run test
+
+exit 0 
