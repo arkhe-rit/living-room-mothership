@@ -1,34 +1,21 @@
 import Koa from "koa";
 import { createServer } from "http";
-import { Server } from "socket.io";
+import { networkInterfaces } from 'os';
+import { Server as SocketIOServer } from "socket.io";
 
 import { clientSocket, identifySocketAs } from "./socket";
 import { socketInterface, multiSocketInterface } from "./messagingInterface";
-import translateAlgebra from "./translateAlgebra";
-import refCardPaths from "./refCards";
-import * as pyr from "../observer/src/pythonRelay.js";
-import * as utils from "../observer/src/utils.js";
 import { convertAlgebra } from "./decodeAlgebra";
 
 import { sortCardsArr, cardsToAlgebra } from "../algebra/observer";
-//FIREBASE
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getDatabase, ref, push, onValue } from "firebase/database";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-// This server is largely unnecessary and should probably be replaced
-// with a simplest-possible server or no server at all.
-// Added initially because Koa is a lovely HTTP server, and it turns
-// out that the socket.io plugging-in here does much use the Koa
-// middleware.
-// Would be useful and retainable if we wanted to keep HTTP endpoints
-// around as an alternative interface to the server.
+
 const isDevEnvironment = process.env.ENV === "DEV" || !process.env.ENV;
-isDevEnvironment && console.log("In dev environment");
+if (isDevEnvironment)
+  console.log("In dev environment");
+
 const app = new Koa();
 const httpServer = createServer(app.callback());
-const io = new Server(httpServer, {
+const io = new SocketIOServer(httpServer, {
   cors: {
     origin: isDevEnvironment ? "" : "https://web-client-arkhe.herokuapp.com"
   },
@@ -36,9 +23,6 @@ const io = new Server(httpServer, {
 });
 
 const port = process.env.PORT;
-
-const pythonProcess = pyr.startPython(refCardPaths, false);
-const processFrame = pyr.processFrame(pythonProcess);
 
 let lastTranslatedAlgebra = { arkhe_tag: "identity" };
 let projectorSockets = [];
@@ -66,6 +50,17 @@ io.on("connection", socket => {
   });
 
   const connection = socketInterface(socket);
+
+  setTimeout(() => {
+    connection.send('test', {a: {b: ['c', 1]}});
+  }, 6000);
+
+  // console.time('pressure reading');
+  socket.on("pressure_reading", (msg) => {
+    // console.timeEnd('pressure reading');
+    // console.time('pressure reading');
+    console.log("Received:", msg.value);
+  });
 
   //projector code
   socket.on("projector/identify", reply => {
@@ -95,43 +90,29 @@ io.on("connection", socket => {
       console.log("bitmap frame");
       let arr = data[0].split(",");
 
-      let dataSet = [];
-      try {
-        console.time("frame");
-        dataSet = await processFrame(arr[1]);
-        console.timeEnd("frame");
-      } catch (e) {
-        reply(e);
-        return;
-      }
-
-      const observedAlgebra = cardsToAlgebra(dataSet);
-      reply(observedAlgebra);
-
-      if (
-        JSON.stringify(observedAlgebra) !== JSON.stringify(lastObservedAlgebra)
-      ) {
-        translatorConn.send("observer/algebra-observed", observedAlgebra);
-
-        lastObservedAlgebra = observedAlgebra;
-      }
+      
+      reply('received');
     });
   });
 
   connection.on("observer/algebra-observed", ({ data, reply }) => {
-    lastTranslatedAlgebra = translateAlgebra(data[0]);
+    // lastTranslatedAlgebra = translateAlgebra(data[0]);
 
-    multiSocketInterface(projectorSockets).send(
-      "translator/algebra-translated",
-      lastTranslatedAlgebra
-    );
+    // multiSocketInterface(projectorSockets).send(
+    //   "translator/algebra-translated",
+    //   lastTranslatedAlgebra
+    // );
 
     //reply(data[0]); //For debugging
   });
 });
 
 httpServer.listen(port, () => {
-  console.log("Translator listening on port", port);
+  const ipAddress = networkInterfaces()?.['Wi-Fi']
+    ?.find(intf => intf.family === 'IPv4')
+    ?.address;
+
+  console.log(`Translator listening at ${ipAddress}:${port}`);
 });
 
 // logger
