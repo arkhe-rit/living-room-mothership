@@ -1,14 +1,8 @@
 import Koa from "koa";
 import { createServer } from "http";
 import { networkInterfaces } from 'os';
-import { Server as SocketIOServer } from "socket.io";
-
-import { clientSocket, identifySocketAs } from "./socket";
-import { socketInterface, multiSocketInterface } from "./messagingInterface";
-import { convertAlgebra } from "./decodeAlgebra";
-
-import { sortCardsArr, cardsToAlgebra } from "../algebra/observer";
 import { setupSocketIO } from "./setupSocketIO";
+import { setupObservers } from "../observers";
 
 const port = process.env.PORT;
 const isDevEnvironment = process.env.ENV === "DEV" || !process.env.ENV;
@@ -19,6 +13,9 @@ const app = new Koa();
 const httpServer = createServer(app.callback());
 
 const obsSockets = setupSocketIO(httpServer);
+
+obsSockets.map(setupObservers)
+  .subscribe(io => io.run());
 
 httpServer.listen(port, () => {
   const ipAddress = networkInterfaces()?.['Wi-Fi']

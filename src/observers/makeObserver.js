@@ -12,6 +12,7 @@ const makeObserver = (
           observer.next(msg.value)
         };
 
+        console.log(`Plugging "${socketMessageName}" into socket server`);
         socket.on(socketMessageName, listener);
     
         return () => socket.removeListener(socketMessageName, listener)

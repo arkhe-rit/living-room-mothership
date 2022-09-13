@@ -1,5 +1,7 @@
-const IO = (ioFunction) => {
-  return {
+const IO = (ioFunction = () => {}) => {
+  const io = ioFunction.bind({});
+
+  const methods = {
     _tag: 'io',
     run: () => ioFunction(),
     map: (f) => IO(() => {
@@ -14,7 +16,11 @@ const IO = (ioFunction) => {
       return result.flat();
     }),
     flatMap: (f) => IO(ioFunction).map(f).flat()
-  }
+  };
+
+  Object.assign(io, methods);
+
+  return io;
 }
 
 export { IO };

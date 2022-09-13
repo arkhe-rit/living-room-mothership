@@ -1,4 +1,5 @@
 import { Observable, multicast } from "observable-fns"
+import { Server as SocketIOServer } from "socket.io";
 
 const setupSocketIO = (httpServer) => {
   const io = new SocketIOServer(httpServer, {
