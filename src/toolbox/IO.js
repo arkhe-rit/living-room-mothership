@@ -8,6 +8,7 @@ const IO = (ioFunction = () => {}) => {
       return f(ioFunction());
     }),
     flat: () => IO(() => {
+      debugger;
       const result = ioFunction();
       if (typeof result === 'function')
         return result();

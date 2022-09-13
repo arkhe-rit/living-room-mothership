@@ -6,7 +6,9 @@ const makeObserver = (
 ) => {
   return {
     plugInToSocket: (socket) => IO(() => {
+      debugger;
       return multicast(new Observable(observer => {
+        debugger;
         const listener = (msg, reply) => {
           console.log("Received:", msg.value);
           observer.next(msg.value)

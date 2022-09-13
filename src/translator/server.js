@@ -15,7 +15,10 @@ const httpServer = createServer(app.callback());
 const obsSockets = setupSocketIO(httpServer);
 
 obsSockets.map(setupObservers)
-  .subscribe(io => io.run());
+  .subscribe(io => {
+    debugger;
+    io.run();
+  });
 
 httpServer.listen(port, () => {
   const ipAddress = networkInterfaces()?.['Wi-Fi']

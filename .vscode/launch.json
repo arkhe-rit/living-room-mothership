@@ -1,17 +1,18 @@
 {
   "configurations": [
-  {
-    "name": "Launch via NPM",
-    "request": "launch",
-    "runtimeArgs": [
-      "run-script",
-      "start"
-    ],
-    "runtimeExecutable": "npm",
-    "skipFiles": [
-      "<node_internals>/**"
-    ],
-    "type": "node"
-  }
+    {
+      "name": "Launch Program",
+      "program": "${workspaceFolder}/src/translator/server.js",
+      "request": "launch",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "node",
+      "env": { 
+        "ENV": "DEV",
+        "PORT": "5555",
+        "NODE_OPTIONS": "--experimental-specifier-resolution=node"
+      }
+    }
   ]
 }
