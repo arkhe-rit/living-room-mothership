@@ -6,6 +6,12 @@ const setupObservers = (socket) => {
 
   const presenceObserver = presence(socket);
 
+  socket.on('identify/presence', (msg, reply) => {
+    console.log("Received:", msg.value);
+    observer.next(msg.value)
+  });
+
+
   return presenceObserver;
 };
 

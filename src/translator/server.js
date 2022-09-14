@@ -23,6 +23,7 @@ obsSockets.map(setupObservers)
     const testObserver = observers;
 
     GLOBAL.testObserver = testObserver;
+    GLOBAL.testObserver
 
     testObserver.observerState
       .subscribe(state => {
@@ -44,15 +45,20 @@ const router = new Router();
 router
   .get('/control/test', async (ctx, next) => {
     console.log('IN /CONTROL/TEST');
-    GLOBAL.testObserver.sendControlMessage('test', 'body ody ody');
+    GLOBAL.testObserver.socket.emit('test', 'body ody ody');
   })
   .get('/control/set/zero', async (ctx, next) => {
     console.log('IN /CONTROL/ZERO');
-    GLOBAL.testObserver.sendControlMessage('control/set/zero');
+    GLOBAL.testObserver.socket.emit('control/set/zero');
   })
   .get('/control/set/high', async (ctx, next) => {
     console.log('IN /CONTROL/HIGH');
-    GLOBAL.testObserver.sendControlMessage('control/set/high');
+    GLOBAL.testObserver.socket.emit('control/set/high');
+  })
+  .get('/control/set/identity', async (ctx, next) => {
+    console.log('IN /CONTROL/identity');
+    // TODO
+    GLOBAL.testObserver.socket.emit('control/set/high');
   });
 
 

@@ -6,9 +6,7 @@ const makeObserver = (
   evtsToState
 ) => {
   return (socket) => ({
-    sendControlMessage: (msgName, msg) => {
-      socket.emit(msgName);
-    },
+    socket,
     observerState: (
       multicast(new Observable(observer => {
         debugger;
