@@ -2,12 +2,15 @@ import { IO } from "../toolbox/IO";
 import { Observable, multicast } from "observable-fns"
 
 const makeObserver = (
-  socketMessageName
+  socketMessageName,
+  evtsToState
 ) => {
-  return {
-    plugInToSocket: (socket) => IO(() => {
-      debugger;
-      return multicast(new Observable(observer => {
+  return (socket) => ({
+    sendControlMessage: (msgName, msg) => {
+      socket.emit(msgName);
+    },
+    observerState: (
+      multicast(new Observable(observer => {
         debugger;
         const listener = (msg, reply) => {
           console.log("Received:", msg.value);
@@ -18,9 +21,10 @@ const makeObserver = (
         socket.on(socketMessageName, listener);
     
         return () => socket.removeListener(socketMessageName, listener)
-      }));
-    })
-  }
+      }))
+      .pipe(evtsToState)
+    )
+  })
 }
 
 export { makeObserver };

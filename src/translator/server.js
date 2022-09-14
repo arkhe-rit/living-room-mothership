@@ -1,4 +1,5 @@
 import Koa from "koa";
+import Router from '@koa/router';
 import { createServer } from "http";
 import { networkInterfaces } from 'os';
 import { setupSocketIO } from "./setupSocketIO";
@@ -14,11 +15,22 @@ const httpServer = createServer(app.callback());
 
 const obsSockets = setupSocketIO(httpServer);
 
+const GLOBAL = {};
+
 obsSockets.map(setupObservers)
-  .subscribe(io => {
+  .subscribe(observers => {
     debugger;
-    io.run();
+    const testObserver = observers;
+
+    GLOBAL.testObserver = testObserver;
+
+    testObserver.observerState
+      .subscribe(state => {
+        console.log('STATE', state);
+        return state;
+      });
   });
+  
 
 httpServer.listen(port, () => {
   const ipAddress = networkInterfaces()?.['Wi-Fi']
@@ -27,6 +39,26 @@ httpServer.listen(port, () => {
 
   console.log(`Translator listening at ${ipAddress}:${port}`);
 });
+
+const router = new Router();
+router
+  .get('/control/test', async (ctx, next) => {
+    console.log('IN /CONTROL/TEST');
+    GLOBAL.testObserver.sendControlMessage('test', 'body ody ody');
+  })
+  .get('/control/set/zero', async (ctx, next) => {
+    console.log('IN /CONTROL/ZERO');
+    GLOBAL.testObserver.sendControlMessage('control/set/zero');
+  })
+  .get('/control/set/high', async (ctx, next) => {
+    console.log('IN /CONTROL/HIGH');
+    GLOBAL.testObserver.sendControlMessage('control/set/high');
+  });
+
+
+app
+  .use(router.routes())
+  .use(router.allowedMethods());
 
 app.listen(3000);
 
