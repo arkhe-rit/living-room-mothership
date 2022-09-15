@@ -6,7 +6,9 @@ const setupSocketIO = (httpServer) => {
     cors: {
       origin: ''
     },
-    maxHttpBufferSize: 1e8
+    maxHttpBufferSize: 1e8,
+    pingTimeout: 60000,
+    pingInterval: 10000
   });
 
   return multicast(new Observable(observer => {

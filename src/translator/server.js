@@ -17,19 +17,22 @@ const obsSockets = setupSocketIO(httpServer);
 
 const GLOBAL = {};
 
-obsSockets.map(setupObservers)
+obsSockets.flatMap(setupObservers)
   .subscribe(observers => {
-    debugger;
-    const testObserver = observers;
+    GLOBAL.observers = observers;
 
-    GLOBAL.testObserver = testObserver;
-    GLOBAL.testObserver
-
-    testObserver.observerState
-      .subscribe(state => {
-        console.log('STATE', state);
-        return state;
-      });
+    Object.values(observers)
+      .map(o => o.observerState)
+      // .map(stateObs => stateObs.subscribe(state => {
+      //   console.log('STATE', state);
+      //   return state;
+      // }));
+      
+    observers['chair-chord'].observerState.subscribe(state => {
+      console.log('chair');
+      console.log(state);
+      console.log(Object.keys(observers));
+    })
   });
   
 
@@ -45,24 +48,40 @@ const router = new Router();
 router
   .get('/control/test', async (ctx, next) => {
     console.log('IN /CONTROL/TEST');
-    GLOBAL.testObserver.socket.emit('test', 'body ody ody');
+
+    ctx.identifiedObserver?.socket.emit('test', 'body ody ody');
+  })
+  .get('/control/set/debug', async (ctx, next) => {
+    console.log('IN /CONTROL/SET/DEBUG');
+
+    ctx.identifiedObserver?.socket.emit('control/set/debug');
   })
   .get('/control/set/zero', async (ctx, next) => {
     console.log('IN /CONTROL/ZERO');
-    GLOBAL.testObserver.socket.emit('control/set/zero');
+    ctx.identifiedObserver?.socket.emit('control/set/zero');
   })
   .get('/control/set/high', async (ctx, next) => {
     console.log('IN /CONTROL/HIGH');
-    GLOBAL.testObserver.socket.emit('control/set/high');
+    ctx.identifiedObserver?.socket.emit('control/set/high');
   })
   .get('/control/set/identity', async (ctx, next) => {
     console.log('IN /CONTROL/identity');
     // TODO
-    GLOBAL.testObserver.socket.emit('control/set/high');
+    ctx.identifiedObserver?.socket.emit('control/set/identity', ctx.query.new_id);
   });
 
 
 app
+  .use(async (ctx, next) => {
+    const {id} = ctx.query;
+
+    const identifiedObserver = Object.entries(GLOBAL.observers)
+      ?.find(([identity, obs]) => identity === id)
+      ?.[1];
+
+    ctx.identifiedObserver = identifiedObserver;
+    await next();
+  })
   .use(router.routes())
   .use(router.allowedMethods());
 
