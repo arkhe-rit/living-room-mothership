@@ -17,7 +17,7 @@ if (isDevEnvironment)
 const app = new Koa();
 const httpServer = createServer(app.callback());
 
-const { socketsByIdentityObs, messagesObs } = setupSocketIO(httpServer);
+const { socketsByIdentityObs, messagesObs, tvObs } = setupSocketIO(httpServer);
 const socketsByIdentity_io = latest(socketsByIdentityObs, {})
 
 const observations = makeObservations(messagesObs);
@@ -28,7 +28,9 @@ observations.subscribe((obs) => {
   STATE.observation = obs;
 });
 
-
+tvObs.subscribe((tv) => {
+  tv.emit('algebra', latestObservation_io());
+});
 
 httpServer.listen(port, () => {
   const ipAddress = networkInterfaces()?.['Wi-Fi']

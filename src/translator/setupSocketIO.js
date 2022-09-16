@@ -20,6 +20,7 @@ const setupSocketIO = (httpServer) => {
 
   const msgObs = new Subject();
   const socketObs = new Subject();
+  const tvObs = new Subject();
 
   let sockets = {};
 
@@ -40,6 +41,10 @@ const setupSocketIO = (httpServer) => {
     socket.on("connect_error", err => {
       console.log(`Socket connection error: ${err.message}`);
       id = null;
+    });
+
+    socket.on('identify/tv', () => {
+      tvObs.next(socket);
     });
 
     socket.on('identify', (msg) => {
@@ -64,7 +69,8 @@ const setupSocketIO = (httpServer) => {
 
   return {
     socketsByIdentityObs: multicast(socketObs),
-    messagesObs: multicast(msgObs)
+    messagesObs: multicast(msgObs),
+    tvObs: multicast(tvObs)
   };
 };
 

@@ -1,24 +1,24 @@
+import { interpretCount, interpretLeft, interpretRight } from "../algebra/interpret";
 import { clientSocket } from "../translator/socket";
 
 const video = document.querySelector("video");
 
 const projectorToTranslator = clientSocket();
-
-
-
-
-window.onload = function () {
-  init();
-};
+projectorToTranslator.on("connect", () => {
+  projectorToTranslator.emit('identify/tv');
+});
 
 // const initialState = await projectorToTranslator.send(
 //   "projector/initial-state"
 // );
 
-let currentState = decodeAlgebra(initialState);
+// let currentState = decodeAlgebra(initialState);
 
-projectorToTranslator.on(eventName, (arg1, arg2, reply) => {
-
+projectorToTranslator.on('algebra', (alg, reply) => {
+  const left = interpretLeft(alg);
+  const right = interpretRight(alg);
+  const count = interpretCount(alg);
+  console.log(`Left: ${left}, Right: ${right}, Count: ${count}`);
 });
 
 projectorToTranslator.on(

@@ -23,4 +23,12 @@ const makeAlgebra = (kind) => ({
     }
 });
 
-export { makeAlgebra };
+const match = (matchObject) => 
+  function match(alg) {
+    if (!("tag" in alg ))
+      throw new TypeError(`Cannot translate an object that is not an algebra`);
+
+    return matchObject[alg.tag](alg, match);
+  };
+
+export { makeAlgebra, match };
