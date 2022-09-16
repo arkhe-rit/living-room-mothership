@@ -1,4 +1,4 @@
-import { Observable, multicast } from "observable-fns"
+import { Observable, multicast, Subject } from "observable-fns"
 import { Server as SocketIOServer } from "socket.io";
 
 const setupSocketIO = (httpServer) => {
@@ -8,38 +8,64 @@ const setupSocketIO = (httpServer) => {
     },
     maxHttpBufferSize: 1e8,
     pingTimeout: 60000,
-    pingInterval: 10000
+    pingInterval: 5000
+  });
+  
+  io.engine.on("connection_error", err => {
+    console.log(err.req); // the request object
+    console.log(err.code); // the error code, for example 1
+    console.log(err.message); // the error message, for example "Session ID unknown"
+    console.log(err.context); // some additional error context
   });
 
-  return multicast(new Observable(observer => {
-    io.on("connection", socket => {
-      let id = socket.id;
-      console.log(`Server Connected to socket ${socket.id}`);
+  const msgObs = new Subject();
+  const socketObs = new Subject();
 
-      socket.on("disconnect", reason => {
-        console.log(`Disconnected from socket ${id}: ${reason}`);
-        id = null;
-      });
+  let sockets = {};
 
-      socket.on("connect_error", err => {
-        console.log(`Socket connection error: ${err.message}`);
-        id = null;
-      });
+  io.on("connection", socket => {
+    let id = socket.id;
+    let arkhe_identity = '???';
+    console.log(`Server Connected to socket ${socket.id}`);
 
-      observer.next(socket);
+    socket.on("disconnect", reason => {
+      console.log(`Disconnected from socket ${arkhe_identity}:${id}: ${reason}`);
+      id = null;
+
+      let newSockets = {...sockets};
+      delete newSockets[arkhe_identity];
+      sockets = newSockets;
     });
 
-    io.engine.on("connection_error", err => {
-      console.log(err.req); // the request object
-      console.log(err.code); // the error code, for example 1
-      console.log(err.message); // the error message, for example "Session ID unknown"
-      console.log(err.context); // some additional error context
-
-      observer.error(err);
+    socket.on("connect_error", err => {
+      console.log(`Socket connection error: ${err.message}`);
+      id = null;
     });
 
-    return () => { }
-  }));
+    socket.on('identify', (msg) => {
+      const {identity, state} = msg;
+
+      console.log('Identify: ', identity);
+
+      arkhe_identity = identity;
+      sockets = {...sockets, [identity]: socket};
+
+      socketObs.next(sockets);
+    })
+
+    socket.on('reading', (msg, reply) => {
+      // console.log("Received:", msg);
+
+      const {type, identity, value} = msg;
+
+      msgObs.next(msg);
+    });
+  });
+
+  return {
+    socketsByIdentityObs: multicast(socketObs),
+    messagesObs: multicast(msgObs)
+  };
 };
 
 export { setupSocketIO };

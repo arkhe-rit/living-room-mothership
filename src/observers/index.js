@@ -1,7 +1,6 @@
-import { Observable } from 'observable-fns';
-import { IO } from '../toolbox/IO';
+import { scan } from 'observable-fns';
+import { chairChordAlg } from '../algebra/chairChord';
 import { chairChord } from './chairChord';
-import { presence } from './presence';
 
 let arkheObservers = {};
 
@@ -14,25 +13,36 @@ const makeChairChord = () => (
   )
 );
 
-const setupObservers = (socket) => {
-  console.log('setting up observers');
+const sensorState = (obsMessages) => {
+  return obsMessages
+    .pipe(scan((acc, msg) => {
 
-  return new Observable(observer => {
-    socket.on('identify/presence', (msg, reply) => {
-      const {identity, state} = msg || {};
-      console.log("IDENTIFY: PRESENCE:", msg);
-      
-      arkheObservers[identity] = presence(socket, state);
-      arkheObservers['chair-chord'] = makeChairChord();
-  
-      observer.next(arkheObservers);
-    });
-  
-    arkheObservers['chair-chord'] = makeChairChord();
-  
-    observer.next(arkheObservers);
-  });
+      if (msg.type === 'sensor/pressure' && msg.identity === 'chair_1') {
+        return {...acc, chair_1: msg.value === 1};
+      }
+      if (msg.type === 'sensor/pressure' && msg.identity === 'chair_2') {
+        return {...acc, chair_2: msg.value === 1};
+      }
+
+      return acc;
+    }, {}));
+}
+
+const observationsFromSensors = (sensorStateObs) => {
+  return sensorStateObs
+    .map(state => {
+      const {identity: id, append: app, value: val} = chairChordAlg;
+      return app([
+        state['chair_1'] ? val('chair_1') : id(),
+        state['chair_2'] ? val('chair_2') : id(),
+        state['chair_3'] ? val('chair_3') : id(),
+        state['chair_4'] ? val('chair_4') : id()
+      ]);
+    })
+}
+
+const makeObservations = (obsMessages) => {
+  return observationsFromSensors(sensorState(obsMessages));
 };
 
-export {setupObservers};
-export * from './presence';
+export {makeObservations};

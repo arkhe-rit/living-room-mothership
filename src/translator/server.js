@@ -3,7 +3,11 @@ import Router from '@koa/router';
 import { createServer } from "http";
 import { networkInterfaces } from 'os';
 import { setupSocketIO } from "./setupSocketIO";
-import { setupObservers } from "../observers";
+import { latest } from "../toolbox/observables";
+import { chairChordAlg } from "../algebra/chairChord";
+import { makeObservations } from "../observers";
+
+const STATE = {};
 
 const port = process.env.PORT;
 const isDevEnvironment = process.env.ENV === "DEV" || !process.env.ENV;
@@ -13,28 +17,18 @@ if (isDevEnvironment)
 const app = new Koa();
 const httpServer = createServer(app.callback());
 
-const obsSockets = setupSocketIO(httpServer);
+const { socketsByIdentityObs, messagesObs } = setupSocketIO(httpServer);
+const socketsByIdentity_io = latest(socketsByIdentityObs, {})
 
-const GLOBAL = {};
+const observations = makeObservations(messagesObs);
+const latestObservation_io = latest(observations, chairChordAlg.identity());
 
-obsSockets.flatMap(setupObservers)
-  .subscribe(observers => {
-    GLOBAL.observers = observers;
+observations.subscribe((obs) => {
+  console.log('OBSER', obs);
+  STATE.observation = obs;
+});
 
-    Object.values(observers)
-      .map(o => o.observerState)
-      // .map(stateObs => stateObs.subscribe(state => {
-      //   console.log('STATE', state);
-      //   return state;
-      // }));
-      
-    observers['chair-chord'].observerState.subscribe(state => {
-      console.log('chair');
-      console.log(state);
-      console.log(Object.keys(observers));
-    })
-  });
-  
+
 
 httpServer.listen(port, () => {
   const ipAddress = networkInterfaces()?.['Wi-Fi']
@@ -49,25 +43,25 @@ router
   .get('/control/test', async (ctx, next) => {
     console.log('IN /CONTROL/TEST');
 
-    ctx.identifiedObserver?.socket.emit('test', 'body ody ody');
+    ctx.identifiedSocket?.emit('test', 'body ody ody');
   })
   .get('/control/set/debug', async (ctx, next) => {
     console.log('IN /CONTROL/SET/DEBUG');
 
-    ctx.identifiedObserver?.socket.emit('control/set/debug');
+    ctx.identifiedSocket?.emit('control/set/debug');
   })
   .get('/control/set/zero', async (ctx, next) => {
     console.log('IN /CONTROL/ZERO');
-    ctx.identifiedObserver?.socket.emit('control/set/zero');
+    ctx.identifiedSocket?.emit('control/set/zero');
   })
   .get('/control/set/high', async (ctx, next) => {
     console.log('IN /CONTROL/HIGH');
-    ctx.identifiedObserver?.socket.emit('control/set/high');
+    ctx.identifiedSocket?.emit('control/set/high');
   })
   .get('/control/set/identity', async (ctx, next) => {
     console.log('IN /CONTROL/identity');
     // TODO
-    ctx.identifiedObserver?.socket.emit('control/set/identity', ctx.query.new_id);
+    ctx.identifiedSocket?.emit('control/set/identity', ctx.query.new_id);
   });
 
 
@@ -75,11 +69,12 @@ app
   .use(async (ctx, next) => {
     const {id} = ctx.query;
 
-    const identifiedObserver = Object.entries(GLOBAL.observers)
+    const socketsByIdentity = socketsByIdentity_io();
+    const identifiedSocket = Object.entries(socketsByIdentity)
       ?.find(([identity, obs]) => identity === id)
       ?.[1];
 
-    ctx.identifiedObserver = identifiedObserver;
+    ctx.identifiedSocket = identifiedSocket;
     await next();
   })
   .use(router.routes())
