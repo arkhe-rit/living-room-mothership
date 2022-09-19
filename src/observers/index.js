@@ -16,12 +16,19 @@ const makeChairChord = () => (
 const sensorState = (obsMessages) => {
   return obsMessages
     .pipe(scan((acc, msg) => {
+      
 
       if (msg.type === 'sensor/pressure' && msg.identity === 'chair_1') {
         return {...acc, chair_1: msg.value === 1};
       }
       if (msg.type === 'sensor/pressure' && msg.identity === 'chair_2') {
         return {...acc, chair_2: msg.value === 1};
+      }
+      if (msg.type === 'sensor/pressure' && msg.identity === 'chair_3') {
+        return {...acc, chair_3: msg.value === 1};
+      }
+      if (msg.type === 'sensor/pressure' && msg.identity === 'chair_4') {
+        return {...acc, chair_4: msg.value === 1};
       }
 
       return acc;
@@ -31,12 +38,12 @@ const sensorState = (obsMessages) => {
 const observationsFromSensors = (sensorStateObs) => {
   return sensorStateObs
     .map(state => {
-      const {identity: id, append: app, value: val} = chairChordAlg;
+      const {identity: id, append: app, value} = chairChordAlg;
       return app([
-        state['chair_1'] ? val('chair_1') : id(),
-        state['chair_2'] ? val('chair_2') : id(),
-        state['chair_3'] ? val('chair_3') : id(),
-        state['chair_4'] ? val('chair_4') : id()
+        state['chair_1'] ? value('chair_1') : id(),
+        state['chair_2'] ? value('chair_2') : id(),
+        state['chair_3'] ? value('chair_3') : id(),
+        state['chair_4'] ? value('chair_4') : id()
       ]);
     })
 }

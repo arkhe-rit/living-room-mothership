@@ -61,7 +61,18 @@ const setupSocketIO = (httpServer) => {
     socket.on('reading', (msg, reply) => {
       // console.log("Received:", msg);
 
-      const {type, identity, value} = msg;
+      const {type, identity, value, threshold_zero, threshold_high, reading} = msg;
+
+      const min = Math.min(threshold_high, threshold_zero);
+      const max = Math.max(threshold_high, threshold_zero);
+
+      if (max === threshold_high) {
+        const threshold = min + (max - min) * .90;
+        msg.value = msg.reading > threshold ? 1 : 0;
+      } else {
+        const threshold = min + (max - min) * .10;
+        msg.value = msg.reading < threshold ? 1 : 0;
+      }
 
       msgObs.next(msg);
     });

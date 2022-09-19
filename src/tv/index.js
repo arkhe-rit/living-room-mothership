@@ -3,6 +3,8 @@ import { clientSocket } from "../translator/socket";
 
 const video = document.querySelector("video");
 
+showVideo(0);
+
 const projectorToTranslator = clientSocket();
 projectorToTranslator.on("connect", () => {
   projectorToTranslator.emit('identify/tv');
@@ -19,19 +21,25 @@ projectorToTranslator.on('algebra', (alg, reply) => {
   const right = interpretRight(alg);
   const count = interpretCount(alg);
   console.log(`Left: ${left}, Right: ${right}, Count: ${count}`);
+
+  algToIO(alg)();
 });
 
-projectorToTranslator.on(
-  "translator/algebra-translated",
-  ({ data, reply }) => {
-    console.log("Got data from translator");
-    console.log(data);
 
-    currentState = decodeAlgebra(data[0]);
-
-    const codeElement = document.querySelector("#display");
-    codeElement.innerText = currentState;
-
-    reply(`Interpreted as:\n${currentState}`);
+function algToIO(alg) {
+  const count = interpretCount(alg);
+  return () => {
+    showVideo(count);
   }
-);
+}
+
+function showVideo(i) {
+  document.querySelectorAll('video').forEach(elem => {
+    elem.style.display = 'none';
+  })
+
+  if (i === 0) document.querySelector('#static').style.display = 'block';
+  if (i === 1) document.querySelector('#luckyStrike').style.display = 'block';
+  if (i === 2) document.querySelector('#heroquest').style.display = 'block';
+  if (i === 3) document.querySelector('#rocCommercials').style.display = 'block';
+}

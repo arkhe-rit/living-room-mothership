@@ -3,21 +3,25 @@ import { match } from ".";
 const interpretRight = match({
   identity: () => null,
   value: ({value}) => value,
-  append: ({operands}, match) => (
-    operands.length
-      ? match(operands.slice(-1)[0])
+  append: ({operands}, match) => {
+    const nonIds = operands.filter(alg => alg.tag !== 'identity');
+
+    return nonIds.length
+      ? match(nonIds.slice(-1)[0])
       : match({tag: 'identity'})
-  )
+  }
 });
 
 const interpretLeft = match({
   identity: () => null,
   value: ({value}) => value,
-  append: ({operands}, match) => (
-    operands.length
-      ? match(operands[0])
+  append: ({operands}, match) => {
+    const nonIds = operands.filter(alg => alg.tag !== 'identity');
+
+    return nonIds.length
+      ? match(nonIds[0])
       : match({tag: 'identity'})
-  )
+  }
 });
 
 const interpretCount = match({
@@ -30,8 +34,19 @@ const interpretCount = match({
   )
 });
 
+const interpretList = match({
+  identity: () => [undefined],
+  value: ({value}) => [value],
+  append: ({operands}, match) => (
+    operands.length
+      ? operands.map(match).flat()
+      : []
+  )
+});
+
 export {
   interpretLeft, 
   interpretRight,
-  interpretCount
+  interpretCount,
+  interpretList
 };
