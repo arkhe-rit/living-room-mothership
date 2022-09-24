@@ -42,4 +42,6 @@ function showVideo(i) {
   if (i === 1) document.querySelector('#luckyStrike').style.display = 'block';
   if (i === 2) document.querySelector('#heroquest').style.display = 'block';
   if (i === 3) document.querySelector('#rocCommercials').style.display = 'block';
+  if (i === 4) document.querySelector('#travis').style.display = 'block';
+
 }

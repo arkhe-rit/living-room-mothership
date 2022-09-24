@@ -16,19 +16,20 @@ const makeChairChord = () => (
 const sensorState = (obsMessages) => {
   return obsMessages
     .pipe(scan((acc, msg) => {
-      
+      if (msg.identity === 'chair_3')
+        console.log(msg.velocity / (msg.noise + 0.001));
 
       if (msg.type === 'sensor/pressure' && msg.identity === 'chair_1') {
-        return {...acc, chair_1: msg.value === 1};
+        return {...acc, chair_1: (msg.reading > 1000)};
       }
       if (msg.type === 'sensor/pressure' && msg.identity === 'chair_2') {
-        return {...acc, chair_2: msg.value === 1};
+        return {...acc, chair_2: msg.weight_reading > 1000};//Math.abs(msg.weight_reading - 70) > 50};
       }
       if (msg.type === 'sensor/pressure' && msg.identity === 'chair_3') {
-        return {...acc, chair_3: msg.value === 1};
+        return {...acc, chair_3: (msg.weight_reading > 1000)};
       }
       if (msg.type === 'sensor/pressure' && msg.identity === 'chair_4') {
-        return {...acc, chair_4: msg.value === 1};
+        return {...acc, chair_4: (msg.weight_reading > 1000)};
       }
 
       return acc;

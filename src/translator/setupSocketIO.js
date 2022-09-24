@@ -8,12 +8,16 @@ const setupSocketIO = (httpServer) => {
     },
     maxHttpBufferSize: 1e8,
     pingTimeout: 60000,
-    pingInterval: 5000
+    pingInterval: 5000,
+    transports: ["websocket", "polling"],
+    upgrade: false,
+    allowUpgrades: false
   });
   
   io.engine.on("connection_error", err => {
-    console.log(err.req); // the request object
-    console.log(err.code); // the error code, for example 1
+    console.log('connection_error:', err.code);
+    // console.log(err.req); // the request object
+    // console.log(err.code); // the error code, for example 1
     console.log(err.message); // the error message, for example "Session ID unknown"
     console.log(err.context); // some additional error context
   });

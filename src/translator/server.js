@@ -64,27 +64,48 @@ observations.subscribe((obs) => {
   }
 });
 
+observations.subscribe(obs => {
+  console.log(interpretList(obs));
+})
+
 let msgsDict = {chair_1: '', chair_2: '', chair_3: '', chair_4: ''};
 messagesObs.subscribe(msg => {
-  msgsDict[msg.identity] = `${msg.value ? '|' : '-'}: R${msg.reading} :: Z${msg.threshold_zero} - H${msg.threshold_high}`;
+  msgsDict[msg.identity] = `${msg.value ? '|' : '-'}: R${msg.reading} :: Z${msg.threshold_zero} - H${msg.threshold_high}, VEL${msg.velocity} W${msg.weight_reading} :: Z${msg.weight_zero} - H${msg.weight_high}`;
 });
-setInterval(() => {
-  console.log(JSON.stringify(msgsDict));
-}, 15)
 // setInterval(() => {
-//   // console.clear();
-//   console.log('chair_1: ' + msgsDict['chair_1']);
-//   console.log('chair_2: ' + msgsDict['chair_2']);
-//   console.log('chair_3: ' + msgsDict['chair_3']);
-//   console.log('chair_4: ' + msgsDict['chair_4']);
-// }, 200);
-
+//   console.log(JSON.stringify(msgsDict));
+// }, 15)
 setInterval(() => {
-  console.log('----------');
-  console.log('Current sockets:');
-  console.log(Object.keys(socketsByIdentity_io()));
-  console.log('----------');
-}, 5000);
+  // console.clear();
+  // console.log('chair_1: ' + msgsDict['chair_1']);
+  // console.log('chair_2: ' + msgsDict['chair_2']);
+  // console.log('chair_3: ' + msgsDict['chair_3']);
+  // console.log('chair_4: ' + msgsDict['chair_4']);
+}, 200);
+
+let last = 0;
+messagesObs.subscribe(msg => {
+
+  let here = Math.round(msg.velocity / (msg.noise + 0.001) / 3);
+  let accel = (here - last) * 60;
+
+  last = here;
+  
+  // console.clear();
+  // console.log(
+  //   Array.from({length: Math.abs(Math.round(msg.velocity / (msg.noise + 0.001) / 3))})
+  //     .map(n => '-')
+  //     .join('')
+  //   )
+  // console.log(accel);
+});
+
+// setInterval(() => {
+//   console.log('----------');
+//   console.log('Current sockets:');
+//   console.log(Object.keys(socketsByIdentity_io()));
+//   console.log('----------');
+// }, 5000);
 
 tvObs.subscribe((tv) => {
   tv.emit('algebra', latestObservation_io());
