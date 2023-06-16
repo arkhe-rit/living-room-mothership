@@ -8,7 +8,7 @@
     ],
     "scripts": {
         "start": "cross-env ENV=DEV PORT=5555 NODE_OPTIONS='--experimental-specifier-resolution=node' node src/translator/server.js",
-        "start-tv": "cross-env ENV=DEV PORT=4321 parcel src/tv/index.html --dist-dir ./dist/tv",
+        "start-tv": "cross-env ENV=DEV PORT=4321 parcel src/projector/legacy/index.html --dist-dir ./dist/tv",
         "test": "cross-env NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest",
         "format": "bash scripts/format.sh",
         "format-check": "prettier --check . && python -m black . --check --include=\"\\.py\" --exclude=\"\\.(json|sh)\"",
