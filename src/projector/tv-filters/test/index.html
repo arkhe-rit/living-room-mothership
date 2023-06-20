@@ -8,8 +8,19 @@
 </head>
 
 <body>
+    <span>
+        <label for="shader-select">Shader Choice: </label>
+        <select id="shader-select">
+            <option value = 0>None</option>
+            <option value = 1>TV 1</option>
+            <option value = 2>TV 2</option>
+            <option value = 3>TV 3</option>
+        </select>
+    </span>
+    <br>
+    <canvas id='backBuffer' hidden></canvas>
     <canvas id='myCanvas' width=700 height=700></canvas>
-
+    <video id='content' src="../../legacy/videos/heroquest.mp4" controls loop hidden></video>
     <script src="main.js" type="module"></script>
 </body>
 
