@@ -77,6 +77,7 @@ const fragShaders = [
     'frag-shader-1.glsl',
     'frag-shader-2.glsl',
     'frag-shader-3.glsl',
+    'frag-shader-4.glsl'
 ];
 const shaderPrograms = [];
 let shaderProgramIndex = 0;
