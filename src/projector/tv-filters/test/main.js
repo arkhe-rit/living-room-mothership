@@ -42,7 +42,7 @@ gl.viewport(0, 0, canvas.width, canvas.height);
 
 ///Shader Creation and Pogram Setup
 const vertexShaderSource = await fetchShaderSource('vert-shader.glsl');
-const fragmentShaderSource = await fetchShaderSource('frag-shader-1.glsl');
+const fragmentShaderSource = await fetchShaderSource('frag-shader-0.glsl');
 
 const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
 const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
@@ -59,6 +59,10 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+
+//flips the pixel order of read-in texture data since the underlying gl functions expect the data to be processed bottom left first,
+//but the image data is processed top left first
+gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 
 // Load the image
 const image = new Image();
@@ -82,10 +86,10 @@ const positionBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 const positions = [
     -1, 1,
-    1, 1,
-    1, -1,
-    1, -1,
     -1, -1,
+    1, -1,
+    1, -1,
+    1, 1,
     -1, 1
 ];
 
@@ -112,7 +116,7 @@ canvas.addEventListener('mousemove', (event) => {
     // Set the value of u_mouse uniform
     gl.uniform2f(uMouseLocation, uMouseX, uMouseY);
 });
-
+console.log(canvas.width, canvas.height);
 let frameCount = 0;
 function render() {
     frameCount++;
