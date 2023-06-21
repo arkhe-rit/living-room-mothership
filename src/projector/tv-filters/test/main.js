@@ -219,6 +219,13 @@ const initControls = () => {
         switchShader(event.target.value);
     }
     shaderSelect.value = shaderProgramIndex;
+
+    const videoSelect = document.getElementById('video-select');
+    videoSelect.onchange = (event) => {
+        video.play();
+        video.src = `../../legacy/videos/${videoSelect.value}`;
+        video.play();
+    }
 }
 
 (() => {
