@@ -80,7 +80,7 @@ const fragShaders = [
     'frag-shader-4.glsl'
 ];
 const shaderPrograms = [];
-let shaderProgramIndex = 0;
+let shaderProgramIndex = 1;
 const getShaderProgram = () => shaderPrograms[shaderProgramIndex];
 const loadShaders = async () => {
     console.log('Loading shaders...');
@@ -159,10 +159,30 @@ const initVertexBuffer = () => {
 }
 
 let frameCount = 0;
+//uniforms that are unique to each shader, the name of the property must be the same as the uniform in the shader
+const shaderUniforms = [
+    {},
+    {
+        u_vertMovementOpt: true,
+        u_vertJerkOpt: true,
+        u_horizonFuzzOpt: true,
+        u_bottomStaticOpt: true,
+        u_scanlineOpt: true,
+        rgbOffsetOpt: true,
 
+        u_jerkFreq: 0.2,
+        u_smallFuzzStr: 0.003,
+        u_largeFuzzStr: 0.004,
+        u_staticStr: 1.5,
+        u_staticBounce: 0.3
+    },
+    {},
+    {},
+    {}
+]
 //the render loop that runs every frame
 const render = () => {
-    console.log('Rendering...')
+    //console.log('Rendering...')
     //render the current frame of the video to the back buffer
     bbCTX.drawImage(video, 0, 0, backBuffer.width, backBuffer.height);
 
@@ -190,7 +210,7 @@ const render = () => {
     gl.clearColor(0, 0, 0, 1);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
-    // Set the uniform values
+    // Set the universal uniform values
     const u_resolutionLocation = gl.getUniformLocation(getShaderProgram(), 'u_resolution');
     const u_timeLocation = gl.getUniformLocation(getShaderProgram(), 'u_time');
     const u_textureLocation = gl.getUniformLocation(getShaderProgram(), 'u_texture');
@@ -206,7 +226,11 @@ const render = () => {
 
     // Pass the texture and noise texture
     gl.uniform1i(u_textureLocation, 0);
-    //gl.uniform1i(u_noiseTextureLocation, 1);
+
+    //per shader uniform settings
+    Object.keys(shaderUniforms[shaderProgramIndex]).forEach(key => {
+        gl.uniform1f(gl.getUniformLocation(getShaderProgram(), key), shaderUniforms[shaderProgramIndex][key]);
+    });
 
     // Draw the rectangle
     gl.drawArrays(gl.TRIANGLES, 0, 6);
@@ -215,19 +239,46 @@ const render = () => {
 
 const initControls = () => {
     const shaderSelect = document.getElementById('shader-select');
-    shaderSelect.onchange = (event) => {
-        switchShader(event.target.value);
+    shaderSelect.onchange = e => {
+        switchShader(shaderSelect.value);
+        //generate an html input field for each uniform in the shader and append them to the 'shader-settings' span
+        //if the value of the key is a boolean make a checkbox, otherwise make a number input
+        const settings = shaderUniforms[shaderProgramIndex];
+        const settingsSpan = document.getElementById('shader-settings');
+        settingsSpan.innerHTML = '';
+        Object.keys(settings).forEach(key => {
+            const type = typeof settings[key];
+            const newInput = document.createElement('input');
+            newInput.type = type === 'boolean' ? 'checkbox' : 'number';
+            newInput.id = key;
+            newInput.name = key;
+            if (type === 'boolean') {
+                newInput.checked = settings[key];
+            }
+            else {
+                newInput.value = settings[key];
+            }
+            newInput.onchange = e => {
+                settings[key] = type === 'boolean' ? e.target.checked : parseFloat(e.target.value);
+            }
+            const newLabel = document.createElement('label');
+            newLabel.htmlFor = key;
+            newLabel.innerHTML = key;
+            settingsSpan.appendChild(newLabel);
+            settingsSpan.appendChild(newInput);
+        });
     }
-    shaderSelect.value = shaderProgramIndex;
+    shaderSelect.onchange();
 
     const videoSelect = document.getElementById('video-select');
-    videoSelect.onchange = (event) => {
+    videoSelect.onchange = e => {
         video.play();
         video.src = `../../legacy/videos/${videoSelect.value}`;
         video.play();
     }
 }
 
+//init
 (() => {
     loadShaders().then(() => {
         initVertexBuffer();
