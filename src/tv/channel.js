@@ -1,21 +1,17 @@
-import { interpretCount, interpretLeft, interpretRight } from "../algebra/interpret";
+//import { interpretCount, interpretLeft, interpretRight } from "../algebra/interpret";
 import { clientSocket } from "../translator/socket";
 
+// Default Video State (Static)
 const video = document.querySelector("video");
-
 showVideo(0);
 
 const projectorToTranslator = clientSocket();
 projectorToTranslator.on("connect", () => {
-  projectorToTranslator.emit('identify/tv');
+  projectorToTranslator.emit('identify/channel');
 });
 
-// const initialState = await projectorToTranslator.send(
-//   "projector/initial-state"
-// );
-
-// let currentState = decodeAlgebra(initialState);
-
+// Original Architecture
+/*
 projectorToTranslator.on('algebra', (alg, reply) => {
   const left = interpretLeft(alg);
   const right = interpretRight(alg);
@@ -25,13 +21,19 @@ projectorToTranslator.on('algebra', (alg, reply) => {
   algToIO(alg)();
 });
 
-
 function algToIO(alg) {
   const count = interpretCount(alg);
   return () => {
     showVideo(count);
   }
 }
+*/
+
+projectorToTranslator.on('signal/tv/channel', (inputState, reply) => {       // inputState will be an integer between 0-9
+  let channel = Math.floor(inputState / 2);                                  // Converts inputState to a number between 0-4 for showVideo
+  showVideo(channel);
+})
+
 
 function showVideo(i) {
   document.querySelectorAll('video').forEach(elem => {
