@@ -1,0 +1,36 @@
+body {
+  background-color: #121212;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: Helvetica, sans-serif;
+  margin: 0;
+}
+
+/* Fullscreen Video View */
+/* video {
+  position: absolute;
+  top: 0px;
+  min-height: 100%;
+  height: 100%;
+} */
+
+/* Dev Dashboard View */
+video {
+  min-height: 40vh;
+  height: 40vh;
+}
+
+.side-by-side {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+}
+
+input {
+  margin-left: 1vw;
+  margin-right: 1vw;
+  width: 20vw;
+}
