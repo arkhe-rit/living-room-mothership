@@ -47,8 +47,14 @@ const setupSocketIO = (httpServer) => {
       id = null;
     });
 
-    socket.on('identify/tv', () => {
+    
+    socket.on('identify/channel', () => {
       tvObs.next(socket);
+      console.log("Channel Socket Identified");
+    });
+    socket.on('identify/filter', () => {
+      tvObs.next(socket);
+      console.log("Filter Socket Identified");
     });
 
     socket.on('identify', (msg) => {

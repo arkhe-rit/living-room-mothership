@@ -163,6 +163,21 @@ router
     ctx.identifiedSocket?.emit('signal/off');
   })
 
+  // Dashboard get calls
+  .get('/control/set/tv/channel', async (ctx, next) => {
+    console.log('IN /CONTROL/set/tv/channel');
+    latestTV_io()?.emit('signal/tv/channel', ctx.query.channel);
+  })
+  .get('/control/set/tv/filter', async (ctx, next) => {
+    console.log('IN /CONTROL/set/tv/filter');
+    latestTV_io()?.emit('signal/tv/filter', ctx.query.filter);
+  })
+  .get('/control/set/eink', async (ctx, next) => {
+    console.log('IN /CONTROL/set/eink');
+    latestTV_io()?.emit('signal/eink', ctx.query.filter);
+  })
+  
+
 
 app
   .use(async (ctx, next) => {

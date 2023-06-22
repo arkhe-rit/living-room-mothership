@@ -5,7 +5,7 @@
 
 const identifySocketAs = componentType => socket => () => {
   socket.emit(`${componentType}/identify`, response => {
-    //response will be "hi observer/porjector, initial state from translator"
+    //response will be "hi observer/projector, initial state from translator"
     console.log(`${response} received`);
   });
 };
