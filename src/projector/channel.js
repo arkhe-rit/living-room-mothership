@@ -4,6 +4,7 @@ import { clientSocket } from "../translator/socket";
 const video = document.querySelector("video");
 showVideo(0);
 
+/*
 const projectorToTranslator = clientSocket();
 projectorToTranslator.on("connect", () => {
   projectorToTranslator.emit('identify/channel');
@@ -14,6 +15,7 @@ projectorToTranslator.on('signal/tv/channel', (inputState, reply) => {       // 
   let channel = Math.floor(inputState / 2);                                  // Converts inputState to a number between 0-4 for showVideo
   showVideo(channel);
 })
+*/
 
 function showVideo(i) {
   document.querySelectorAll('video').forEach(elem => {
@@ -27,3 +29,5 @@ function showVideo(i) {
   if (i === 4) document.querySelector('#travis').style.display = 'block';
 
 }
+
+export { showVideo };

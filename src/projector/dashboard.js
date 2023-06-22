@@ -1,10 +1,11 @@
-//import { clientSocket } from "../translator/socket";
+import { showVideo } from "./channel"
 
 // When channel slider is updated, send a GET request to server
 document.querySelector('#channel').onchange = () => {
     document.querySelector('#channelState').innerHTML = document.querySelector('#channel').value;
 
-    fetch('http://localhost:5555/CONTROL/set/tv/channel?channel=' + document.querySelector('#channel').value);
+    //fetch('http://localhost:5555/CONTROL/set/tv/channel?channel=' + document.querySelector('#channel').value); // Broken, working on fix
+    showVideo(Math.floor(document.querySelector('#channel').value / 2)); // Temporary fix for above problem
 }
 
 // When filter slider is updated, send a GET request to server
