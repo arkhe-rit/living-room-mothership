@@ -47,5 +47,3 @@ function showVideo(i) {
   if (i === 4) document.querySelector('#travis').style.display = 'block';
 
 }
-
-}
