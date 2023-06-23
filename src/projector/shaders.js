@@ -86,7 +86,6 @@ const loadShaders = async (gl) => {
             program: newProgram,
             presets: []
         });
-        console.log(`Loaded shader program ${fragShader}`);
     }
 
     gl.useProgram(getShaderProgram());
