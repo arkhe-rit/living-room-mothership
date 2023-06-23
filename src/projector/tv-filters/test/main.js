@@ -1,4 +1,4 @@
-import * as shaders from './shaders.js';
+import * as shaders from '../../shaders.js';
 
 const DEBUG = false;
 

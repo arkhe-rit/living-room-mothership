@@ -1,8 +1,10 @@
 const fetchShaderSource = async (url) => {
+    console.log(`Fetching shader source from ${url}`)
     const response = await fetch(url);
     if (!response.ok) {
         throw new Error(`Failed to fetch shader source from ${url}: ${response.status} ${response.statusText}`);
     }
+    console.log(response)
     return await response.text();
 }
 
@@ -12,7 +14,7 @@ const createShader = (gl, type, source) => {
     gl.compileShader(shader);
 
     if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-        console.error('Shader compilation error:', gl.getShaderInfoLog(shader));
+        console.error('Shader compilation error:', gl.getShaderInfoLog(shader), type, source);
         gl.deleteShader(shader);
         return null;
     }
@@ -70,11 +72,11 @@ const fragShaders = [
 const loadShaders = async (gl) => {
     //let shaderPrograms = [];
     console.log('Loading shaders...');
-    const vertexShaderSource = await fetchShaderSource('../../vert-shader.glsl');
+    const vertexShaderSource = await fetchShaderSource('vert-shader.glsl');
     const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
 
     for (let fragShader of fragShaders) {
-        const fragmentShaderSource = await fetchShaderSource("../../shaders/" + fragShader);
+        const fragmentShaderSource = await fetchShaderSource("./shaders/" + fragShader);
         const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
         const newProgram = createProgram(gl, vertexShader, fragmentShader);
         shaderPrograms.push({
