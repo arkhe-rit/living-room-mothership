@@ -136,49 +136,10 @@ const render = () => {
 
     // Draw the rectangle
     gl.drawArrays(gl.TRIANGLES, 0, 6);
-    requestAnimationFrame(render);
+    setTimeout(() => {
+        requestAnimationFrame(render);
+    }, 1000 / 24);
 }
-
-/* const initControls = () => {
-    const shaderSelect = document.getElementById('shader-select');
-    shaderSelect.onchange = e => {
-        shaders.switchShader(shaderSelect.value, gl);
-        //generate an html input field for each uniform in the shader and append them to the 'shader-settings' span
-        //if the value of the key is a boolean make a checkbox, otherwise make a number input
-        const settings = shaderUniforms[shaders.shaderProgramIndex];
-        const settingsSpan = document.getElementById('shader-settings');
-        settingsSpan.innerHTML = '';
-        Object.keys(settings).forEach(key => {
-            const type = typeof settings[key];
-            const newInput = document.createElement('input');
-            newInput.type = type === 'boolean' ? 'checkbox' : 'number';
-            newInput.id = key;
-            newInput.name = key;
-            if (type === 'boolean') {
-                newInput.checked = settings[key];
-            }
-            else {
-                newInput.value = settings[key];
-            }
-            newInput.onchange = e => {
-                settings[key] = type === 'boolean' ? e.target.checked : parseFloat(e.target.value);
-            }
-            const newLabel = document.createElement('label');
-            newLabel.htmlFor = key;
-            newLabel.innerHTML = key;
-            settingsSpan.appendChild(newLabel);
-            settingsSpan.appendChild(newInput);
-        });
-    }
-    shaderSelect.onchange();
-
-    const videoSelect = document.getElementById('video-select');
-    videoSelect.onchange = e => {
-        video.play();
-        video.src = `media/${videoSelect.value}`;
-        video.play();
-    }
-} */
 
 //init
 (() => {
