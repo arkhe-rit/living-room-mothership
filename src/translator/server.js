@@ -7,6 +7,7 @@ import { latest } from "../toolbox/observables";
 import { chairChordAlg } from "../algebra/chairChord";
 import { makeObservations } from "../observers";
 import { interpretLeft, interpretList, interpretRight } from "../algebra/interpret";
+import { setupRedisAdapter } from "./redis";
 
 const STATE = {};
 
@@ -18,7 +19,8 @@ if (isDevEnvironment)
 const app = new Koa();
 const httpServer = createServer(app.callback());
 
-const { socketsByIdentityObs, messagesObs, tvObs } = setupSocketIO(httpServer);
+const { socketsByIdentityObs, messagesObs, tvObs, io } = setupSocketIO(httpServer);
+await setupRedisAdapter(io);
 const socketsByIdentity_io = latest(socketsByIdentityObs, {})
 const latestTV_io = latest(tvObs)
 const latestSockets_io = latest(socketsByIdentityObs);
@@ -194,5 +196,5 @@ app
   .use(router.routes())
   .use(router.allowedMethods());
 
-app.listen(3000);
+app.listen(3001);
 

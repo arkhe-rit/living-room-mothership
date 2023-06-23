@@ -1,9 +1,17 @@
 import { clientSocket } from "../translator/socket";
 
+clientSocket.onAny((event, ...args) => {
+  console.log(event, args);
+});
+//subscribe to the test channel of the redis server
+clientSocket.on("test", (message, channel) => {
+  console.log(`Received ${message} from ${channel}`);
+  clientSocket.emit("test", "Message");
+});
+clientSocket.emit("channel test", "channel Message");
+
 // Default Video State (Static)
 const video = document.querySelector("video");
-showVideo(0);
-
 /*
 const projectorToTranslator = clientSocket();
 projectorToTranslator.on("connect", () => {

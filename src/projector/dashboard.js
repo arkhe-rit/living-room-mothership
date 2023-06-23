@@ -1,3 +1,5 @@
+
+
 // When channel slider is updated, send a GET request to server
 document.querySelector('#channel-select').onchange = (e) => {
     document.querySelector('#channel-state').innerHTML = e.target.value;
