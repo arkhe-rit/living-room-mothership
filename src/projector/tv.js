@@ -12,7 +12,7 @@ projectorToTranslator.on('signal/tv/filter', (inputState, reply) => {    // inpu
     // Do whatever the hell you want with all the code below:
     console.log("Switch Shader Call with Value: " + inputState);
     // Pass value to function call that does the thing
-    //switchShader(inputState); // I think this is the function call it should make?
+    shaders.switchShader(inputState); // I think this is the function call it should make?
 })
 
 
@@ -139,7 +139,7 @@ const render = () => {
     requestAnimationFrame(render);
 }
 
-const initControls = () => {
+/* const initControls = () => {
     const shaderSelect = document.getElementById('shader-select');
     shaderSelect.onchange = e => {
         shaders.switchShader(shaderSelect.value, gl);
@@ -178,14 +178,14 @@ const initControls = () => {
         video.src = `media/${videoSelect.value}`;
         video.play();
     }
-}
+} */
 
 //init
 (() => {
     shaders.loadShaders(gl).then(() => {
         shaders.initVertexBuffer(gl);
         loadTextures();
-        initControls();
+        //initControls();
         console.log('Starting video...')
         video.play();
         render();

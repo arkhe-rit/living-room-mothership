@@ -1,10 +1,15 @@
+import vert from './shaders/vert-shader.glsl';
+import frag0 from './shaders/frag-shader-0.glsl';
+import frag1 from './shaders/frag-shader-1.glsl';
+import frag2 from './shaders/frag-shader-2.glsl';
+import frag3 from './shaders/frag-shader-3.glsl';
+import frag4 from './shaders/frag-shader-4.glsl';
+
 const fetchShaderSource = async (url) => {
-    console.log(`Fetching shader source from ${url}`)
     const response = await fetch(url);
     if (!response.ok) {
         throw new Error(`Failed to fetch shader source from ${url}: ${response.status} ${response.statusText}`);
     }
-    console.log(response)
     return await response.text();
 }
 
@@ -14,7 +19,7 @@ const createShader = (gl, type, source) => {
     gl.compileShader(shader);
 
     if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-        console.error('Shader compilation error:', gl.getShaderInfoLog(shader), type, source);
+        console.error('Shader compilation error:', gl.getShaderInfoLog(shader));
         gl.deleteShader(shader);
         return null;
     }
@@ -63,21 +68,19 @@ let shaderProgramIndex = 1;
 const shaderPrograms = [];
 const getShaderProgram = () => shaderPrograms[shaderProgramIndex].program;
 const fragShaders = [
-    'frag-shader-0.glsl',
-    'frag-shader-1.glsl',
-    'frag-shader-2.glsl',
-    'frag-shader-3.glsl',
-    'frag-shader-4.glsl'
+    frag0,
+    frag1,
+    frag2,
+    frag3,
+    frag4
 ];
 const loadShaders = async (gl) => {
     //let shaderPrograms = [];
     console.log('Loading shaders...');
-    const vertexShaderSource = await fetchShaderSource('vert-shader.glsl');
-    const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
+    const vertexShader = createShader(gl, gl.VERTEX_SHADER, vert);
 
     for (let fragShader of fragShaders) {
-        const fragmentShaderSource = await fetchShaderSource("./shaders/" + fragShader);
-        const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
+        const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragShader);
         const newProgram = createProgram(gl, vertexShader, fragmentShader);
         shaderPrograms.push({
             program: newProgram,

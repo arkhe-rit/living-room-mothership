@@ -28,6 +28,7 @@
     },
     "homepage": "https://github.com/arkhe-rit/living-room#readme",
     "devDependencies": {
+        "@parcel/transformer-glsl": "^2.7.0",
         "assert": "^2.0.0",
         "events": "^3.3.0",
         "jest": "^28.1.1",
