@@ -84,11 +84,11 @@ let shaderProgramIndex = 1;
 const getShaderProgram = () => shaderPrograms[shaderProgramIndex];
 const loadShaders = async () => {
     console.log('Loading shaders...');
-    const vertexShaderSource = await fetchShaderSource('vert-shader.glsl');
+    const vertexShaderSource = await fetchShaderSource('../../vert-shader.glsl');
     const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
 
     for (let fragShader of fragShaders) {
-        const fragmentShaderSource = await fetchShaderSource(fragShader);
+        const fragmentShaderSource = await fetchShaderSource("../../shaders/" + fragShader);
         const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
         const newProgram = createProgram(gl, vertexShader, fragmentShader);
         shaderPrograms.push(newProgram);
@@ -273,7 +273,7 @@ const initControls = () => {
     const videoSelect = document.getElementById('video-select');
     videoSelect.onchange = e => {
         video.play();
-        video.src = `../../legacy/videos/${videoSelect.value}`;
+        video.src = `../../media/${videoSelect.value}`;
         video.play();
     }
 }
