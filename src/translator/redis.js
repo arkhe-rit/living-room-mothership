@@ -3,16 +3,22 @@ import { createAdapter } from "@socket.io/redis-adapter";
 import { createClient } from "redis";
 
 
-const setupRedisAdapter = (io) => {
-    const pubClient = createClient({ url: "redis://localhost:6379" });
-    const subClient = pubClient.duplicate();
-    subClient.subscribe("test", (message, channel) => {
-        console.log(`Received ${message} from ${channel}`);
-        pubClient.publish("Channel", "Message");
+const setupRedisAdapter = async (io) => {
+    const pubClient = createClient({
+        host: 'localhost',
+        port: 6379
     });
-    return Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
-        io.adapter(createAdapter(pubClient, subClient));
-        io.listen(3000);
+    const subClient = pubClient.duplicate();
+    io.adapter(createAdapter(pubClient, subClient));
+    io.listen(3000);
+    await pubClient.connect();
+    await subClient.connect();
+    io.on('connection', (socket) => {
+        socket.on('publish', (msg) => {
+            const { channel, message } = msg;
+            console.log(`Publishing to ${channel}:`, message);
+            pubClient.publish(channel, message);
+        });
     });
 }
 

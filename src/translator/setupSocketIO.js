@@ -46,7 +46,6 @@ const setupSocketIO = (httpServer) => {
       console.log(`Socket connection error: ${err.message}`);
       id = null;
     });
-
     
     socket.on('identify/channel', () => {
       tvObs.next(socket);
