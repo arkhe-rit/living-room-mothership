@@ -14,11 +14,11 @@ const setupRedisAdapter = async (io) => {
     await pubClient.connect();
     await subClient.connect();
     io.on('connection', (socket) => {
-        socket.on('publish', (msg) => {
-            const { channel, message } = msg;
-            console.log(`Publishing to ${channel}:`, message);
+        socket.onAny((channel, message) => {
+            message = message.toString();
+            console.log(channel, message);
             pubClient.publish(channel, message);
-        });
+        })
     });
 }
 

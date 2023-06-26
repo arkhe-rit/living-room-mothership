@@ -5,7 +5,7 @@ const serverSocket = clientSocket();
 serverSocket.on("connect", () => {
   console.log("connected to server through channel.js");
 });
-serverSocket.emit("publish", { channel: "test", message: "Message" });
+serverSocket.emit("test channel", "test message");
 
 
 
