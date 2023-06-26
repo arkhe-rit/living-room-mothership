@@ -5,14 +5,6 @@ import frag2 from './shaders/frag-shader-2.glsl';
 import frag3 from './shaders/frag-shader-3.glsl';
 import frag4 from './shaders/frag-shader-4.glsl';
 
-const fetchShaderSource = async (url) => {
-    const response = await fetch(url);
-    if (!response.ok) {
-        throw new Error(`Failed to fetch shader source from ${url}: ${response.status} ${response.statusText}`);
-    }
-    return await response.text();
-}
-
 const createShader = (gl, type, source) => {
     const shader = gl.createShader(type);
     gl.shaderSource(shader, source);
