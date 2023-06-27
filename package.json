@@ -40,11 +40,13 @@
     },
     "dependencies": {
         "@koa/router": "^12.0.0",
+        "aedes": "^0.48.0",
         "buffer": "^6.0.3",
         "cross-env": "^7.0.3",
         "express": "^4.18.1",
         "koa": "^2.13.4",
         "lodash": "^4.17.21",
+        "mdns": "^2.7.2",
         "observable-fns": "^0.6.1",
         "parcel": "^2.7.0",
         "socket.io": "^4.5.1",

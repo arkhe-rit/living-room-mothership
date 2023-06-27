@@ -15,27 +15,6 @@ const isDevEnvironment = process.env.ENV === "DEV" || !process.env.ENV;
 if (isDevEnvironment)
   console.log("In dev environment");
 
-import mdns from 'mdns';
- 
-// watch all http servers
-const browser = mdns.createBrowser(mdns.tcp('http'));
-browser.on('serviceUp', service => {
-  console.log("MDNS service up: ", service);
-});
-browser.on('serviceDown', service => {
-  console.log("MDNS service down: ", service);
-});
-browser.start();
-
-// advertise a http server on port 4321
-const ad = mdns.createAdvertisement(mdns.tcp('http'), 5555, {
-  name: 'living-room-mothership',
-  txtRecord: {
-    name: 'living-room-mothership'
-  }
-});
-ad.start();
-
 const app = new Koa();
 const httpServer = createServer(app.callback());
 
@@ -55,10 +34,9 @@ observations.subscribe((obs) => {
 
   latestTV_io()?.emit('algebra', obs);
 
-  const left = interpretLeft(obs) || '';
-  const right = interpretRight(obs) || '';
-  if (left.startsWith('1') || left.startsWith('2')) {
-  // if (['chair_1', 'chair_2'].includes(left)) {
+  const left = interpretLeft(obs);
+  const right = interpretRight(obs);
+  if (['chair_1', 'chair_2'].includes(left)) {
     if (relay_2_on === false) {
       const x = latestSockets_io();
       x?.['relay_2']?.emit('signal/on');  
@@ -71,8 +49,7 @@ observations.subscribe((obs) => {
       relay_2_on = false;
     }
   }
-  if (right.startsWith('3') || right.startsWith('4')) {
-  // if (['chair_3', 'chair_4'].includes(right)) {
+  if (['chair_3', 'chair_4'].includes(right)) {
     if (relay_1_on === false) {
       latestSockets_io()?.['relay_1']?.emit('signal/on');
       console.log('relay_1 on');
@@ -88,9 +65,9 @@ observations.subscribe((obs) => {
 });
 
 observations.subscribe(obs => {
+  debugger;
   console.log(interpretList(obs));
   console.log( `REL_1: ${relay_1_on ? '|' : '-'}`, `REL_2: ${relay_2_on ? '|' : '-'}`)
-
 })
 
 let msgsDict = {chair_1: '', chair_2: '', chair_3: '', chair_4: ''};
@@ -205,3 +182,4 @@ app
   .use(router.allowedMethods());
 
 app.listen(3000);
+
