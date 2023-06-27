@@ -1,28 +1,31 @@
-import { clientSocket } from "../translator/socket";
+import { clientSocket } from "../../translator/socket";
 import * as shaders from "./shaders";
 
 // Set up socket, connect to server, and identify self
-const projectorToTranslator = clientSocket();
-projectorToTranslator.on("connect", () => {
-    projectorToTranslator.emit('identify/filter');
-});
+const messageBus = clientSocket();
+messageBus.emit('client-status', 'tv connected');
 
 // Listen for relevant messages
-projectorToTranslator.on('signal/tv/filter', (inputState, reply) => {    // inputState will be an integer between 0-9
-    // Do whatever the hell you want with all the code below:
-    console.log("Switch Shader Call with Value: " + inputState);
-    // Pass value to function call that does the thing
-    shaders.switchShader(inputState); // I think this is the function call it should make?
-})
+messageBus.on('tv/request/channel', (value) => {
+    console.log("Channel request received: " + value);
+    value %= videos.length;
+    console.log(`Now playing: ${changeVideo(value)}`);
+    //TODO: change the above to send a message back to the server saying that the video was 
+    //successfully swapped and what video it was swapped to so the dashboard can update
+});
+messageBus.on('tv/request/filter', (value) => {
+    //TODO: use `shaders.switchShader(value)` to change the shader and send a message back to the server
+});
 
+///
 
 const DEBUG = false;
 
 //Load the canvases and video elements
-const canvas = document.getElementById('myCanvas');
+const canvas = document.getElementById('main-canvas');
 const gl = canvas.getContext('webgl');
 
-const backBuffer = document.getElementById('backBuffer');
+const backBuffer = document.getElementById('back-buffer');
 const bbCTX = backBuffer.getContext('2d');
 //set the backbuffer size to be the same as the main canvas
 backBuffer.width = canvas.width;
@@ -30,6 +33,20 @@ backBuffer.height = canvas.height;
 gl.viewport(0, 0, canvas.width, canvas.height);
 
 const video = document.getElementById('content');
+const videos = [
+    new URL('../media/heroquest.mp4', import.meta.url),
+    new URL('../media/luckyStrike.mp4', import.meta.url),
+    new URL('../media/roc_commercials.mp4', import.meta.url),
+    new URL('../media/static.mp4', import.meta.url),
+    new URL('../media/travis.mov', import.meta.url)
+]
+const changeVideo = (index) => {
+    const newVid = videos[index];
+    video.play();
+    video.src = newVid;
+    video.play();
+    return newVid;
+}
 
 if (DEBUG) {
     video.hidden = false;
@@ -57,7 +74,7 @@ const loadTextures = async () => {
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, noiseImage);
         gl.bindTexture(gl.TEXTURE_2D, noiseTexture);
     };
-    noiseImage.src = 'media/noise.png';
+    noiseImage.src = '../media/noise.png';
 }
 
 let frameCount = 0;

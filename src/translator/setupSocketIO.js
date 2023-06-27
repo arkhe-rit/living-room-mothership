@@ -33,6 +33,11 @@ const setupSocketIO = (httpServer) => {
     let arkhe_identity = '???';
     console.log(`Server Connected to socket ${socket.id}`);
 
+    socket.onAny((channel, message) => {
+      console.log(channel, message);
+      socket.broadcast.emit(channel, message)
+    });
+
     socket.on("disconnect", reason => {
       console.log(`Disconnected from socket ${arkhe_identity}:${id}: ${reason}`);
       id = null;

@@ -1,4 +1,3 @@
-import { Server } from "socket.io";
 import { createAdapter } from "@socket.io/redis-adapter";
 import { createClient } from "redis";
 
@@ -16,8 +15,12 @@ const setupRedisAdapter = async (io) => {
     io.on('connection', (socket) => {
         socket.onAny((channel, message) => {
             message = message.toString();
-            console.log(channel, message);
-            pubClient.publish(channel, message);
+            //console.log(channel, message);
+            //this channel is used to broadcast emits to other clients and has junk data
+            if (channel !== 'socket.io#/#') {
+                pubClient.publish(channel, message);
+            }
+            socket.emit(channel, message)
         })
     });
 }

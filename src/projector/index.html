@@ -10,16 +10,12 @@
 
     <!-- Videos Shown on TV -->
     <video id="content" src="./media/heroquest.mp4" autoplay muted loop></video>
-    <!-- <video id="heroquest" src="./media/heroquest.mp4" autoplay muted loop></video>
-    <video id="luckyStrike" src="./media/luckyStrike.mp4" autoplay muted loop></video>
-    <video id="rocCommercials" src="./media/roc_commercials.mp4" autoplay muted loop></video>  
-    <video id="travis" src="./media/travis.mov" style="width:100%; object-position: 50% 25%; object-fit: cover" autoplay muted loop></video>   -->
 
     <!-- Dashboard Sliders -->
     <h1>DEVELOPMENT DASHBOARD</h1>
     <div class="side-by-side">
       <p>Channel</p>
-      <input type="range" id="channel-select" min="0" max="9" step="1" value="0">
+      <input type="range" id="channel-select" min="0" max="5" step="1" value="0">
       <p id="channel-state">0</p>
     </div>
     <br>
@@ -39,9 +35,8 @@
     <canvas id='backBuffer' hidden></canvas>
     <canvas id='myCanvas' width=700 height=700></canvas>
 
-    <script type="module" src="channel.js"></script>
-    <!-- <script type="module" src="tv.js"></script> -->
+    <!-- <script type="module" src="channel.js"></script> -->
     <!-- <script type="module" src="eink.js"></script> -->
-    <!-- <script type="module" src="dashboard.js"></script> -->
+    <script type="module" src="dashboard.js"></script>
   </body>
 </html>

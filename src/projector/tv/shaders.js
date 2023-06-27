@@ -1,9 +1,9 @@
-import vert from './shaders/vert-shader.glsl';
-import frag0 from './shaders/frag-shader-0.glsl';
-import frag1 from './shaders/frag-shader-1.glsl';
-import frag2 from './shaders/frag-shader-2.glsl';
-import frag3 from './shaders/frag-shader-3.glsl';
-import frag4 from './shaders/frag-shader-4.glsl';
+import vert from '../shaders/vert-shader.glsl';
+import frag0 from '../shaders/frag-shader-0.glsl';
+import frag1 from '../shaders/frag-shader-1.glsl';
+import frag2 from '../shaders/frag-shader-2.glsl';
+import frag3 from '../shaders/frag-shader-3.glsl';
+import frag4 from '../shaders/frag-shader-4.glsl';
 
 const createShader = (gl, type, source) => {
     const shader = gl.createShader(type);

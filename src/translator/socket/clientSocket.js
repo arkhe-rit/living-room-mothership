@@ -12,7 +12,10 @@ const clientSocket = () => {
       ? "http://localhost:5555"
       : "https://arkhe-api.herokuapp.com/",
     {
-      transports: ["websocket"]
+      transports: ["websocket"],
+      "force new connection": true,
+      reconnectionAttempts: Infinity,
+      timeout: 10000
     }
   );
   let id = null;
@@ -56,6 +59,8 @@ const clientSocket = () => {
     console.log(`Socket connection error: ${err.message}`);
     reconnect(25);
   });
+
+
 
   return socket;
 };
