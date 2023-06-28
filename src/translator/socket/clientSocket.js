@@ -60,8 +60,6 @@ const clientSocket = () => {
     reconnect(25);
   });
 
-
-
   return socket;
 };
 

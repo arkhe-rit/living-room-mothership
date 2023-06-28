@@ -3,10 +3,15 @@ import * as shaders from "./shaders";
 
 // Set up socket, connect to server, and identify self
 const messageBus = clientSocket();
-messageBus.emit('client-status', 'tv connected');
+messageBus.emit('subscribe', 'tv');
+messageBus.emit('publish', { channel: 'tv', message: 0 })
+messageBus.on('tv', (data) => {
+    console.log("Message received: " + data);
+});
+
 
 // Listen for relevant messages
-messageBus.on('tv/request/channel', (value) => {
+/* messageBus.on('tv/request/channel', (value) => {
     console.log("Channel request received: " + value);
     value %= videos.length;
     console.log(`Now playing: ${changeVideo(value)}`);
@@ -17,7 +22,7 @@ messageBus.on('tv/request/filter', (value) => {
     console.log("Filter request received: " + value);
     shaders.switchShader(value, gl);
     console.log(`Now using filter: ${shaders.shaderProgramIndex}`)
-});
+}); */
 
 ///
 
