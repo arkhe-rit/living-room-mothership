@@ -56,7 +56,7 @@ const initVertexBuffer = (gl) => {
     gl.vertexAttribPointer(a_positionLocation, 2, gl.FLOAT, false, 0, 0);
 }
 
-let shaderProgramIndex = 1;
+let shaderProgramIndex = 0;
 const shaderPrograms = [];
 const getShaderProgram = () => shaderPrograms[shaderProgramIndex].program;
 const fragShaders = [

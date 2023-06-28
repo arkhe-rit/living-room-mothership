@@ -16,7 +16,7 @@ messageBus.on('tv/request/channel', (value) => {
 messageBus.on('tv/request/filter', (value) => {
     console.log("Filter request received: " + value);
     shaders.switchShader(value, gl);
-    // console.log(`Now using filter: ${shaders.shaderProgramIndex}`)
+    console.log(`Now using filter: ${shaders.shaderProgramIndex}`)
 });
 
 ///
