@@ -3,7 +3,10 @@ import { clientSocket } from "../translator/socket";
 const messageBus = clientSocket();
 messageBus.emit('client-status', 'dashboard connected');
 
-//TODO: update the values of the numbers at the end of the slideres on launch, or ensure the sliders start at 0
+//for, forces the values to be 0 and later will invoke the change event of the sliders to force
+//update the TV so the dashboard and the TV are in sync.
+//TODO: poll the TV for the current state of the TV and update the sliders to match so the TV is not interrupted by the dashboard
+//loading after the TV has started
 const channelSelect = document.querySelector('#channel-select');
 channelSelect.value = 0;
 const filterSelect = document.querySelector('#filter-select');
