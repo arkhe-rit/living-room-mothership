@@ -5,6 +5,7 @@ messageBus.emit('client-status', 'dashboard connected');
 
 //TODO: update the values of the numbers at the end of the slideres on launch, or ensure the sliders start at 0
 
+
 // When channel slider is updated, send a GET request to server
 document.querySelector('#channel-select').onchange = (e) => {
     document.querySelector('#channel-state').innerHTML = e.target.value;
@@ -20,7 +21,7 @@ document.querySelector('#channel-select').onchange = (e) => {
 document.querySelector('#filter-select').onchange = (e) => {
     document.querySelector('#filter-state').innerHTML = e.target.value;
     //fetch('http://localhost:5555/CONTROL/set/tv/filter?filter=' + e.target.value);
-
+    messageBus.emit('tv/request/filter', e.target.value);
     //TODO: add emit to the tv to change the filter
 }
 

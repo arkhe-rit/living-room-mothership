@@ -4,11 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script src="tv.js" type="module"></script>
+    <style>
+        body {
+            overflow: hidden;
+            margin: 0px;
+        }
+    </style>
 </head>
 <body>
     <video id="content" src="../media/heroquest.mp4" hidden loop></video>
     <canvas id="back-buffer" hidden></canvas>
     <canvas id="main-canvas" width="700" height="700"></canvas>
+    <script src="tv.js" type="module"></script>
 </body>
 </html>

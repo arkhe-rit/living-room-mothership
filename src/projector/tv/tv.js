@@ -14,7 +14,9 @@ messageBus.on('tv/request/channel', (value) => {
     //successfully swapped and what video it was swapped to so the dashboard can update
 });
 messageBus.on('tv/request/filter', (value) => {
-    //TODO: use `shaders.switchShader(value)` to change the shader and send a message back to the server
+    console.log("Filter request received: " + value);
+    shaders.switchShader(value, gl);
+    // console.log(`Now using filter: ${shaders.shaderProgramIndex}`)
 });
 
 ///
@@ -24,6 +26,8 @@ const DEBUG = false;
 //Load the canvases and video elements
 const canvas = document.getElementById('main-canvas');
 const gl = canvas.getContext('webgl');
+canvas.height = window.screen.height;
+canvas.width = window.screen.width;
 
 const backBuffer = document.getElementById('back-buffer');
 const bbCTX = backBuffer.getContext('2d');

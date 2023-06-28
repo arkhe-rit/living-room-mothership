@@ -84,6 +84,7 @@ const loadShaders = async (gl) => {
 }
 
 const switchShader = (index, gl) => {
+    index %= shaderPrograms.length;
     shaderProgramIndex = index;
     gl.useProgram(getShaderProgram());
     initVertexBuffer(gl);
