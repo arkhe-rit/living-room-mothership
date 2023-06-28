@@ -1,0 +1,121 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>Living Room Dashboard</title>
+</head>
+<body>
+    <h1>Living Room Dashboard</h1>
+
+    <hr>
+
+    <section id="redis-log">
+        <div>
+            <h2>Redis Messages</h2>
+            <ul id="message-list">
+                <li>
+                    <p class="message-channel">Channel #1</p>
+                    <p class="message-content">Message</p>
+                </li>
+                <li>
+                    <p class="message-channel">Channel #2</p>
+                    <p class="message-content">Message</p>
+                </li>
+                <li>
+                    <p class="message-channel">Channel #3</p>
+                    <p class="message-content">Message</p>
+                </li>
+                <li>
+                    <p class="message-channel">Channel #4</p>
+                    <p class="message-content">Message</p>
+                </li>
+                <li>
+                    <p class="message-channel">Channel #2</p>
+                    <p class="message-content">Message</p>
+                </li>
+                <li>
+                    <p class="message-channel">Channel #2</p>
+                    <p class="message-content">Message</p>
+                </li>
+                <li>
+                    <p class="message-channel">Channel #2</p>
+                    <p class="message-content">Message</p>
+                </li>
+                <li>
+                    <p class="message-channel">Channel #1</p>
+                    <p class="message-content">Message</p>
+                </li>
+                <li>
+                    <p class="message-channel">Channel #4</p>
+                    <p class="message-content">Message</p>
+                </li>
+                <li>
+                    <p class="message-channel">Channel #1</p>
+                    <p class="message-content">Message</p>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="control-panel">
+        <div id="channel-selector">
+            <label for="channel-selector-input">Channel:</label>
+            <!--<input type="text" id="channel-selector-input">-->
+            <select id="channel-selector-input">
+                <option value="channel-1">Channel #1</option>
+                <option value="channel-2">Channel #2</option>
+                <option value="channel-3">Channel #3</option>
+                <option value="channel-4">Channel #4</option>
+            </select>
+        </div>
+
+        <div id="message-selector">
+            <label for="message-selector-input">Message:</label>
+            <input type="text" id="message-selector-input">
+        </div>
+
+        <button type="button" id="message-sender">Publish</button>
+    </section>
+
+    <hr>
+
+    <section id="client-list">
+        <div class="left">
+            <h2>Observers</h2>
+            <ul id="observer-list">
+                <li>
+                    <p class="observer-name">Observer #1</p>
+                    <p class="observer-status">Value: [Value]</p>
+                </li>
+                <li>
+                    <p class="observer-name">Observer #2</p>
+                    <p class="observer-status">Value: [Value]</p>
+                </li>
+            </ul>
+        </div>
+
+        <div class="right">
+            <h2>Projectors</h2>
+            <ul id="projector-list">
+                <li>
+                    <p class="projector-name">Projector #1</p>
+                    <p class="projector-status">State: [State]</p>
+                </li>
+                <li>
+                    <p class="projector-name">Projector #2</p>
+                    <p class="projector-status">State: [State]</p>
+                </li>
+            </ul>
+        </div>
+    </section>
+    
+    <hr>
+
+    <section>
+        <img src="hunke.png">
+    </section>
+</body>
+</html>
