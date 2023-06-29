@@ -1,28 +1,25 @@
-import { clientSocket } from "../../translator/socket";
+import { createBusClient } from "../../translator/messageBusClient";
 import * as shaders from "./shaders";
 
 // Set up socket, connect to server, and identify self
-const messageBus = clientSocket();
-messageBus.emit('subscribe', 'tv');
-messageBus.emit('publish', { channel: 'tv', message: 0 })
-messageBus.on('tv', (data) => {
-    console.log("Message received: " + data);
-});
-
-
-// Listen for relevant messages
-/* messageBus.on('tv/request/channel', (value) => {
-    console.log("Channel request received: " + value);
-    value %= videos.length;
-    console.log(`Now playing: ${changeVideo(value)}`);
-    //TODO: change the above to send a message back to the server saying that the video was 
-    //successfully swapped and what video it was swapped to so the dashboard can update
-});
-messageBus.on('tv/request/filter', (value) => {
-    console.log("Filter request received: " + value);
-    shaders.switchShader(value, gl);
-    console.log(`Now using filter: ${shaders.shaderProgramIndex}`)
-}); */
+const messageBus = createBusClient([
+    {
+        channel: 'tv/channel', 
+        callback: (value) => {
+            console.log("Channel request received: " + value);
+            value %= videos.length;
+            console.log(`Now playing: ${changeVideo(value)}`);
+        }
+    },
+    {
+        channel: 'tv/filter',
+        callback: (value) => {
+            console.log("Filter request received: " + value);
+            shaders.switchShader(value, gl);
+            console.log(`Now using filter: ${shaders.shaderProgramIndex}`)
+        }
+    }
+]);
 
 ///
 

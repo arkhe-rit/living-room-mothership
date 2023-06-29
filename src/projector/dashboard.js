@@ -1,6 +1,6 @@
-import { clientSocket } from "../translator/socket";
+import { createBusClient } from "../translator/messageBusClient";
 
-const messageBus = clientSocket();
+const messageBus = createBusClient();
 
 //for, forces the values to be 0 and later will invoke the change event of the sliders to force
 //update the TV so the dashboard and the TV are in sync.
@@ -16,18 +16,14 @@ einkSelect.value = 0;
 // When channel slider is updated, send a GET request to server
 channelSelect.onchange = (e) => {
     document.querySelector('#channel-state').innerHTML = e.target.value;
-    //TODO: change the emit to be a timeout that expects a return of what video was swapped to
-    //https://socket.io/docs/v3/emitting-events/#acknowledgements
-    //messageBus.emit('tv/request/channel', e.target.value);
-    messageBus.emit('publish', {channel: 'tv', message: 0});    
+    messageBus.publish('tv/channel', e.target.value);
 }
 channelSelect.dispatchEvent(new Event('change'));
 
 // When filter slider is updated, send a GET request to server
 filterSelect.onchange = (e) => {
     document.querySelector('#filter-state').innerHTML = e.target.value;
-    //messageBus.emit('tv/request/filter', e.target.value);
-    //TODO: add emit to the tv to change the filter
+    messageBus.publish('tv/filter', e.target.value);
 }
 filterSelect.dispatchEvent(new Event('change'));
 

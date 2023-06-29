@@ -26,7 +26,6 @@ const setupRedisAdapter = async (io) => {
                     console.log(`Emitting to ${id} on channel ${channel} with content ${message}`)
                     io.to(id).emit(channel, message);
                 });
-                console.log("Message sent to channel: " + channel, message);
             });
         });
         socket.on('unsubscribe', (channel) => {
