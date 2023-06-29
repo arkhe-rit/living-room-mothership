@@ -1,69 +1,36 @@
+/* UNIVERSAL */
 body {
-    width: 60%;
     margin: 0 auto;
 }
+h1 {
+    font-style: italic;
+}
 
-#redis-log ul {
-    width: 60vw;
-    height: 20vh;
-    padding: 1vh 2vw;
-
+#message-list {
+    padding: 0px;
     border-color: dimgrey;
-    background-color:gainsboro ;
+    background-color:gainsboro[];
     border-style: solid;
-
     overflow: auto;
 }
 
 #message-list li {
     display:flex;
-    flex-direction: row;
+    text-justify: center;
 }
-#message-list .message-channel
-{
-    width: 12vw;
-    margin-right: 4rem;
+#message-list li p {
+    margin: 0px;
 }
 
 #control-panel {
-    width: 60vw;
-    height: 5vh;
-    padding-left: 2vw;
-
     display:flex;
-    flex-direction: row;
     align-items: center;
-}
-#control-panel button {
-    height: 60%;
-    margin-right: 1vw;
-}
-#control-panel #channel-selector {
-    width: 12vw;
-    margin-right: 4rem;
-}
-#control-panel #channel-selector select {
-    width: auto;
-    height: 60%;
-}
-#control-panel #message-selector {
-    width: 34vw;
-    padding-left: 0px;
-    margin-right: 4rem;
-}
-#control-panel #message-selector input {
-    width: 80%;
-    height: 60%;
 }
 
 
 
 #client-list {
     display: flex;
-    flex-direction: row;
-}
-#client-list div {
-    width: 50%;
 }
 
 #client-list div ul {
@@ -77,18 +44,194 @@ body {
     margin: 1vh 0vw;
     
     border-color: dimgrey;
-    background-color:gainsboro ;
+    background-color:whitesmoke;
     border-style: solid;
 
-    
     display:flex;
     flex-direction: column;
     align-items: start;
 }
 
-.left {
-    margin-right: 3vw;
+/* DESKTOP */
+@media screen and (min-width: 993px) {
+    body {
+        width: 60%;
+    }
+
+    #message-list {
+        width: 60vw;
+        height: 400px;
+        padding: 0px;
+
+        border-color: dimgrey;
+        background-color:gainsboro[];
+        border-style: solid;
+
+        overflow: auto;
+    }
+
+    #message-list li {
+        display:flex;
+        flex-direction: row;
+        padding: 4px 2vw;
+
+        text-justify: center;
+    }
+    #message-list li p {
+        height: 28px;
+        line-height: 28px;
+        font-size: medium;
+    }
+    
+    #message-list .message-channel
+    {
+        width: 18%;
+        margin-right: 4rem;
+    }
+
+    #control-panel {
+        width: 60vw;
+        height: 48px;
+        padding-left: 2vw;
+
+        flex-direction: row;
+    }
+    #control-panel button {
+        width: 10%;
+        height: 60%;
+        margin-right: 1vw;
+    }
+    #control-panel #channel-selector {
+        width: 20%;
+        margin-right: 1vw;
+    }
+    #control-panel #channel-selector select {
+        width: auto;
+        height: 60%;
+    }
+    #control-panel #message-selector {
+        width: 70%;
+        padding-left: 0px;
+        margin-right: 1vw;
+    }
+    #control-panel #message-selector input {
+        width: 80%;
+        height: 60%;
+    }
+
+
+
+    #client-list {
+        display: flex;
+        flex-direction: row;
+    }
+    #client-list div {
+        width: 50%;
+    }
+
+    #client-list div ul {
+        list-style-type: none;
+        padding-left: 0px;
+        width: 100%;
+    }
+    #client-list div ul li {
+        width: 100%;
+        padding: 1vh 2vw;
+        margin: 1vh 0vw;
+        
+        border-color: dimgrey;
+        background-color:whitesmoke;
+        border-style: solid;
+
+        
+        display:flex;
+        flex-direction: column;
+        align-items: start;
+    }
+
+    .left {
+        margin-right: 3vw;
+    }
+    .right {
+        margin-left: 3vw;
+    }
 }
-.right {
-    margin-left: 3vw;
+
+/* MOBILE */
+@media screen and (max-width: 993px) {
+    body {
+        width: 90%;
+    }
+    h1 {
+        font-size:x-large;
+    }
+    p {
+        font-size: larger;
+    }
+
+    #message-list {
+        width: 90vw;
+        height: 70vh;
+        padding: 0px;
+
+        border-color: dimgrey;
+        background-color:gainsboro[];
+        border-style: solid;
+
+        overflow: auto;
+    }
+    #message-list li {
+        display:flex;
+        flex-direction: column;
+        padding: 1px 2vw;
+
+        text-justify: center;
+    }
+    #message-list li p {
+        height: 36px;
+        line-height: 36px;
+        font-size: larger;
+    }
+
+    #control-panel {
+        width: 80vw;
+
+        display:flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    #control-panel button {
+        margin-top: 2vh;
+        margin-bottom: 15vh;
+    }
+
+
+
+    #client-list {
+        display: flex;
+        flex-direction: column;
+    }
+    #client-list div {
+        width: 100%;
+    }
+
+    #client-list div ul {
+        list-style-type: none;
+        width: 100%;
+        margin-bottom: 10vh;
+    }
+    #client-list div ul li {
+        width: 100%;
+        padding: 1vh 2vw;
+        margin: 1vh 0vw;
+        
+        border-color: dimgrey;
+        background-color:whitesmoke;
+        border-style: solid;
+
+        
+        display:flex;
+        flex-direction: column;
+        align-items: start;
+    }
 }

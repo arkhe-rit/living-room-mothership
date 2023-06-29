@@ -8,7 +8,11 @@
     <title>Living Room Dashboard</title>
 </head>
 <body>
-    <h1>Living Room Dashboard</h1>
+    <span>
+        <!--<img src="Arkhe Logo Wide.png" width="40px">-->
+        <h1>Living Room Dashboard</h1>
+    </span>
+    
 
     <hr>
 
@@ -16,46 +20,7 @@
         <div>
             <h2>Redis Messages</h2>
             <ul id="message-list">
-                <li>
-                    <p class="message-channel">Channel #1</p>
-                    <p class="message-content">Message</p>
-                </li>
-                <li>
-                    <p class="message-channel">Channel #2</p>
-                    <p class="message-content">Message</p>
-                </li>
-                <li>
-                    <p class="message-channel">Channel #3</p>
-                    <p class="message-content">Message</p>
-                </li>
-                <li>
-                    <p class="message-channel">Channel #4</p>
-                    <p class="message-content">Message</p>
-                </li>
-                <li>
-                    <p class="message-channel">Channel #2</p>
-                    <p class="message-content">Message</p>
-                </li>
-                <li>
-                    <p class="message-channel">Channel #2</p>
-                    <p class="message-content">Message</p>
-                </li>
-                <li>
-                    <p class="message-channel">Channel #2</p>
-                    <p class="message-content">Message</p>
-                </li>
-                <li>
-                    <p class="message-channel">Channel #1</p>
-                    <p class="message-content">Message</p>
-                </li>
-                <li>
-                    <p class="message-channel">Channel #4</p>
-                    <p class="message-content">Message</p>
-                </li>
-                <li>
-                    <p class="message-channel">Channel #1</p>
-                    <p class="message-content">Message</p>
-                </li>
+                <!-- Messages dynamically added with JS -->
             </ul>
         </div>
     </section>
@@ -94,6 +59,10 @@
                     <p class="observer-name">Observer #2</p>
                     <p class="observer-status">Value: [Value]</p>
                 </li>
+                <li>
+                    <p class="observer-name">Observer #3</p>
+                    <p class="observer-status">Value: [Value]</p>
+                </li>
             </ul>
         </div>
 
@@ -108,14 +77,20 @@
                     <p class="projector-name">Projector #2</p>
                     <p class="projector-status">State: [State]</p>
                 </li>
+                <li>
+                    <p class="projector-name">Projector #3</p>
+                    <p class="projector-status">State: [State]</p>
+                </li>
             </ul>
         </div>
     </section>
     
     <hr>
 
-    <section>
+    <!--<section>
         <img src="hunke.png">
-    </section>
+    </section>-->
+
+    <script type="module" src="dashboard.js"></script></script>
 </body>
 </html>
