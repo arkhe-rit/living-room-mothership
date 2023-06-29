@@ -2,6 +2,9 @@
 body {
     margin: 0 auto;
 }
+#logo {
+    float: left;
+}
 h1 {
     font-style: italic;
 }
@@ -56,6 +59,16 @@ h1 {
 @media screen and (min-width: 993px) {
     body {
         width: 60%;
+    }
+    hr {
+        height: 1px;
+        width: 80%;
+        border-top: 1px solid dimgrey;
+        margin-top: 2.5vh;
+    }
+    #logo {
+        height: 36px;
+        margin-right: 1vw;
     }
 
     #message-list {
@@ -167,6 +180,10 @@ h1 {
     }
     p {
         font-size: larger;
+    }
+    #logo {
+        height: 24px;
+        margin-right: 2vw;
     }
 
     #message-list {
