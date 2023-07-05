@@ -1,6 +1,8 @@
 import { createClient } from "redis";
 
-let subscriptions = {};
+let subscriptions = {
+    '*': []
+};
 
 const setupRedisAdapter = async (io) => {
     const pubClient = createClient({
@@ -13,29 +15,35 @@ const setupRedisAdapter = async (io) => {
     await subClient.connect();
     
 
-    io.of("/").adapter.on("join-room", (room, id) => {
-        console.log(`socket ${id} has joined room ${room}`);
-    });
     io.on('connection', (socket) => {
         socket.on('subscribe', (channel) => {
-            subscriptions[channel]? subscriptions[channel].push(socket.id) : subscriptions[channel] = [socket.id];
-            console.log("Client subscribed to channel: " + channel);
-            console.log('subscriptions: ', subscriptions);
-            subClient.subscribe(channel, (message, channel) => {
-                subscriptions[channel].forEach((id) => {
-                    console.log(`Emitting to ${id} on channel ${channel} with content ${message}`)
-                    io.to(id).emit(channel, message);
+            //if this is the first client to the subscribe to the channel, 
+            //create the array for the channel and subscribe through redis
+            if (subscriptions[channel] === undefined) {
+                subscriptions[channel] = [socket.id];
+                subClient.subscribe(channel, (message, channel) => {
+                    subscriptions[channel].forEach((id) => {
+                        console.log(`Emitting to ${id} on channel ${channel} with content ${message}`)
+                        io.to(id).emit(channel, message);
+                    });
+                    subscriptions['*'].forEach((id) => {
+                        io.to(id).emit(channel, message);
+                    });
                 });
-            });
+            }
+            //othewrise, just add the client to the array
+            else {
+                subscriptions[channel].push(socket.id);
+            }
+            console.log("Client subscribed to channel: " + channel);
         });
         socket.on('unsubscribe', (channel) => {
             subscriptions[channel] = subscriptions[channel].filter((id) => id !== socket.id);
             console.log("Client unsubscribed from channel: " + channel);
             //if the channel is empty, delete it
-            for (const channel in subscriptions) {
-                if (subscriptions[channel].length === 0) {
-                    delete subscriptions[channel];
-                }
+            if (channel !== '*' && subscriptions[channel].length === 0) {
+                delete subscriptions[channel];
+                subClient.unsubscribe(channel);
             }
         });
         socket.on('disconnect', () => {
