@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  base: &base
+    image: node:19
+    volumes:
+      - nodemodules:/usr/src/app/node_modules
+      - .:/usr/src/app
+    working_dir: /usr/src/app
+  install:
+    <<: *base
+    command: npm install
+  build:
+    <<: *base
+    command: npm run build
+
+volumes:
+  nodemodules:
+    external: true

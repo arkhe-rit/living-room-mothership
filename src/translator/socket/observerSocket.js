@@ -1,5 +1,5 @@
-import { identifySocketAs } from ".";
-import { clientSocket } from ".";
+import { identifySocketAs } from "./index.js";
+import { clientSocket } from "./index.js";
 
 const observerSocket = () => {
   // Establish a connection

@@ -2,11 +2,11 @@ import Koa from "koa";
 import Router from '@koa/router';
 import { createServer } from "http";
 import { networkInterfaces } from 'os';
-import { setupSocketIO } from "./setupSocketIO";
-import { latest } from "../toolbox/observables";
-import { chairChordAlg } from "../algebra/chairChord";
-import { makeObservations } from "../observers";
-import { interpretLeft, interpretList, interpretRight } from "../algebra/interpret";
+import { setupSocketIO } from "./setupSocketIO.js";
+import { latest } from "../toolbox/observables.js";
+import { chairChordAlg } from "../algebra/chairChord.js";
+import { makeObservations } from "../observers/index.js";
+import { interpretLeft, interpretList, interpretRight } from "../algebra/interpret.js";
 
 const STATE = {};
 
@@ -14,27 +14,6 @@ const port = process.env.PORT;
 const isDevEnvironment = process.env.ENV === "DEV" || !process.env.ENV;
 if (isDevEnvironment)
   console.log("In dev environment");
-
-import mdns from 'mdns';
- 
-// watch all http servers
-const browser = mdns.createBrowser(mdns.tcp('http'));
-browser.on('serviceUp', service => {
-  console.log("MDNS service up: ", service);
-});
-browser.on('serviceDown', service => {
-  console.log("MDNS service down: ", service);
-});
-browser.start();
-
-// advertise a http server on port 4321
-const ad = mdns.createAdvertisement(mdns.tcp('http'), 5555, {
-  name: 'living-room-mothership',
-  txtRecord: {
-    name: 'living-room-mothership'
-  }
-});
-ad.start();
 
 const app = new Koa();
 const httpServer = createServer(app.callback());
@@ -149,7 +128,11 @@ httpServer.listen(port, () => {
     ?.find(intf => intf.family === 'IPv4')
     ?.address;
 
-  const ipAdddress = hotspotIpAddress || ethIpAddress || wifiIpAddress;
+  const eth0IpAddress = networkInterfaces()?.['eth0']
+    ?.find(intf => intf.family === 'IPv4')
+    ?.address;
+
+  const ipAdddress = hotspotIpAddress || ethIpAddress || wifiIpAddress || eth0IpAddress;
 
   console.log(`Translator listening at ${ipAdddress}:${port}`);
 });
@@ -205,3 +188,19 @@ app
   .use(router.allowedMethods());
 
 app.listen(3000);
+
+import redis from 'redis';
+const client = redis.createClient({
+  url: 'redis://redis:6379'
+});
+const pubClient = client.duplicate();
+
+await client.connect();
+await pubClient.connect();
+console.info('Redis clients connected');
+
+await pubClient.publish('test', 'yyoooo');
+await client.subscribe('test', (msg, channel) => {
+  console.log('got message', msg, 'on channel', channel);
+});
+ 
