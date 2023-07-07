@@ -1,52 +1,43 @@
-version: '3'  # Specifies the version of Docker Compose file format, '3' is the latest as of my knowledge cutoff in September 2021.
-name: mothership
+# This is the primary Docker Compose file for the "mothership" application.
+# It orchestrates two services: "redis" (a Redis database server) and "conductor" (a Node.js app).
+# This file is responsible for setting up these services, their health checks, dependencies, port mappings, and shared volumes.
+# It is used to create an environment where the "conductor" service can communicate with the "redis" service.
+#
+version: '3'  # Specifies the version of Docker Compose file format. As of 2021, version '3' is the most current.
+name: mothership  # Specifies the name of the project, in this case "mothership".
 
-services:  # Top-level key that specifies each service (i.e., container) that makes up the app.
+services:  # Defines the set of services (i.e., containers) that comprise your application.
 
-  redis:  # Defines a service named "redis".
-    image: 'redis:latest'  # Specifies the Docker image to use for this service. The image is "redis" and the tag is "alpine", which is a minimal version.
+  redis:  # A service named "redis". Each service runs in a separate container.
+    image: 'redis:latest'  # Specifies the Docker image to use for this service. We're using the latest version of Redis image.
+    ports:  
+      - '6379:6379'  # Maps port 6379 of the host to port 6379 in the container where Redis server listens.
+    healthcheck:  # Defines a health check to determine if the container is running correctly.
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]  # Executes a shell command that pings the Redis server and expects a "PONG" in response.
+      interval: 1s  # Interval between health checks.
+      timeout: 3s  # The time after which the health check will be considered as failed if there is no response.
+      retries: 5  # Number of times to retry the health check before considering the container as unhealthy.
+
+  conductor:  # A service named "conductor".
+    build:  # Specifies that Docker should build an image using the Dockerfile in the current directory.
+      context: .  # The build context directory. Docker will look for the Dockerfile here.
+      dockerfile: docker/Dockerfile.conductor  # Path to the Dockerfile within the context directory.
     ports:
-      - '6379:6379'
-    healthcheck: # Specifies a health check to perform to determine if the container is healthy.
-      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
-      interval: 1s
-      timeout: 3s
-      retries: 5
+      - 3000:3000  # Maps port 3000 of the host to port 3000 in the container.
+      - 4321:4321  # Maps port 4321 of the host to port 4321 in the container.
+      - 1235:1235  # Maps port 1235 of the host to port 1235 in the container.
+    volumes:  # Specifies the directories that should be shared between the host and the container.
+      - nodemodules:/usr/src/app/node_modules  # Mounts the nodemodules volume at the specified path in the container.
+      - .:/usr/src/app  # Mounts the current directory on the host to the specified path in the container.
+      - type: volume  # Specifies a volume mount type.
+        source: shared  # Specifies the source of the volume to mount. In this case, the "shared" volume defined below.
+        target: /usr/src/app/shared  # Path in the container where the volume will be mounted.
+    command: ["npm", "run", "start_insideDocker"]  # The command to run when the container starts.
+    depends_on:  # Specifies the services this service depends on.
+      redis:  # The conductor service depends on the redis service.
+        condition: service_healthy  # Only start the conductor service when the redis service is healthy.
 
-  conductor:  # Defines a service named "conductor".
-    build: 
-      context: .
-      dockerfile: docker/Dockerfile.conductor
-    ports:
-      - 3000:3000
-      - 4321:4321
-      - 1235:1235
-    volumes:
-      - nodemodules:/usr/src/app/node_modules
-      - .:/usr/src/app
-      - type: volume
-        source: shared
-        target: /usr/src/app/shared
-    command: ["npm", "run", "start_insideDocker"]
-    depends_on:  # Expresses dependency between services, which determines the order of service startup.
-      redis:  # "node_app" service depends on the "redis" service.
-        condition: service_healthy  # The "redis" service must be healthy and running before starting the conductor service
-      # - python_sidecar
-
-  # python_sidecar:  # Defines a service named "python_sidecar".
-  #   build: 
-  #     context: .
-  #     dockerfile: docker/Dockerfile.python_sidecar
-  #   volumes:
-  #     - type: volume
-  #       source: shared
-  #       target: /usr/src/app/shared
-  #   command: ["python3", "-u", "index.py"]
-  #   depends_on:
-  #     - redis
-  #   runtime: nvidia  # Specifies the Docker container's runtime. "nvidia" is necessary for leveraging the host's GPU.
-
-volumes:  # Top-level key that defines named volumes.
-  shared:  # Defines a named volume called "shared". This volume can be used by any service to share data.
-  nodemodules:
-    external: true
+volumes:  # Defines named volumes that can be used by any service.
+  shared:  # A named volume called "shared". Can be used to share data between containers.
+  nodemodules:  # Another named volume for node modules.
+    external: true  # Indicates that this volume is managed outside of Docker Compose.
