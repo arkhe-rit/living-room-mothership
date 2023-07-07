@@ -18,6 +18,12 @@ const messageBus = createBusClient([
             shaders.switchShader(value, gl);
             console.log(`Now using filter: ${shaders.shaderProgramIndex}`)
         }
+    },
+    {
+        channel: 'wildcard/*',
+        callback: (value) => {
+            console.log("Unknown request received: " + value);
+        }
     }
 ]);
 

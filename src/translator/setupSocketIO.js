@@ -46,26 +46,6 @@ const setupSocketIO = (httpServer) => {
       console.log(`Socket connection error: ${err.message}`);
       id = null;
     });
-    
-    socket.on('identify/channel', () => {
-      tvObs.next(socket);
-      console.log("Channel Socket Identified");
-    });
-    socket.on('identify/filter', () => {
-      tvObs.next(socket);
-      console.log("Filter Socket Identified");
-    });
-
-    socket.on('identify', (msg) => {
-      const {identity, state} = msg;
-
-      console.log('Identify: ', identity);
-
-      arkhe_identity = identity;
-      sockets = {...sockets, [identity]: socket};
-
-      socketObs.next(sockets);
-    })
 
     socket.on('reading', (msg, reply) => {
       // console.log("Received:", msg);

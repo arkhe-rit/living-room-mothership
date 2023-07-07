@@ -1,6 +1,7 @@
 import { createBusClient } from "../translator/messageBusClient";
 
 const messageBus = createBusClient();
+messageBus.publish('tv/wildcard', 'hello world');
 
 //for, forces the values to be 0 and later will invoke the change event of the sliders to force
 //update the TV so the dashboard and the TV are in sync.
