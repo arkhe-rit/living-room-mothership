@@ -50,3 +50,17 @@ npm run start-dashboard
 npm run start-tv
 ```
 The dashboard will open on port `4321` and the TV will open on port `1234`.
+
+# How the Pub/Sub model works
+
+Redis acts as the backbone of our inter-client communication, with Socket.IO working as a mediator for any HTML/JS based clients. Redis' Pub/Sub models uses *channels* to share *messages* to any interested listeners.
+
+## Publishing
+
+Publishing to Redis is as simple as specifying a channel you want to publish to, then declaring the message content you're going to publish. A client does not need to be subscribed to a channel to publish to, there is no setup for the channel needed. 
+For Socket.IO clients, this is achieved with the `.publish` function of a `messageBusClient` object.
+
+## Subscribing
+
+Subscribing to a Redis channel is simliar to subscribing to a YouTube channel (or at least how it used to work). A client declares interest to a specific channel, then any time a message is published to the channel, Redis pushes it to the client, who handles it however they want. A client can subscribe to any amount of channels, or none at all; since there is no concept of "creating" channels, its possible to subscribe to a channel that never gets any messages (accidentally achieved if you misspell the channel name when subscribing).
+For socket.IO clients, this is achieved with the `.subscribe` function of a `messageBusClient` object. When subscribing to channel this way, you are required to provide a callback function that will get called when a new message is published on the channel. Usually this is an anymous function that checks the format of the message content and then calls other methods to handle the result of the message.
