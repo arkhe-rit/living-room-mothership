@@ -30,6 +30,7 @@ const canvas = document.getElementById('main-canvas');
 const gl = canvas.getContext('webgl');
 canvas.height = window.screen.height;
 canvas.width = window.screen.width;
+gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 
 const backBuffer = document.getElementById('back-buffer');
 const bbCTX = backBuffer.getContext('2d');
@@ -59,52 +60,7 @@ if (DEBUG) {
     backBuffer.hidden = false;
 }
 
-///Image Texture Setup
-const loadTextures = async () => {
-    console.log('Loading textures...')
-    //flips the pixel order of read-in texture data since the underlying gl functions expect the data to be processed bottom left first,
-    //but the image data is processed top left first
-    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-
-    // Load the noise image used for one of the fragment shaders
-    const noiseTexture = gl.createTexture();
-    const noiseImage = new Image();
-    noiseImage.onload = function () {
-        gl.activeTexture(gl.TEXTURE1);
-        // Set the texture parameters
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-        //
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, noiseImage);
-        gl.bindTexture(gl.TEXTURE_2D, noiseTexture);
-    };
-    noiseImage.src = '../media/noise.png';
-}
-
 let frameCount = 0;
-//uniforms that are unique to each shader, the name of the property must be the same as the uniform in the shader
-const shaderUniforms = [
-    {},
-    {
-        u_vertMovementOpt: true,
-        u_vertJerkOpt: true,
-        u_horizonFuzzOpt: true,
-        u_bottomStaticOpt: true,
-        u_scanlineOpt: true,
-        rgbOffsetOpt: true,
-
-        u_jerkFreq: 0.2,
-        u_smallFuzzStr: 0.003,
-        u_largeFuzzStr: 0.004,
-        u_staticStr: 1.5,
-        u_staticBounce: 0.3
-    },
-    {},
-    {},
-    {}
-]
 //the render loop that runs every frame
 const render = () => {
     //console.log('Rendering...')
@@ -152,11 +108,6 @@ const render = () => {
     // Pass the texture and noise texture
     gl.uniform1i(u_textureLocation, 0);
 
-    //per shader uniform settings
-    Object.keys(shaderUniforms[shaders.shaderProgramIndex]).forEach(key => {
-        gl.uniform1f(gl.getUniformLocation(shaders.getShaderProgram(), key), shaderUniforms[shaders.shaderProgramIndex][key]);
-    });
-
     // Draw the rectangle
     gl.drawArrays(gl.TRIANGLES, 0, 6);
     setTimeout(() => {
@@ -168,8 +119,6 @@ const render = () => {
 (() => {
     shaders.loadShaders(gl).then(() => {
         shaders.initVertexBuffer(gl);
-        loadTextures();
-        //initControls();
         console.log('Starting video...')
         video.play();
         render();

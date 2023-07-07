@@ -1,3 +1,4 @@
+//A simple frag shader that just outputs the pixel color of the texture
 precision mediump float;
 
 uniform vec3 u_resolution;

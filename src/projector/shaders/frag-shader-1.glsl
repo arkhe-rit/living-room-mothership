@@ -1,3 +1,4 @@
+//The main shader code for the TV effect, with all of the effects enabled
 precision mediump float;
 
 uniform vec3 u_resolution;  // viewport resolution (in pixels)
@@ -5,18 +6,18 @@ uniform float u_time;       // shader playback time (in seconds)
 uniform sampler2D u_texture;
 
 //customizable uniforms
-uniform float u_jerkFreq;
-uniform float u_smallFuzzStr;
-uniform float u_largeFuzzStr;
-uniform float u_staticStr;
-uniform float u_staticBounce;
+float u_jerkFreq = 0.2;
+float u_smallFuzzStr = 0.003;
+float u_largeFuzzStr = 0.004;
+float u_staticStr = 1.5;
+float u_staticBounce = 0.3;
 
-uniform float u_vertMovementOpt;
-uniform float u_vertJerkOpt;
-uniform float u_horizonFuzzOpt;
-uniform float u_bottomStaticOpt;
-uniform float u_scanlineOpt;
-uniform float rgbOffsetOpt;
+float u_vertMovementOpt = 1.0;
+float u_vertJerkOpt = 1.0;
+float u_horizonFuzzOpt = 1.0;
+float u_bottomStaticOpt = 1.0;
+float u_scanlineOpt = 1.0;
+float rgbOffsetOpt = 1.0;
 
 // Noise generation functions borrowed from: 
 // https://github.com/ashima/webgl-noise/blob/master/src/noise2D.glsl
