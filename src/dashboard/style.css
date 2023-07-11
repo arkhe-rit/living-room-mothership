@@ -24,6 +24,9 @@ h1 {
 #message-list li p {
     margin: 0px;
 }
+.message-channel {
+    font-weight: bold;
+}
 
 #control-panel {
     display:flex;
