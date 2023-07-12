@@ -1,9 +1,12 @@
-import { clientSocket } from "./socket";
+import { clientSocket } from "../server/socket/clientSocket";
 
-const createBusClient = (subscriptions: {channel: string, callback: Function}[] = []) => {
+type messageType = 'command' | 'algebra';
+type messageCallback = (message: {type: messageType}, channel: string) => void;
+
+const createBusClient = (subscriptions: { channel: string, callback: messageCallback }[] = []) => {
     const socketClient = clientSocket();
 
-    const subscribe = (channel: string, callback: Function) => {
+    const subscribe = (channel: string, callback: messageCallback) => {
         socketClient.emit('subscribe', channel);
         socketClient.on(channel, callback);
     }

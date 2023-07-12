@@ -1,31 +1,24 @@
-import { createBusClient } from "../../translator/messageBusClient";
+import { createBusClient } from "../../toolbox/messageBusClient";
 import * as shaders from "./shaders";
 
 // Set up socket, connect to server, and identify self
-const messageBus = createBusClient([
-    {
-        channel: 'tv/channel', 
-        callback: (value) => {
-            console.log("Channel request received: " + value);
-            value %= videos.length;
-            console.log(`Now playing: ${changeVideo(value)}`);
-        }
-    },
-    {
-        channel: 'tv/filter',
-        callback: (value) => {
-            console.log("Filter request received: " + value);
-            shaders.switchShader(value, gl);
-            console.log(`Now using filter: ${shaders.shaderProgramIndex}`)
-        }
-    },
-    {
-        channel: 'wildcard/*',
-        callback: (value) => {
-            console.log("Unknown request received: " + value);
-        }
+const messageBus = createBusClient();
+messageBus.subscribe('projector/tv/*', (message) => {
+    switch (message.type) {
+        case 'command':
+            switch (message.command) {
+                case 'change-video':
+                    const newChannel = message.channel % videos.length;
+                    console.log(`Now playing: ${changeVideo(newChannel)}`);
+                    break;
+                case 'change-filter':
+                    shaders.switchShader(message.filter, gl);
+                    console.log(`Now using filter: ${shaders.shaderProgramIndex}`)
+                    break;
+            }
+            break;
     }
-]);
+});
 
 ///
 

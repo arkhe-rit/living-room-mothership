@@ -1,8 +1,11 @@
 import Koa from "koa";
 import Router from '@koa/router';
+import staticMiddleware from "koa-static";
+import mount from "koa-mount";
+import path from "path";
 import { createServer } from "http";
 import { networkInterfaces } from 'os';
-import { setupSocketIO } from "./setupSocketIO";
+import { setupSocketIO } from "./socket/setupSocketIO";
 import { latest } from "../toolbox/observables";
 import { chairChordAlg } from "../algebra/chairChord";
 import { makeObservations } from "../observers";
@@ -27,6 +30,9 @@ const latestSockets_io = latest(socketsByIdentityObs);
 
 const observations = makeObservations(messagesObs);
 const latestObservation_io = latest(observations, chairChordAlg.identity());
+
+//get the root directory of the process
+const __dirname = path.resolve();
 
 let relay_1_on = false;
 let relay_2_on = false;
@@ -179,11 +185,15 @@ router
     latestTV_io()?.emit('signal/eink', ctx.query.filter);
   })
   
+const tvStatic = staticMiddleware(path.join(__dirname, 'src/projector/tv'));
+app.use(mount('/tv', tvStatic));
 
+const dashboardStatic = staticMiddleware(path.join(__dirname, 'src/dashboard'));
+app.use(mount('/dashboard', dashboardStatic));
 
 app
   .use(async (ctx, next) => {
-    const {id} = ctx.query;
+    const { id } = ctx.query;
 
     const socketsByIdentity = socketsByIdentity_io();
     const identifiedSocket = Object.entries(socketsByIdentity)
@@ -194,7 +204,5 @@ app
     await next();
   })
   .use(router.routes())
-  .use(router.allowedMethods());
-
-app.listen(3001);
+  .use(router.allowedMethods())
 

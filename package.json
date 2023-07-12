@@ -4,12 +4,12 @@
     "description": "",
     "type": "module",
     "source": [
-        "src/index.html"
+        "src/"
     ],
     "scripts": {
-        "start": "cross-env ENV=DEV PORT=5555 NODE_OPTIONS='--experimental-specifier-resolution=node' node src/translator/server.js",
-        "start-dashboard": "cross-env ENV=DEV PORT=4321 parcel src/dashboard/index.html --dist-dir ./dist/tv",
-        "start-tv": "cross-env ENV=DEV PORT=1234 parcel src/projector/tv/tv.html --dist-dir ./dist/tv",
+        "start": "cross-env ENV=DEV PORT=5555 NODE_OPTIONS='--experimental-specifier-resolution=node' node src/server/server.js",
+        "start-tv": "cross-env ENV=DEV PORT=1234 parcel src/projector/tv/index.html --dist-dir ./dist/tv",
+        "start-dashboard": "cross-env ENV=DEV PORT=4321 parcel src/dashboard/index.html --dist-dir ./dist/dashboard",
         "test": "cross-env NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest",
         "format": "bash scripts/format.sh",
         "format-check": "prettier --check . && python -m black . --check --include=\"\\.py\" --exclude=\"\\.(json|sh)\"",
@@ -47,6 +47,8 @@
         "cross-env": "^7.0.3",
         "express": "^4.18.1",
         "koa": "^2.13.4",
+        "koa-mount": "^4.0.0",
+        "koa-static": "^5.0.0",
         "lodash": "^4.17.21",
         "observable-fns": "^0.6.1",
         "parcel": "^2.7.0",

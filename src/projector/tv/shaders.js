@@ -5,6 +5,7 @@ import frag2 from '../shaders/frag-shader-2.glsl';
 import frag3 from '../shaders/frag-shader-3.glsl';
 import frag4 from '../shaders/frag-shader-4.glsl';
 import frag5 from '../shaders/frag-shader-5.glsl';
+import frag6 from '../shaders/frag-shader-6.glsl';
 
 const createShader = (gl, type, source) => {
     const shader = gl.createShader(type);
@@ -66,7 +67,8 @@ const fragShaders = [
     frag2,
     frag3,
     frag4,
-    frag5
+    frag5,
+    frag6
 ];
 const loadShaders = async (gl) => {
     //let shaderPrograms = [];

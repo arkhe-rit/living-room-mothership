@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createBusClient = void 0;
-const socket_1 = require("./socket");
+const clientSocket_1 = require("../server/socket/clientSocket");
 const createBusClient = (subscriptions = []) => {
-    const socketClient = (0, socket_1.clientSocket)();
+    const socketClient = (0, clientSocket_1.clientSocket)();
     const subscribe = (channel, callback) => {
         socketClient.emit('subscribe', channel);
         socketClient.on(channel, callback);

@@ -63,4 +63,4 @@ const clientSocket = () => {
   return socket;
 };
 
-export default clientSocket;
+export { clientSocket };

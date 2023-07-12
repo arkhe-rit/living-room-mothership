@@ -1,4 +1,4 @@
-import { createBusClient } from "../translator/messageBusClient";
+import { createBusClient } from "../toolbox/messageBusClient";
 
 // Set-up Functions (called when page is loaded)
 const allChannels = [];
