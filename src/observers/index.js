@@ -1,6 +1,6 @@
 import { scan } from 'observable-fns';
-import { chairChordAlg } from '../algebra/chairChord';
-import { chairChord } from './chairChord';
+import { chairChordAlg } from '../algebra/chairChord.js';
+import { chairChord } from './chairChord.js';
 
 let arkheObservers = {};
 

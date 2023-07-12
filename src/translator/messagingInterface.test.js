@@ -1,5 +1,5 @@
 import { jest } from "@jest/globals";
-import { socketInterface } from "./messagingInterface";
+import { socketInterface } from "./messagingInterface.js";
 
 const mockSocket = () => {
   let listeners = {};

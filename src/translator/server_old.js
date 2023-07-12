@@ -2,11 +2,11 @@ import Koa from "koa";
 import Router from '@koa/router';
 import { createServer } from "http";
 import { networkInterfaces } from 'os';
-import { setupSocketIO } from "./setupSocketIO";
-import { latest } from "../toolbox/observables";
-import { chairChordAlg } from "../algebra/chairChord";
-import { makeObservations } from "../observers";
-import { interpretLeft, interpretList, interpretRight } from "../algebra/interpret";
+import { setupSocketIO } from "./setupSocketIO.js";
+import { latest } from "../toolbox/observables.js";
+import { chairChordAlg } from "../algebra/chairChord.js";
+import { makeObservations } from "../observers/index.js";
+import { interpretLeft, interpretList, interpretRight } from "../algebra/interpret.js";
 
 const STATE = {};
 

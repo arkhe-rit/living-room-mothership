@@ -1,4 +1,4 @@
-import { match } from ".";
+import { match } from "./index.js";
 
 const interpretRight = match({
   identity: () => null,

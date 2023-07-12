@@ -1,5 +1,5 @@
-import { interpretCount, interpretLeft, interpretRight } from "../algebra/interpret";
-import { clientSocket } from "../translator/socket";
+import { interpretCount, interpretLeft, interpretRight } from "../algebra/interpret.js";
+import { clientSocket } from "../translator/socket.js";
 
 const video = document.querySelector("video");
 
