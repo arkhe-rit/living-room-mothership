@@ -1,8 +1,5 @@
 import Koa from "koa";
 import Router from '@koa/router';
-import staticMiddleware from "koa-static";
-import mount from "koa-mount";
-import path from "path";
 import { createServer } from "http";
 import { networkInterfaces } from 'os';
 import { setupSocketIO } from "./socket/setupSocketIO";
@@ -31,8 +28,6 @@ const latestSockets_io = latest(socketsByIdentityObs);
 const observations = makeObservations(messagesObs);
 const latestObservation_io = latest(observations, chairChordAlg.identity());
 
-//get the root directory of the process
-const __dirname = path.resolve();
 
 let relay_1_on = false;
 let relay_2_on = false;
@@ -137,60 +132,55 @@ httpServer.listen(port, () => {
   console.log(`Translator listening at ${ipAdddress}:${port}`);
 });
 
-const router = new Router();
-router
-  .get('/control/test', async (ctx, next) => {
-    console.log('IN /CONTROL/TEST');
+{
+  const router = new Router();
+  router
+    .get('/control/test', async (ctx, next) => {
+      console.log('IN /CONTROL/TEST');
 
-    ctx.identifiedSocket?.emit('test', 'body ody ody');
-  })
-  .get('/control/set/debug', async (ctx, next) => {
-    console.log('IN /CONTROL/SET/DEBUG');
+      ctx.identifiedSocket?.emit('test', 'body ody ody');
+    })
+    .get('/control/set/debug', async (ctx, next) => {
+      console.log('IN /CONTROL/SET/DEBUG');
 
-    ctx.identifiedSocket?.emit('control/set/debug');
-  })
-  .get('/control/set/zero', async (ctx, next) => {
-    console.log('IN /CONTROL/ZERO');
-    ctx.identifiedSocket?.emit('control/set/zero');
-  })
-  .get('/control/set/high', async (ctx, next) => {
-    console.log('IN /CONTROL/HIGH');
-    ctx.identifiedSocket?.emit('control/set/high');
-  })
-  .get('/control/set/identity', async (ctx, next) => {
-    console.log('IN /CONTROL/identity');
-    // TODO
-    ctx.identifiedSocket?.emit('control/set/identity', ctx.query.new_id);
-  })
-  .get('/signal/on', async (ctx, next) => {
-    console.log('IN /SIGNAL/on');
-    ctx.identifiedSocket?.emit('signal/on');
-  })
-  .get('/signal/off', async (ctx, next) => {
-    console.log('IN /SIGNAL/off');
-    ctx.identifiedSocket?.emit('signal/off');
-  })
+      ctx.identifiedSocket?.emit('control/set/debug');
+    })
+    .get('/control/set/zero', async (ctx, next) => {
+      console.log('IN /CONTROL/ZERO');
+      ctx.identifiedSocket?.emit('control/set/zero');
+    })
+    .get('/control/set/high', async (ctx, next) => {
+      console.log('IN /CONTROL/HIGH');
+      ctx.identifiedSocket?.emit('control/set/high');
+    })
+    .get('/control/set/identity', async (ctx, next) => {
+      console.log('IN /CONTROL/identity');
+      // TODO
+      ctx.identifiedSocket?.emit('control/set/identity', ctx.query.new_id);
+    })
+    .get('/signal/on', async (ctx, next) => {
+      console.log('IN /SIGNAL/on');
+      ctx.identifiedSocket?.emit('signal/on');
+    })
+    .get('/signal/off', async (ctx, next) => {
+      console.log('IN /SIGNAL/off');
+      ctx.identifiedSocket?.emit('signal/off');
+    })
 
-  // Dashboard get calls
-  .get('/control/set/tv/channel', async (ctx, next) => {
-    console.log('IN /CONTROL/set/tv/channel');
-    latestTV_io()?.emit('signal/tv/channel', ctx.query.channel);
-  })
-  .get('/control/set/tv/filter', async (ctx, next) => {
-    console.log('IN /CONTROL/set/tv/filter');
-    latestTV_io()?.emit('signal/tv/filter', ctx.query.filter);
-  })
-  .get('/control/set/eink', async (ctx, next) => {
-    console.log('IN /CONTROL/set/eink');
-    latestTV_io()?.emit('signal/eink', ctx.query.filter);
-  })
-  
-const tvStatic = staticMiddleware(path.join(__dirname, 'src/projector/tv'));
-app.use(mount('/tv', tvStatic));
-
-const dashboardStatic = staticMiddleware(path.join(__dirname, 'src/dashboard'));
-app.use(mount('/dashboard', dashboardStatic));
-
+    // Dashboard get calls
+    .get('/control/set/tv/channel', async (ctx, next) => {
+      console.log('IN /CONTROL/set/tv/channel');
+      latestTV_io()?.emit('signal/tv/channel', ctx.query.channel);
+    })
+    .get('/control/set/tv/filter', async (ctx, next) => {
+      console.log('IN /CONTROL/set/tv/filter');
+      latestTV_io()?.emit('signal/tv/filter', ctx.query.filter);
+    })
+    .get('/control/set/eink', async (ctx, next) => {
+      console.log('IN /CONTROL/set/eink');
+      latestTV_io()?.emit('signal/eink', ctx.query.filter);
+    })
+}
 app
   .use(async (ctx, next) => {
     const { id } = ctx.query;
@@ -205,4 +195,3 @@ app
   })
   .use(router.routes())
   .use(router.allowedMethods())
-
