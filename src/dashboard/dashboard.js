@@ -1,6 +1,7 @@
 import { createBusClient } from "../translator/messageBusClient";
 
 // Set-up Functions (called when page is loaded)
+const allChannels = [];
 loadChannels();
 window.onload = (e) => {document.querySelector("#message-sender").onclick = sendMessage};
 
@@ -8,10 +9,25 @@ window.onload = (e) => {document.querySelector("#message-sender").onclick = send
 // Callback functions are called when a message is received from the correspoonding channel.
 // Currently tv/channel and tv/filter update the status and the log; depenidn gon how quickly data is received 
 // from observers, might not want to update log. TODO: Hide duplicate messages in log and show number sent instead.
+{
+    channel: 'projector/*'
+}
 const messageBus = createBusClient([
     {
+        channel: '*',
+        callback: (value, channel) => {
+            updateLog(channel, value);
+        }
+    },
+    {
+        channel: 'projector/*',
+        callback: (value, channel) => {
+            updateStatus(channel, value);
+        }
+    },
+    {
         channel: 'tv/channel', 
-        callback: (value) => {
+        callback: (value, channel) => {
             updateStatus('#tv-channel', value);
             updateLog('tv/channel', value);
         }
@@ -35,31 +51,17 @@ const messageBus = createBusClient([
 // Fills channel selector dropdown with valid channels. Could just hardcode in HTML but see TODO...
 // TODO: See if we can pull channels from redis here. Not sure if possible.
 function loadChannels() {
-    let channels = document.querySelector("#channel-selector-input");
-    let option;
-    
-    option = document.createElement("option");
-    option.value = option.innerHTML = "tv/channel";
-    channels.appendChild(option);
-
-    option = document.createElement("option");
-    option.value = option.innerHTML = "tv/filter";
-    channels.appendChild(option);
-
-    option = document.createElement("option");
-    option.value = option.innerHTML = "wildcard/*";
-    channels.appendChild(option);
-
     // Until we can pull channels from redis, HARD CODE NEW CHANNELS HERE!!!!
-    /*
-    option = document.createElement("option");
-    option.value = option.innerHTML = "projector/epaper";
-    channels.appendChild(option);
+    allChannels.push("tv/channel", "tv/filter", "wildcard/*");
 
-    option = document.createElement("option");
-    option.value = option.innerHTML = "projector/radio";
-    channels.appendChild(option);
-    */
+    let channelDropdown = document.querySelector("#channel-selector-input");
+    let option;
+
+    for(let i = 0; i < allChannels.length; i++) {
+        option = document.createElement("option");
+        option.value = option.innerHTML = allChannels[i];
+        channelDropdown.appendChild(option);
+    }
 }
 
 // Checks validity of message and sends to redis. Called when 'Publish' button is clicked.
@@ -67,10 +69,26 @@ function sendMessage() {
     let channel = document.querySelector("#channel-selector-input").value;
     let message = document.querySelector("#message-selector-input").value;
     message= message.trim();
-    if(message.length == 0) { return; } // Message is blank, so do nothing. TODO: Add feedback to user that message is blank.
+    if(message.length == 0) { 
+        document.querySelector("#message-selector-input").value = "";
+        document.querySelector("#message-selector-input").placeholder = "Invalid Input";
+        return; // Message is blank, so do nothing.
+    }
 
-    // Send message to server
-    messageBus.publish(channel, message);  
+    // If sent on universal channel, emit message to all known channels
+    if(channel == "universal") {
+        for(let i = 0; i < allChannels.length; i++) {
+            messageBus.publish(allChannels[i], message);
+        }
+    }
+    else {
+        // Send message to server
+        messageBus.publish(channel, message);  
+        /*
+        messageBus.publish('projector/tv', {type: 'algebra', algebra: {...}});
+        messageBus.publish('projector/tv/command', {type:'command', command:'change-channel', channel:4}); 
+        */
+    }
 
     // Clear message field
     document.querySelector("#message-selector-input").value = "";
