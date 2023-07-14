@@ -132,7 +132,6 @@ httpServer.listen(port, () => {
   console.log(`Translator listening at ${ipAdddress}:${port}`);
 });
 
-{
   const router = new Router();
   router
     .get('/control/test', async (ctx, next) => {
@@ -180,7 +179,7 @@ httpServer.listen(port, () => {
       console.log('IN /CONTROL/set/eink');
       latestTV_io()?.emit('signal/eink', ctx.query.filter);
     })
-}
+    
 app
   .use(async (ctx, next) => {
     const { id } = ctx.query;

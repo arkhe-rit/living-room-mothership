@@ -88,6 +88,7 @@ function sendMessage() {
         messageBus.publish('projector/tv', {type: 'algebra', algebra: {...}});
         messageBus.publish('projector/tv/command', {type:'command', command:'change-channel', channel:4}); 
         */
+        //{ "type": "command", "command": "change-video", "channel": 2 }
     }
 
     // Clear message field

@@ -15,7 +15,7 @@ const createBusClient = (subscriptions: { channel: string, callback: messageCall
         socketClient.emit('unsubscribe', channel);
     }
 
-    const publish = (channel: string, message: string) => {
+    const publish = (channel: string, message: { type: messageType }) => {
         socketClient.emit('publish', {channel, message});
     }
 
