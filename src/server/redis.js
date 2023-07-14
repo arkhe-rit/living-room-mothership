@@ -4,7 +4,7 @@ let subscriptions = {};
 
 const setupRedisAdapter = async (io) => {
     const pubClient = createClient({
-        host: 'localhost',
+        host: 'redis',
         port: 6379
     });
     const subClient = pubClient.duplicate();

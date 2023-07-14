@@ -4,22 +4,18 @@
     "description": "",
     "type": "module",
     "source": [
-        "src/"
+        "src/server/server.js"
     ],
     "scripts": {
         "start-server": "cross-env ENV=DEV PORT=5555 NODE_OPTIONS='--experimental-specifier-resolution=node' node src/server/server.js",
         "start-tv": "cross-env ENV=DEV PORT=1234 parcel src/projector/tv/index.html --dist-dir ./dist/tv",
         "start-dashboard": "cross-env ENV=DEV PORT=4321 parcel src/dashboard/index.html --dist-dir ./dist/dashboard",
         "test": "cross-env NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest",
-        "format": "bash scripts/format.sh",
-        "format-check": "prettier --check . && python -m black . --check --include=\"\\.py\" --exclude=\"\\.(json|sh)\"",
-        "attach-githooks": "git config core.hooksPath gitHooks",
         "prestart-translator": "npm install",
         "pretest": "npm install",
-        "build": "parcel build",
         "start": " docker-compose up -d --build && docker compose logs --follow",
         "setup": "docker volume create nodemodules && docker-compose -f docker-compose.builder.yml run --rm install",
-        "start_insideDocker": "cross-env ENV=DEV PORT=5555 NODE_OPTIONS='--experimental-specifier-resolution=node' nodemon -L src/translator/server.js",
+        "start_insideDocker": "cross-env ENV=DEV PORT=5555 NODE_OPTIONS='--experimental-specifier-resolution=node' nodemon -L src/server/server.js",
         "start-tv_insideDocker": "cross-env ENV=DEV PORT=4321 parcel src/tv/index.html --dist-dir ./dist/tv --hmr-port 1235"
     },
     "repository": {
@@ -34,13 +30,19 @@
     "homepage": "https://github.com/arkhe-rit/living-room#readme",
     "devDependencies": {
         "@parcel/transformer-glsl": "^2.7.0",
+        "@typescript-eslint/eslint-plugin": "^5.62.0",
         "assert": "^2.0.0",
+        "eslint": "^8.45.0",
+        "eslint-config-standard-with-typescript": "^36.0.1",
+        "eslint-plugin-import": "^2.27.5",
+        "eslint-plugin-n": "^15.7.0",
+        "eslint-plugin-promise": "^6.1.1",
         "events": "^3.3.0",
         "jest": "^28.1.1",
-        "prettier": "^2.6.2",
         "process": "^0.11.10",
         "querystring-es3": "^0.2.1",
         "stream-http": "^3.2.0",
+        "typescript": "^5.1.6",
         "url": "^0.11.0",
         "util": "^0.12.4"
     },
