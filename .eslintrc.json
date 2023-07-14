@@ -20,6 +20,9 @@
         ],
         "no-case-declarations": [
             "warn"
+        ],
+        "@typescript-eslint/no-unused-vars": [
+            "warn"
         ]
     }
 }
