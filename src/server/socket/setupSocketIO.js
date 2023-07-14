@@ -48,7 +48,7 @@ const setupSocketIO = (httpServer) => {
     });
 
     socket.on('reading', (msg, reply) => {
-      // console.log("Received:", msg);
+      console.log("Received:", `Id: ${msg.identity}, read: ${msg.weight_reading}`);
 
       const {type, identity, value, threshold_zero, threshold_high, reading} = msg;
 

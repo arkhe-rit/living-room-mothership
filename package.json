@@ -7,7 +7,7 @@
         "src/"
     ],
     "scripts": {
-        "start": "cross-env ENV=DEV PORT=5555 NODE_OPTIONS='--experimental-specifier-resolution=node' node src/server/server.js",
+        "start-server": "cross-env ENV=DEV PORT=5555 NODE_OPTIONS='--experimental-specifier-resolution=node' node src/server/server.js",
         "start-tv": "cross-env ENV=DEV PORT=1234 parcel src/projector/tv/index.html --dist-dir ./dist/tv",
         "start-dashboard": "cross-env ENV=DEV PORT=4321 parcel src/dashboard/index.html --dist-dir ./dist/dashboard",
         "test": "cross-env NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest",
@@ -16,7 +16,11 @@
         "attach-githooks": "git config core.hooksPath gitHooks",
         "prestart-translator": "npm install",
         "pretest": "npm install",
-        "build": "parcel build"
+        "build": "parcel build",
+        "start": " docker-compose up -d --build && docker compose logs --follow",
+        "setup": "docker volume create nodemodules && docker-compose -f docker-compose.builder.yml run --rm install",
+        "start_insideDocker": "cross-env ENV=DEV PORT=5555 NODE_OPTIONS='--experimental-specifier-resolution=node' nodemon -L src/translator/server.js",
+        "start-tv_insideDocker": "cross-env ENV=DEV PORT=4321 parcel src/tv/index.html --dist-dir ./dist/tv --hmr-port 1235"
     },
     "repository": {
         "type": "git",
@@ -43,6 +47,7 @@
     "dependencies": {
         "@koa/router": "^12.0.0",
         "@socket.io/redis-adapter": "^8.2.1",
+        "aedes": "^0.48.0",
         "buffer": "^6.0.3",
         "cross-env": "^7.0.3",
         "express": "^4.18.1",
@@ -50,6 +55,7 @@
         "koa-mount": "^4.0.0",
         "koa-static": "^5.0.0",
         "lodash": "^4.17.21",
+        "nodemon": "^2.0.22",
         "observable-fns": "^0.6.1",
         "parcel": "^2.7.0",
         "redis": "^4.6.7",

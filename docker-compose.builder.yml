@@ -1,0 +1,29 @@
+# This Docker Compose file is designed to set up a build environment for the "mothership" Node.js app.
+# It creates "base", "install", and "build" services using the same Node.js image and shared volumes.
+# The "install" service runs "npm install" to install the project dependencies,
+# and the "build" service executes "npm run build" to compile the application.
+# By doing so, it ensures the build process happens within a container, guaranteeing consistency across different environments.
+#
+
+version: '3'  # Specifies the version of Docker Compose file format. As of 2021, version '3' is the most current.
+
+services:  # Defines the set of services (i.e., containers) that comprise your application.
+
+  base: &base  # An anchor (&) creates a named chunk of YAML that will be inserted where you use a pointer (*).
+    image: node:19  # Specifies the Docker image to use for this service. We're using the Node.js image, version 19.
+    volumes:  # Specifies the directories that should be shared between the host and the container.
+      - nodemodules:/usr/src/app/node_modules  # Mounts the nodemodules volume at the specified path in the container.
+      - .:/usr/src/app  # Mounts the current directory on the host to the specified path in the container.
+    working_dir: /usr/src/app  # Defines the working directory for commands to run in.
+
+  install:  # A service named "install".
+    <<: *base  # Inserts the chunk of YAML defined under "base" above.
+    command: npm install  # Runs "npm install" when the container starts.
+
+  build:  # A service named "build".
+    <<: *base  # Inserts the chunk of YAML defined under "base" above.
+    command: npm run build  # Runs "npm run build" when the container starts.
+
+volumes:  # Defines named volumes that can be used by any service.
+  nodemodules:  # A named volume for node modules.
+    external: true  # Indicates that this volume is managed outside of Docker Compose.
