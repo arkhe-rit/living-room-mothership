@@ -47,21 +47,6 @@ const setupSocketIO = (httpServer) => {
       id = null;
     });
 
-    socket.on('identify/tv', () => {
-      tvObs.next(socket);
-    });
-
-    socket.on('identify', (msg) => {
-      const {identity, state} = msg;
-
-      console.log('Identify: ', identity);
-
-      arkhe_identity = identity;
-      sockets = {...sockets, [identity]: socket};
-
-      socketObs.next(sockets);
-    })
-
     socket.on('reading', (msg, reply) => {
       console.log("Received:", `Id: ${msg.identity}, read: ${msg.weight_reading}`);
 
@@ -85,7 +70,8 @@ const setupSocketIO = (httpServer) => {
   return {
     socketsByIdentityObs: multicast(socketObs),
     messagesObs: multicast(msgObs),
-    tvObs: multicast(tvObs)
+    tvObs: multicast(tvObs),
+    io
   };
 };
 
