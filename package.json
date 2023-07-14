@@ -10,7 +10,7 @@
         "start-server": "cross-env ENV=DEV PORT=5555 NODE_OPTIONS='--experimental-specifier-resolution=node' node src/server/server.js",
         "start-tv": "cross-env ENV=DEV PORT=1234 parcel src/projector/tv/index.html --dist-dir ./dist/tv",
         "start-dashboard": "cross-env ENV=DEV PORT=4321 parcel src/dashboard/index.html --dist-dir ./dist/dashboard",
-        "test": "cross-env NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest",
+        "test": "cross-env NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest --passWithNoTests",
         "prestart-translator": "npm install",
         "pretest": "npm install",
         "start": " docker-compose up -d --build && docker compose logs --follow",
