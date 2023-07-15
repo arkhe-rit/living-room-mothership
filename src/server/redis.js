@@ -66,6 +66,7 @@ const setupRedisAdapter = async (io) => {
         socket.on('publish', (data) => {
             const channel = data.channel.toString();
             const message = data.message.toString();
+            //instead of publishing to a wildcard channel, publish to individual channels that match the pattern
             if (channel.includes('*')) {
                 for (const sub in subscriptions) {
                     if (wildcardComparison(channel, sub)) {
