@@ -66,7 +66,16 @@ const setupRedisAdapter = async (io) => {
         socket.on('publish', (data) => {
             const channel = data.channel.toString();
             const message = data.message.toString();
-            pubClient.publish(channel, message);
+            if (channel.includes('*')) {
+                for (const sub in subscriptions) {
+                    if (wildcardComparison(channel, sub)) {
+                        pubClient.publish(sub, message);
+                    }
+                }
+            }
+            else {
+                pubClient.publish(channel, message);
+            }
         });
     });
 }
