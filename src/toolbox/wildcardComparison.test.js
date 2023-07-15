@@ -30,4 +30,9 @@ describe('wildcardComparison', () => {
         const result = wildcardComparison('*/control', 'projector/screen/power');
         expect(result).toBe(false);
     });
+
+    test('should return false for "projector/*/control" and "projector/tv/banana/control/apple"', () => {
+        const result = wildcardComparison('projector/*/control', 'projector/tv/banana/control/apple');
+        expect(result).toBe(false);
+    });
 });
