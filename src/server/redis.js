@@ -40,7 +40,7 @@ const setupRedisAdapter = async (io) => {
                         if (wildcardComparison(sub, channel)) {
                             emitToSubs(sub, message);
                         }
-                    }
+                    });
                 });
             }
             //othewrise, just add the client to the array
