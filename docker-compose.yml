@@ -26,6 +26,7 @@ services:  # Defines the set of services (i.e., containers) that comprise your a
       - 3000:3000  # Maps port 3000 of the host to port 3000 in the container.
       - 4321:4321  # Maps port 4321 of the host to port 4321 in the container.
       - 1235:1235  # Maps port 1235 of the host to port 1235 in the container.
+      - 5555:5555
     volumes:  # Specifies the directories that should be shared between the host and the container.
       - nodemodules:/usr/src/app/node_modules  # Mounts the nodemodules volume at the specified path in the container.
       - .:/usr/src/app  # Mounts the current directory on the host to the specified path in the container.
