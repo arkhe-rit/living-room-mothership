@@ -9,9 +9,6 @@ window.onload = (e) => {document.querySelector("#message-sender").onclick = send
 // Callback functions are called when a message is received from the correspoonding channel.
 // Currently tv/channel and tv/filter update the status and the log; depenidn gon how quickly data is received 
 // from observers, might not want to update log. TODO: Hide duplicate messages in log and show number sent instead.
-{
-    channel: 'projector/*'
-}
 const messageBus = createBusClient([
     {
         channel: '*',

@@ -2,12 +2,12 @@ import Koa from "koa";
 import Router from '@koa/router';
 import { createServer } from "http";
 import { networkInterfaces } from 'os';
-import { setupSocketIO } from "./socket/setupSocketIO";
-import { latest } from "../toolbox/observables";
-import { chairChordAlg } from "../algebra/chairChord";
-import { makeObservations } from "../observers";
-import { interpretLeft, interpretList, interpretRight } from "../algebra/interpret";
-import { setupRedisAdapter } from "./redis";
+import { setupSocketIO } from "./socket/setupSocketIO.js";
+import { latest } from "../toolbox/observables.js";
+import { chairChordAlg } from "../algebra/chairChord.js";
+import { makeObservations } from "../observers/index.js";
+import { interpretLeft, interpretList, interpretRight } from "../algebra/interpret.js";
+import { setupRedisAdapter } from "./redis.js";
 
 const STATE = {};
 

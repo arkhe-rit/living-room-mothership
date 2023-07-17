@@ -10,7 +10,7 @@ messageBus.subscribe('projector/tv/*', (message) => {
         case 'command':
             switch (message.command) {
                 case 'change-video':
-                    const newChannel = message.channel % videos.length;
+                    let newChannel = message.channel % videos.length;
                     console.log(`Now playing: ${changeVideo(newChannel)}`);
                     break;
                 case 'change-filter':

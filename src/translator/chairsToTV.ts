@@ -1,6 +1,6 @@
 import { TranslatorDescription } from "./translatorEngine";
 
-type ChairAlg = {
+/* type ChairAlg = {
 
 };
 
@@ -14,4 +14,4 @@ const chairsToTv2: TranslatorDescription<ChairAlg, TvAlg> = {
   fn: (alg) => {
     return alg;
   }
-}
+} */
