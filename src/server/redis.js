@@ -1,4 +1,5 @@
 import { createClient } from "redis";
+import { wildcardComparison } from "../toolbox/wildcardComparison.js";
 
 let subscriptions = {};
 
@@ -35,15 +36,11 @@ const setupRedisAdapter = async (io) => {
                     }
                     //aside from emitting to the specific channel, check the subscriptions diciontary for any
                     //wildcard subscriptions that have a matching pattern
-                    for (const sub in subscriptions) {
-                        console.log(`Checking ${sub} against ${channel}`)
-                        if (sub.includes('*')) {
-                            if (matchChannelPattern(channel, sub)) {
-                                console.log(`Found wildcard subscription ${sub} for channel ${channel}`)
-                                emitToSubs(sub, message);
-                            }
+                    Object.keys(subscriptions).filter(sub => sub.includes('*')).forEach((sub) => {
+                        if (wildcardComparison(sub, channel)) {
+                            emitToSubs(sub, message);
                         }
-                    }
+                    });
                 });
             }
             //othewrise, just add the client to the array
@@ -69,44 +66,19 @@ const setupRedisAdapter = async (io) => {
         socket.on('publish', (data) => {
             const channel = data.channel.toString();
             const message = data.message.toString();
-            pubClient.publish(channel, message);
+            //instead of publishing to a channel with a wildcard in it, publish to individual channels that match the pattern
+            if (channel.includes('*')) {
+                for (const sub in subscriptions) {
+                    if (wildcardComparison(channel, sub)) {
+                        pubClient.publish(sub, message);
+                    }
+                }
+            }
+            else {
+                pubClient.publish(channel, message);
+            }
         });
     });
 }
-
-const matchChannelPattern = (incomingChannel, subscribedChannel) => {
-    const incomingParts = incomingChannel.split('/');
-    const subscribedParts = subscribedChannel.split('/');
-
-    let incomingIndex = 0;
-    let subscribedIndex = 0;
-
-    while (subscribedIndex < subscribedParts.length && incomingIndex < incomingParts.length) {
-        const subscribedPart = subscribedParts[subscribedIndex];
-        const incomingPart = incomingParts[incomingIndex];
-        //console.log('Comparing', subscribedPart, incomingPart)
-
-        if (subscribedPart === incomingPart) {
-            //console.log('Match', subscribedPart, incomingPart);
-            subscribedIndex++;
-            incomingIndex++;
-            continue;
-        }
-        else if (incomingPart === subscribedParts[subscribedIndex + 1]) {
-            //console.log('Wildcard', subscribedPart, incomingPart);
-            subscribedIndex++;
-            continue;
-        }
-        else if (subscribedPart !== '*' && subscribedPart !== incomingPart) {
-            //console.log('Early out', subscribedPart, incomingPart);
-            return false;
-        }
-        incomingIndex++;
-    }
-    if (subscribedParts[subscribedIndex] === '*') {
-        subscribedIndex++;
-    }
-    return incomingIndex === incomingParts.length && subscribedIndex === subscribedParts.length;
-};
 
 export { setupRedisAdapter };
