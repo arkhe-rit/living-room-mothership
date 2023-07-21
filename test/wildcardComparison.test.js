@@ -1,4 +1,4 @@
-import { wildcardComparison } from './wildcardComparison';
+import { wildcardComparison } from '../src/toolbox/wildcardComparison';
 
 describe('wildcardComparison', () => {
     test('should return true for "projector/tv/*" and "projector/tv/control"', () => {

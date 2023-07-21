@@ -1,5 +1,5 @@
 const chairsToLamps = (obs) => {
-    const left = interpretLeft(obs);
+    /* const left = interpretLeft(obs);
     const right = interpretRight(obs);
     if (['chair_1', 'chair_2'].includes(left)) {
         if (relay_2_on === false) {
@@ -26,5 +26,5 @@ const chairsToLamps = (obs) => {
             console.log('relay_1 off');
             relay_1_on = false;
         }
-    }
+    } */
 }
