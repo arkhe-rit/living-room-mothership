@@ -58,7 +58,7 @@ const defaultSocket = io(
     }
 );
 
-const createBusClient = (socket: {emit: Function, on: Function} = setupSocket(defaultSocket)) => (subscriptions: { channel: string, callback: messageCallback }[] = []) => {
+const createBusClient = (socket = setupSocket(defaultSocket)) => (subscriptions: { channel: string, callback: messageCallback }[] = []) => {
     const client = {
         socket,
         subscribe: (channel: string, callback: messageCallback) => {
