@@ -1,15 +1,36 @@
 import { createBusClient } from '../src/toolbox/messageBusClient';
 import { jest } from '@jest/globals';
-import { mockSocket } from 'socket.io-client';
-
-jest.mock('socket.io-client');
 
 describe('createBusClient', () => {
     let busClient;
+    let mockSocket;
 
     beforeEach(() => {
+        mockSocket = {
+            channels: {},
+            emit: jest.fn((channel, arg) => {
+                if (mockSocket.channels === undefined) {
+                    mockSocket.channels = {};
+                }
+                switch (channel) {
+                    case 'subscribe':
+                        mockSocket.channels[arg] = [];
+                        break;
+                    case 'unsubscribe':
+                        mockSocket.channels[channel] = undefined;
+                        break;
+                    case 'publish':
+                        mockSocket.channels[arg.channel] && mockSocket.channels[arg.channel].forEach(callback => callback(arg.message));
+                        break;
+                }
+            }),
+            on: jest.fn((channel, callback) => {
+                mockSocket.channels[channel] = [...mockSocket.channels[channel], callback];
+            })
+        };
+
         // Initialize the busClient
-        busClient = createBusClient();
+        busClient = createBusClient(mockSocket)();
     });
 
     it('should return an object with socket, subscribe, unsubscribe, and publish methods', () => {

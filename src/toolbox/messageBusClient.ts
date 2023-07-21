@@ -7,50 +7,7 @@ type messageCallback = (message: { type: messageType }, channel: string) => void
 
 const isDevEnv = process.env.ENV === "DEV" || !process.env.ENV;
 
-const createBusClient = (subscriptions: { channel: string, callback: messageCallback }[] = []) => {
-    const socket = io(
-        isDevEnv
-            ? "http://localhost:5555"
-            : "https://arkhe-api.herokuapp.com/",
-        {
-            reconnectionAttempts: Infinity,
-            timeout: 10000
-        }
-    );
-    setupSocket(socket);
-
-    ///
-
-    const subscribe = (channel: string, callback: messageCallback) => {
-        socket.emit('subscribe', channel);
-        socket.on(channel, callback);
-        return this;
-    }
-
-    const unsubscribe = (channel: string) => {
-        socket.emit('unsubscribe', channel);
-        return this;
-    }
-
-    const publish = (channel: string, message: { type: messageType }) => {
-        socket.emit('publish', { channel, message });
-        return this;
-    }
-
-    // Subscribe to all channels passed in as default subscriptions
-    subscriptions.forEach(subscription => {
-        subscribe(subscription.channel, subscription.callback);
-    });
-
-    return {
-        socket,
-        subscribe,
-        unsubscribe,
-        publish
-    }
-}
-
-const setupSocket = (socket: Socket<DefaultEventsMap, DefaultEventsMap>) => {
+const setupSocket = (socket: Socket<DefaultEventsMap, DefaultEventsMap>): Socket<DefaultEventsMap> => {
     socket.on("connect", () => {
         console.log(`Connected to socket ${socket.id}`);
     });
@@ -87,6 +44,44 @@ const setupSocket = (socket: Socket<DefaultEventsMap, DefaultEventsMap>) => {
         console.log(`Socket connection error: ${err.message}`);
         reconnect(25);
     });
+
+    return socket;
+}
+
+const defaultSocket = io(
+    isDevEnv
+        ? "http://localhost:5555"
+        : "https://arkhe-api.herokuapp.com/",
+    {
+        reconnectionAttempts: Infinity,
+        timeout: 10000
+    }
+);
+
+const createBusClient = (socket: {emit: Function, on: Function} = setupSocket(defaultSocket)) => (subscriptions: { channel: string, callback: messageCallback }[] = []) => {
+    const client = {
+        socket,
+        subscribe: (channel: string, callback: messageCallback) => {
+            socket.emit('subscribe', channel);
+            socket.on(channel, callback);
+            return client;
+        },
+        unsubscribe: (channel: string) => {
+            socket.emit('unsubscribe', channel);
+            return client;
+        },
+        publish: (channel: string, message: { type: messageType }) => {
+            socket.emit('publish', { channel, message });
+            return this;
+        }
+    }
+
+    // Subscribe to all channels passed in as default subscriptions
+    subscriptions.forEach(subscription => {
+        client.subscribe(subscription.channel, subscription.callback);
+    });
+
+    return client;
 }
 
 export { createBusClient }
