@@ -1,5 +1,5 @@
 const mugsToTVFilter = (msg) => {
-    console.log(`Mugs to TV filter received: ${msg}`);
+    //console.log(`Mugs to TV filter received: ${msg}`);
     const filter = Math.floor(msg[2] / 90);
     return {
         type: 'command',

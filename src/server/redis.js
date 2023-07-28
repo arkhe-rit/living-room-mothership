@@ -14,7 +14,7 @@ const setupRedisAdapter = async (io) => {
 
     const emitToSubs = (channel, message) => {
         subscriptions[channel].forEach((id) => {
-            console.log(`Emitting to ${id} on channel ${channel} with content ${message}`)
+            //console.log(`Emitting to ${id} on channel ${channel} with content ${message}`)
             io.to(id).emit(channel, message);
         });
     }
@@ -28,7 +28,7 @@ const setupRedisAdapter = async (io) => {
                 subscriptions[channel] = [socket.id];
                 //psubscribe is used to be able to handle wildcard subscriptions
                 subClient.pSubscribe(channel, (message, channel) => {
-                    console.log(`Received message ${message} on channel ${channel}`);
+                    //console.log(`Received message ${message} on channel ${channel}`);
                     //nonwildcard channels
                     if (subscriptions[channel] !== undefined) {
                         emitToSubs(channel, message);

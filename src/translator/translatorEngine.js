@@ -10,7 +10,7 @@ const translators = [
 ]
 
 const createTranslatorEngine = () => {
-  const messageBus = createBusClient();
+  const messageBus = createBusClient()();
   messageBus.subscribe('translator/command', (msg) => {
     switch (msg.type) {
       case 'command':
@@ -36,14 +36,14 @@ const createTranslatorEngine = () => {
       if (translator.name === translatorName) {
         messageBus.subscribe(translator.listeningChannel, (msg) => {
           if (msg.type === 'algebra') {
-            const translatedMessage = translator.callback(msg.algebra);
+            const translatedMessage = JSON.stringify(translator.callback(msg.algebra));
             messageBus.publish(translator.publishingChannel, translatedMessage);
           }
         });
         return;
       }
-      console.log(`Unknown translator: ${translatorName}`);
     }
+    console.log(`Unknown translator: ${translatorName}`);
   };
 
   const deactivateTranslator = (translatorName) => {
