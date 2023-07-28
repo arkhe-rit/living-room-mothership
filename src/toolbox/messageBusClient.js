@@ -1,21 +1,21 @@
-import { clientSocket } from "../server/socket/clientSocket";
+import { clientSocket } from "../server/socket/clientSocket.js";
 
-type messageType = 'command' | 'algebra';
-type messageCallback = (message: {type: messageType}, channel: string) => void;
-
-const createBusClient = (subscriptions: { channel: string, callback: messageCallback }[] = []) => {
+const createBusClient = (subscriptions = []) => {
     const socketClient = clientSocket();
 
-    const subscribe = (channel: string, callback: messageCallback) => {
+    const subscribe = (channel, callback) => {
         socketClient.emit('subscribe', channel);
-        socketClient.on(channel, callback);
+        socketClient.on(channel, (message) => {
+            const parsedMessage = JSON.parse(message);
+            callback(parsedMessage, channel);
+        });
     }
 
-    const unsubscribe = (channel: string) => {
+    const unsubscribe = (channel) => {
         socketClient.emit('unsubscribe', channel);
     }
 
-    const publish = (channel: string, message: { type: messageType }) => {
+    const publish = (channel, message) => {
         socketClient.emit('publish', {channel, message});
     }
 

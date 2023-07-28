@@ -1,8 +1,13 @@
 {
+    "ts-node": {"files": true},
     "compilerOptions": {
         "target": "es6",
         "module": "commonjs",
-        "sourceMap": true,
-        "outDir": "dist",
-    }
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
 }

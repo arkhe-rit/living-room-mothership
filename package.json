@@ -17,7 +17,8 @@
         "setup": "docker volume create nodemodules && docker-compose -f docker-compose.builder.yml run --rm install",
         "start_insideDocker": "cross-env ENV=DEV PORT=5555 NODE_OPTIONS='--experimental-specifier-resolution=node' nodemon -L src/server/server.js",
         "start-tv_insideDocker": "cross-env ENV=DEV PORT=4321 parcel src/tv/index.html --dist-dir ./dist/tv --hmr-port 1235",
-        "lint": "npx eslint src/"
+        "lint": "npx eslint src/",
+        "build": "tsc"
     },
     "repository": {
         "type": "git",
@@ -40,7 +41,6 @@
         "process": "^0.11.10",
         "querystring-es3": "^0.2.1",
         "stream-http": "^3.2.0",
-        "typescript": "^5.1.6",
         "url": "^0.11.0",
         "util": "^0.12.4"
     },
@@ -58,7 +58,8 @@
         "parcel": "^2.7.0",
         "redis": "^4.6.7",
         "socket.io": "^4.5.1",
-        "socket.io-client": "^4.5.1"
+        "socket.io-client": "^4.5.1",
+        "ts-import": "^5.0.0-beta.0"
     },
     "jest": {
         "transform": {}

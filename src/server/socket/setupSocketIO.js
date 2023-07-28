@@ -68,9 +68,9 @@ const setupSocketIO = (httpServer) => {
   });
 
   return {
-    socketsByIdentityObs: multicast(socketObs),
+    /* socketsByIdentityObs: multicast(socketObs),
     messagesObs: multicast(msgObs),
-    tvObs: multicast(tvObs),
+    tvObs: multicast(tvObs), */
     io
   };
 };
