@@ -1,8 +1,8 @@
-import { createBusClient } from "../../toolbox/messageBusClient";
+import { createBusClient } from "../../toolbox/messageBusClient.js";
 import * as shaders from "./shaders";
 
 // Set up socket, connect to server, and identify self
-const messageBus = createBusClient();
+const messageBus = createBusClient()();
 messageBus.subscribe('projector/tv/*', (message) => {
     switch (message.type) {
         case 'command':

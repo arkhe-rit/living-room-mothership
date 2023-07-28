@@ -4,8 +4,9 @@ import { Server as SocketIOServer } from "socket.io";
 const setupSocketIO = (httpServer) => {
   const io = new SocketIOServer(httpServer, {
     cors: {
-      origin: ''
+      origin: '*'
     },
+    methods: ["GET", "POST"],
     maxHttpBufferSize: 1e8,
     pingTimeout: 60000,
     pingInterval: 5000,
