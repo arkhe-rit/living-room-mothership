@@ -21,7 +21,7 @@ const setupSocket = (socket) => {
 
     socket.on("disconnect", (reason, details) => {
         console.log(`Disconnected from socket ${socket.id}: ${reason}`);
-        if (details instanceof Error) {;
+        if (details instanceof Error) {
             console.log("--", "Msg: ", details.message);
         }
         else {
