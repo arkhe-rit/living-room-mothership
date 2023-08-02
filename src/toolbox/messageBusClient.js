@@ -64,7 +64,7 @@ const createBusClient = (socket = setupSocket(defaultSocket)) => (subscriptions 
                     console.log(`Failed to parse message: ${message}`);
                     console.log('Likely not JSON, passing as string');
                 }
-                callback(message);
+                callback(message, channel);
             });
             return client;
         },
