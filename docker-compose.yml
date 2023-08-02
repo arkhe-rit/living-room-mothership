@@ -12,6 +12,7 @@ services:  # Defines the set of services (i.e., containers) that comprise your a
     image: 'redis:latest'  # Specifies the Docker image to use for this service. We're using the latest version of Redis image.
     ports:  
       - '6379:6379'  # Maps port 6379 of the host to port 6379 in the container where Redis server listens.
+      - '8001:8001'
     healthcheck:  # Defines a health check to determine if the container is running correctly.
       test: ["CMD-SHELL", "redis-cli ping | grep PONG"]  # Executes a shell command that pings the Redis server and expects a "PONG" in response.
       interval: 1s  # Interval between health checks.
