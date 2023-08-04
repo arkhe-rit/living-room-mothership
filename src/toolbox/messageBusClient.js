@@ -58,7 +58,7 @@ const createBusClient = (socket = setupSocket(defaultSocket)) => (subscriptions 
         subscribe: (channel, callback) => {
             socket.emit('subscribe', channel);
             socket.on(channel, ({ message, originalChannel }) => {
-                console.log(originalChannel);
+                //console.log(originalChannel);
                 try {
                     message = JSON.parse(message);
                 } catch (e) {

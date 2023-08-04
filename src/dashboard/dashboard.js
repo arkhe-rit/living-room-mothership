@@ -57,8 +57,8 @@ const messageBus = createBusClient()([
         callback: (value, channel) => {
             updateLog(String(channel), JSON.stringify(value));
         }
-    }
-    /*
+    },
+    
     // Unnecessary for our purposes, might be useful later.
     {
         channel: '*',
@@ -68,7 +68,7 @@ const messageBus = createBusClient()([
             }
         }
     }
-    */
+    
 ]);
 
 // Fills channel selector dropdown with valid channels. Could just hardcode in HTML but see TODO...
