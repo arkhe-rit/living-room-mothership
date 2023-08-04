@@ -1,12 +1,12 @@
 import { createBusClient } from '../toolbox/messageBusClient.js';
 import { chairsToLampsTranslator } from './chairsToLamps.js';
 import { chairsToTVTranslator } from './chairsToTVChannel.js';
-import { mugsToTVFilterTranslator } from './mugsToTVFilter.js';
+import { mugToTVFilterTranslator } from './cvMugToTVFilter.js';
 
 const translators = [
   chairsToLampsTranslator,
   chairsToTVTranslator,
-  mugsToTVFilterTranslator
+  mugToTVFilterTranslator
 ]
 
 const createTranslatorEngine = () => {
@@ -16,10 +16,10 @@ const createTranslatorEngine = () => {
       case 'command':
         switch (msg.command) {
           case 'activate-translator':
-            activateTranslator(msg.translator);
+            activateTranslator(msg.value);
             break;
           case 'deactivate-translator':
-            deactivateTranslator(msg.translator);
+            deactivateTranslator(msg.value);
             break;
           default:
             console.log(`Unknown command: ${msg.command}`)

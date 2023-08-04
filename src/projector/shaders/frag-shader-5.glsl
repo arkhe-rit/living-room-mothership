@@ -5,6 +5,7 @@ uniform vec3 u_resolution;
 
 const int u_pixelSize = 12; // Set the desired pixelation size here
 
+//pixelation effect
 void main()
 {
     // Calculate the texture size based on the resolution

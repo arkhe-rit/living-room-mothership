@@ -12,8 +12,9 @@ messageBus.subscribe('projector/tv', (message) => {
                     console.log(`Now playing: ${changeVideo(newChannel)}`);
                     break;
                 case 'change-filter':
+                    //shader filter settings: [horizontalTearStrength, blackWhite, verticalJerk, chromaticAberration]
                     shaders.switchShader(message.value, gl);
-                    console.log(`Now using filter: ${shaders.shaderProgramIndex}`)
+                    //console.log(`Now using filter: ${shaders.shaderProgramIndex}`)
                     break;
             }
             break;
@@ -94,7 +95,6 @@ const render = () => {
     const u_resolutionLocation = gl.getUniformLocation(shaders.getShaderProgram(), 'u_resolution');
     const u_timeLocation = gl.getUniformLocation(shaders.getShaderProgram(), 'u_time');
     const u_textureLocation = gl.getUniformLocation(shaders.getShaderProgram(), 'u_texture');
-    //const u_noiseTextureLocation = gl.getUniformLocation(getShaderProgram(), 'u_noiseTexture');
     const u_frameLocation = gl.getUniformLocation(shaders.getShaderProgram(), 'u_frameCount');
 
     // Pass the canvas resolution

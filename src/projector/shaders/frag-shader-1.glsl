@@ -116,9 +116,9 @@ void main() {
 
     staticVal *= u_bottomStaticOpt;
 
-    float red = texture2D(u_texture, vec2(uv.x + xOffset -0.01*rgbOffsetOpt, y)).r + staticVal;
+    float red = texture2D(u_texture, vec2(uv.x + xOffset -0.008*rgbOffsetOpt, y)).r + staticVal;
     float green = texture2D(u_texture, vec2(uv.x + xOffset, y)).g + staticVal;
-    float blue = texture2D(u_texture, vec2(uv.x + xOffset +0.01*rgbOffsetOpt, y)).b + staticVal;
+    float blue = texture2D(u_texture, vec2(uv.x + xOffset +0.008*rgbOffsetOpt, y)).b + staticVal;
   
     vec3 color = vec3(red, green, blue);
     float scanline = sin(uv.y * y * 800.0)*0.04 * u_scanlineOpt;

@@ -5,6 +5,7 @@ uniform vec3 u_resolution;
 
 const float PI = 3.14159256;
 
+//compresses the entire image into a dingle color for some reason
 void main() {    
     float d = dot(gl_FragCoord.xyz, gl_FragCoord.xyz);
     vec2 s = gl_FragCoord.xy * d;
