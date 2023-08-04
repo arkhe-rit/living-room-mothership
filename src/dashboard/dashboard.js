@@ -66,6 +66,8 @@ const messageBus = createBusClient()([
             if(!allChannels.includes(channel)) {
                 updateLog(String(channel), JSON.stringify(value));
             }
+            all_known_channels.add(channel);
+            const channels = [...all_known_channels];
         }
     }
     */
@@ -146,9 +148,32 @@ function sendMessage() {
 
 let messageList = document.querySelector("#message-list");
 let numMessages = 0;
+
+/*
+let currentFilters = ['observer/mug', 'projector/tv']
+
+let allMessages = [];
+let filteredMessages = [];
+const passesFilters = msg => {
+    // check everything in currentFilters, if m
+    // return msg passes filter1 && msg passes filter 2
+};
+*/
 function updateLog(channel, message) {
+    allMessages.push(message);
+    /*
+    // run tbhrough filters to determine if messages hould be added to filteredMessages
+    if (passesFilters(message)) {
+        filteredMessages.push(message);
+    }
+
+    // wherever the code is that happens when I click a checkbox
+    currentFilters.add/remove 
+    filteredMessages = allMessages.filter(passesFilters);
+*/
+
     // Add message to log
-    var newMessage = document.createElement("li");
+    let newMessage = document.createElement("li");
     newMessage.innerHTML += '<p class="message-channel">' + channel + '</p>';
     newMessage.innerHTML += '<p class="message-content">' + message + '</p>';
 
