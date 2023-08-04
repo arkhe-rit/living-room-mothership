@@ -74,7 +74,7 @@ const createBusClient = (socket = setupSocket(defaultSocket)) => (subscriptions 
         },
         publish: (channel, message) => {
             socket.emit('publish', { channel, message });
-            return this;
+            return client;
         }
     }
 

@@ -11,7 +11,7 @@ const translators = [
 
 const createTranslatorEngine = () => {
   const messageBus = createBusClient()();
-  messageBus.subscribe('translator/command', (msg) => {
+  messageBus.subscribe('translator', (msg) => {
     switch (msg.type) {
       case 'command':
         switch (msg.command) {
