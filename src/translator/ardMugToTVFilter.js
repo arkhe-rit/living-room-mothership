@@ -12,7 +12,7 @@ const mugToTVFilter = (msg) => {
     }
 }
 
-export const ardMugToTVFilter = {
+export const ardMugToTVFilterTranslator = {
     name: 'ardMugToTVFilter',
     listening: 'observer/ardMug',
     publishing: 'projector/tv',

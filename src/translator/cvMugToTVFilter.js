@@ -10,7 +10,7 @@ const mugsToTVFilter = (msg) => {
     }
 }
 
-export const mugToTVFilterTranslator = {
+export const cvMugToTVFilterTranslator = {
     name: 'cvMugsToTVFilter',
     listeningChannel: 'observer/cvMugs',
     publishingChannel: 'projector/tv',

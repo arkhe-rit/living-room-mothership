@@ -1,12 +1,16 @@
 import { createBusClient } from '../toolbox/messageBusClient.js';
 import { chairsToLampsTranslator } from './chairsToLamps.js';
 import { chairsToTVTranslator } from './chairsToTVChannel.js';
-import { mugToTVFilterTranslator } from './cvMugToTVFilter.js';
+import { cvMugToTVFilterTranslator } from './cvMugToTVFilter.js';
+import { ardMugToTVFilterTranslator } from './ardMugToTVFilter.js';
+import { rugToTVChannelTranslator } from './rugToTVChannel.js';
 
 const translators = [
   chairsToLampsTranslator,
   chairsToTVTranslator,
-  mugToTVFilterTranslator
+  cvMugToTVFilterTranslator,
+  ardMugToTVFilterTranslator,
+  rugToTVChannelTranslator
 ]
 
 const createTranslatorEngine = () => {
