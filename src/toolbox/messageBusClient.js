@@ -57,14 +57,15 @@ const createBusClient = (socket = setupSocket(defaultSocket)) => (subscriptions 
         socket,
         subscribe: (channel, callback) => {
             socket.emit('subscribe', channel);
-            socket.on(channel, (message) => {
+            socket.on(channel, ({ message, originalChannel }) => {
+                console.log(originalChannel);
                 try {
                     message = JSON.parse(message);
                 } catch (e) {
                     console.log(`Failed to parse message: ${message}`);
                     console.log('Likely not JSON, passing as string');
                 }
-                callback(message, channel);
+                callback(message, originalChannel);
             });
             return client;
         },

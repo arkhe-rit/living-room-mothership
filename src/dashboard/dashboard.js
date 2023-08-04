@@ -61,8 +61,8 @@ const messageBus = createBusClient()([
     {
         channel: '*',
         callback: (value, channel) => {
+            updateLog(String(channel), JSON.stringify(value));
             if(!allChannels.includes(channel)) {
-                updateLog(String(channel), JSON.stringify(value));
             }
         }
     }
