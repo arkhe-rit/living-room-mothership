@@ -1,7 +1,7 @@
 //shader filter settings: [horizontalFuzzStrength, blackWhite, verticalJerkStrength, static]
-const mugsToTVFilter = (msg) => {
-    const staticOpt = msg.value[0] > 0.5 ? 1 : 0;
-    const verticalJerkStrength = msg.value[1] > 0.5 ? 1 : 0;
+const mugsToTVFilter = (msgValue) => {
+    const staticOpt = msgValue[0] > 0.5 ? 1 : 0;
+    const verticalJerkStrength = msgValue[1] > 0.5 ? 1 : 0;
     const filterSettings = [-1, -1, verticalJerkStrength, staticOpt];
     return {
         type: 'command',
@@ -11,8 +11,8 @@ const mugsToTVFilter = (msg) => {
 }
 
 export const cvMugToTVFilterTranslator = {
-    name: 'cvMugsToTVFilter',
-    listeningChannel: 'observer/cvMugs',
+    name: 'cvMugToTVFilter',
+    listeningChannel: 'observer/cvMug',
     publishingChannel: 'projector/tv',
     callback: mugsToTVFilter
 }

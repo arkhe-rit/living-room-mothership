@@ -1,5 +1,5 @@
-const rugToTVChannel = (msg) => {
-    const channel = msg.value % 5;
+const rugToTVChannel = (msgValue) => {
+    const channel = msgValue % 5;
     return {
         type: 'command',
         command: 'change-video',

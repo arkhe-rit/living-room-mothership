@@ -61,7 +61,19 @@ function sendMessage() {
     let channel = document.querySelector("#channel-selector-input").value;
     let messageType = document.querySelector("#type-selector-input").value;
     let messageCommand = document.querySelector("#command-selector-input").value;
-    let messageValue = document.querySelector("#value-selector-input").value;
+    let messageValue = document.querySelector("#value-selector-input").value
+    if (messageValue.includes('[')) {
+        messageValue = messageValue.replace('[', '');
+        messageValue = messageValue.replace(']', '');
+        messageValue = messageValue.split(',');
+        let newMessage = [];
+        for (let i = 0; i < messageValue.length; i++) {
+            newMessage[i] = parseFloat(messageValue[i]);
+        }
+    }
+    else {
+        messageValue = parseFloat(messageValue);
+    }
 
     /*
     message= message.trim();

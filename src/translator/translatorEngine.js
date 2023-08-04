@@ -40,7 +40,7 @@ const createTranslatorEngine = () => {
       if (translator.name === translatorName) {
         messageBus.subscribe(translator.listeningChannel, (msg) => {
           if (msg.type === 'algebra') {
-            const translatedMessage = JSON.stringify(translator.callback(msg.algebra));
+            const translatedMessage = JSON.stringify(translator.callback(msg.value));
             messageBus.publish(translator.publishingChannel, translatedMessage);
           }
         });
