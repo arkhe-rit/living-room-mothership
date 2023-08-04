@@ -6,19 +6,18 @@ uniform float u_time;       // shader playback time (in seconds)
 uniform sampler2D u_texture;
 
 //customizable uniforms
-float u_jerkFreq = 0.2;
-float u_smallFuzzStr = 0.002;
-float u_largeFuzzStr = 0.003;
+float u_jerkFreq = 0.35;
 float u_staticStr = 1.5;
 float u_staticBounce = 0.3;
 
-float u_vertMovementOpt = 0.0;
 float u_vertJerkOpt = 0.0;
-float u_horizonFuzzOpt = 1.0;
-float u_bottomStaticOpt = 0.0;
-float u_scanlineOpt = 1.0;
+float u_scanlineOpt = 0.0;
 float rgbOffsetOpt = 0.0;
-float greyScaleOpt = 1.0;
+
+uniform float u_horizontalFuzzStr;
+uniform float u_greyScaleOpt;
+uniform float u_vertMovementOpt;
+uniform float u_bottomStaticOpt;
 
 // Noise generation functions borrowed from: 
 // https://github.com/ashima/webgl-noise/blob/master/src/noise2D.glsl
@@ -96,8 +95,8 @@ void main() {
     
     float jerkOffset = (1.0 - step(snoise(vec2(u_time * 1.3, 5.0)), 0.8)) * 0.05;
 
-    float fuzzOffset = snoise(vec2(u_time * 15.0, uv.y * 80.0)) * u_smallFuzzStr;
-    float largeFuzzOffset = snoise(vec2(u_time * 1.0, uv.y * 25.0)) * u_largeFuzzStr;
+    float fuzzOffset = snoise(vec2(u_time * 15.0, uv.y * 80.0)) * u_horizontalFuzzStr;
+    float largeFuzzOffset = snoise(vec2(u_time * 1.0, uv.y * 25.0)) * u_horizontalFuzzStr;
   
     float vertMovementOn = (1.0 - step(snoise(vec2(u_time * u_jerkFreq, 8.0)), 0.4)) * u_vertMovementOpt;
     float vertJerk = (1.0 - step(snoise(vec2(u_time * 1.5, 5.0)), 0.6)) * u_vertJerkOpt;
@@ -105,7 +104,7 @@ void main() {
     float yOffset = abs(sin(u_time) * 4.0) * vertMovementOn + vertJerk * vertJerk2 * 0.3;
     float y = mod(uv.y + yOffset, 1.0);
     
-    float xOffset = (fuzzOffset + largeFuzzOffset) * 1.0 * u_horizonFuzzOpt;
+    float xOffset = (fuzzOffset + largeFuzzOffset);
   
     float staticVal = 0.0;
   
@@ -117,15 +116,15 @@ void main() {
 
     staticVal *= u_bottomStaticOpt;
 
-    float red = texture2D(u_texture, vec2(uv.x + xOffset -0.01*rgbOffsetOpt, y)).r + staticVal;
+    float red = texture2D(u_texture, vec2(uv.x + xOffset -0.008*rgbOffsetOpt, y)).r + staticVal;
     float green = texture2D(u_texture, vec2(uv.x + xOffset, y)).g + staticVal;
-    float blue = texture2D(u_texture, vec2(uv.x + xOffset +0.01*rgbOffsetOpt, y)).b + staticVal;
+    float blue = texture2D(u_texture, vec2(uv.x + xOffset +0.008*rgbOffsetOpt, y)).b + staticVal;
   
     vec3 color = vec3(red, green, blue);
     float scanline = sin(uv.y * y * 800.0)*0.04 * u_scanlineOpt;
     color -= scanline;
 
-	if (greyScaleOpt == 1.0) {
+	if (u_greyScaleOpt == 1.0) {
 		vec3 greyScale = vec3(0.5, 0.5, 0.5);
 		color = vec3(dot(color.rgb, greyScale));
 	}

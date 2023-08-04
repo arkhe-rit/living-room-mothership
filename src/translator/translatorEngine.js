@@ -1,25 +1,29 @@
 import { createBusClient } from '../toolbox/messageBusClient.js';
 import { chairsToLampsTranslator } from './chairsToLamps.js';
 import { chairsToTVTranslator } from './chairsToTVChannel.js';
-import { mugsToTVFilterTranslator } from './mugsToTVFilter.js';
+import { cvMugToTVFilterTranslator } from './cvMugToTVFilter.js';
+import { ardMugToTVFilterTranslator } from './ardMugToTVFilter.js';
+import { rugToTVChannelTranslator } from './rugToTVChannel.js';
 
 const translators = [
   chairsToLampsTranslator,
   chairsToTVTranslator,
-  mugsToTVFilterTranslator
+  cvMugToTVFilterTranslator,
+  ardMugToTVFilterTranslator,
+  rugToTVChannelTranslator
 ]
 
 const createTranslatorEngine = () => {
   const messageBus = createBusClient()();
-  messageBus.subscribe('translator/command', (msg) => {
+  messageBus.subscribe('translator', (msg) => {
     switch (msg.type) {
       case 'command':
         switch (msg.command) {
           case 'activate-translator':
-            activateTranslator(msg.translator);
+            activateTranslator(msg.value);
             break;
           case 'deactivate-translator':
-            deactivateTranslator(msg.translator);
+            deactivateTranslator(msg.value);
             break;
           default:
             console.log(`Unknown command: ${msg.command}`)

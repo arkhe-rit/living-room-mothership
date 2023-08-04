@@ -58,7 +58,7 @@ const initVertexBuffer = (gl) => {
     gl.vertexAttribPointer(a_positionLocation, 2, gl.FLOAT, false, 0, 0);
 }
 
-let shaderProgramIndex = 0;
+let shaderProgramIndex = 4;
 const shaderPrograms = [];
 const getShaderProgram = () => shaderPrograms[shaderProgramIndex].program;
 const fragShaders = [
@@ -87,16 +87,27 @@ const loadShaders = async (gl) => {
     gl.useProgram(getShaderProgram());
 }
 
-const switchShader = (index, gl) => {
-    index %= shaderPrograms.length;
-    shaderProgramIndex = index;
-    gl.useProgram(getShaderProgram());
-    initVertexBuffer(gl);
-    console.log(`Switched to shader program ${shaderProgramIndex}`);
+//shader filter settings: [horizontalFuzzStrength, blackWhite, verticalJerkStrength, static]
+const switchShader = (filterSettings, gl) => {
+    if (filterSettings[0] !== -1) {
+        const u_horizontalTear = gl.getUniformLocation(getShaderProgram(), 'u_horizontalFuzzStr');
+        gl.uniform1f(u_horizontalTear, filterSettings[0]);
+    }
+
+    if (filterSettings[1] !== -1) {
+        const u_blackWhite = gl.getUniformLocation(getShaderProgram(), 'u_greyScaleOpt');
+        gl.uniform1f(u_blackWhite, filterSettings[1]);
+    }
+
+    if (filterSettings[2] !== -1) {
+        const u_verticalJerk = gl.getUniformLocation(getShaderProgram(), 'u_vertMovementOpt');
+        gl.uniform1f(u_verticalJerk, filterSettings[2]);
+    }
+
+    if (filterSettings[3] !== -1) {
+        const u_chromaticAberration = gl.getUniformLocation(getShaderProgram(), 'u_bottomStaticOpt');
+        gl.uniform1f(u_chromaticAberration, filterSettings[3]);
+    }
 }
 
-const incrementShader = () => {
-    switchShader((shaderProgramIndex + 1) % shaderPrograms.length);
-}
-
-export {loadShaders, switchShader, initVertexBuffer, getShaderProgram, incrementShader, shaderProgramIndex}
+export {loadShaders, switchShader, initVertexBuffer, getShaderProgram, shaderProgramIndex}

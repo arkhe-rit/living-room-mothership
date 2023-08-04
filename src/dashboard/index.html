@@ -20,23 +20,92 @@
                 <!-- Messages dynamically added with JS -->
             </ul>
         </div>
+<!--
+        <div id="filter-channels">
+            <input type="checkbox" id="filter-tv" checked="true">
+            <label for="filter-tv">projector/tv</label>
+            
+            <input type="checkbox" id="filter-epaper" checked="true">
+            <label for="filter-epaper">projector/epaper</label>
+
+            <input type="checkbox" id="filter-lamp" checked="true">
+            <label for="filter-lamp">projector/lamp</label>
+
+            <input type="checkbox" id="filter-chairs" checked="true">
+            <label for="filter-chairs">observer/chairs</label>
+
+            <input type="checkbox" id="filter-coffee" checked="true">
+            <label for="filter-coffee">observer/coffee</label>
+
+            <input type="checkbox" id="filter-rug" checked="true">
+            <label for="filter-rug">observer/rug</label>
+
+            <input type="checkbox" id="filter-translator" checked="true">
+            <label for="filter-translator">translator</label>
+        </div>
+--> 
     </section>
 
     <section id="control-panel">
-        <div id="channel-selector">
-            <label for="channel-selector-input">Channel:</label>
-            <!--<input type="text" id="channel-selector-input">-->
-            <select id="channel-selector-input">
-                <option value="universal">universal</option>
-            </select>
+        <div id="message-sender">
+            <div id="channel-selector">
+                <label for="channel-selector-input">Channel:</label>
+                <select id="channel-selector-input"></select>
+            </div>
+
+            <div id="type-selector">
+                <label for="type-selector-input">Type:</label>
+                <select id="type-selector-input">
+                    <option value="command">Command</option>
+                    <option value="algebra">Algebra</option>
+                </select>
+            </div>
+
+            <div id="command-selector">
+                <label for="command-selector-input">Command:</label>
+                <input type="text" id="command-selector-input" placeholder="(If applicable)">
+            </div>
+
+            <div id="value-selector">
+                <label for="value-selector-input">Value:</label>
+                <input type="text" id="value-selector-input">
+            </div>
+
+            <button type="button" id="message-sender-button">Publish Message</button>
         </div>
 
-        <div id="message-selector">
-            <label for="message-selector-input">Message:</label>
-            <input type="text" id="message-selector-input">
-        </div>
+        <div id="message-filter">
+            <div>
+                <input type="checkbox" id="filter-tv" checked="true">
+                <label for="filter-tv">projector/tv</label>
+            </div>
+            <div>
+                <input type="checkbox" id="filter-epaper" checked="true">
+                <label for="filter-epaper">projector/epaper</label>
+            </div>
+            <div>
+                <input type="checkbox" id="filter-lamp" checked="true">
+                <label for="filter-lamp">projector/lamp</label>
+            </div>
+            <div>
+                <input type="checkbox" id="filter-chairs" checked="true">
+                <label for="filter-chairs">observer/chairs</label>
+            </div>
+            <div>
+                <input type="checkbox" id="filter-coffee" checked="true">
+                <label for="filter-coffee">observer/coffee</label>
+            </div>
+            <div>
+                <input type="checkbox" id="filter-rug" checked="true">
+                <label for="filter-rug">observer/rug</label>
+            </div>
+            <div>
+                <input type="checkbox" id="filter-translator" checked="true">
+                <label for="filter-translator">translator</label>
+            </div>
 
-        <button type="button" id="message-sender">Publish</button>
+            <button type="button" id="apply-filters">Filter Messages</button>
+        </div>
     </section>
 
     <hr>

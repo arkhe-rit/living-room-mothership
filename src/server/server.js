@@ -18,7 +18,6 @@ const { io } = setupSocketIO(httpServer);
 await setupRedisAdapter(io);
 
 const translatorEngine = createTranslatorEngine();
-translatorEngine.activateTranslator('mugsToTVFilter');
 
 httpServer.listen(port, () => {
   const hotspotIpAddress = networkInterfaces()?.['Local Area Connection* 2']
