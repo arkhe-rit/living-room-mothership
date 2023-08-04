@@ -10,24 +10,58 @@ window.onload = (e) => {document.querySelector("#message-sender-button").onclick
 // Currently tv/channel and tv/filter update the status and the log; depenidn gon how quickly data is received 
 // from observers, might not want to update log. TODO: Hide duplicate messages in log and show number sent instead.
 const messageBus = createBusClient()([
-    /*
-    {
-        channel: '*',
-        callback: (value, channel) => {
-            updateLog(String(channel), JSON.stringify(value));
-        }
-    },
-    {
-        channel: 'projector/*',
-        callback: (value, channel) => {
-            updateStatus(String(channel), JSON.stringify(value));
-        }
-    },*/
     {
         channel: 'projector/tv',
         callback: (value, channel) => {
             updateLog(String(channel), JSON.stringify(value));
             updateStatus('#tv-channel', value.value);
+        }
+    },
+    {
+        channel: 'projector/epaper',
+        callback: (value, channel) => {
+            updateLog(String(channel), JSON.stringify(value));
+            updateStatus('#e-paper', value.value);
+        }
+    },
+    {
+        channel: 'projector/lamp',
+        callback: (value, channel) => {
+            updateLog(String(channel), JSON.stringify(value));
+            updateStatus('#lamp', value.value);
+        }
+    },
+    {
+        channel: 'observer/chairs',
+        callback: (value, channel) => {
+            updateLog(String(channel), JSON.stringify(value));
+            updateStatus('#chairs', value.value);
+        }
+    },
+    {
+        channel: 'observer/coffee',
+        callback: (value, channel) => {
+            updateLog(String(channel), JSON.stringify(value));
+            updateStatus('#coffee', value.value);
+        }
+    },
+    {
+        channel: 'observer/rug',
+        callback: (value, channel) => {
+            updateLog(String(channel), JSON.stringify(value));
+            updateStatus('#rug', value.value);
+        }
+    },
+    {
+        channel: 'translator',
+        callback: (value, channel) => {
+            updateLog(String(channel), JSON.stringify(value));
+        }
+    },
+    {
+        channel: '*',
+        callback: (value, channel) => {
+            updateLog(String(channel), JSON.stringify(value));
         }
     }
 ]);
