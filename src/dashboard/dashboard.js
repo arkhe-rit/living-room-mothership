@@ -64,10 +64,7 @@ const messageBus = createBusClient()([
         channel: '*',
         callback: (value, channel) => {
             updateLog(String(channel), JSON.stringify(value));
-            if(!allChannels.includes(channel)) {
-            }
-            all_known_channels.add(channel);
-            const channels = [...all_known_channels];
+            allChannels.add(channel);
         }
     }
     
@@ -160,7 +157,7 @@ const passesFilters = msg => {
 };
 */
 function updateLog(channel, message) {
-    allMessages.push(message);
+    //allMessages.push(message);
     /*
     // run tbhrough filters to determine if messages hould be added to filteredMessages
     if (passesFilters(message)) {
