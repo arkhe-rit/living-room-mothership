@@ -13,10 +13,24 @@ const setupRedisAdapter = async (io) => {
     await subClient.connect();
 
     const emitToSubs = (channel, message) => {
-        subscriptions[channel].forEach((id) => {
-            //console.log(`Emitting to ${id} on channel ${channel} with content ${message}`)
-            io.to(id).emit(channel, message);
+        //nonwildcard channels
+        if (subscriptions[channel] !== undefined) {
+            subscriptions[channel].forEach((id) => {
+                console.log(`Emitting to ${id} on channel ${channel} with content ${message}`)
+                io.to(id).emit(channel, { message, originalChannel: channel });
+            });
+        }
+        //aside from emitting to the specific channel, check the subscriptions diciontary for any
+        //wildcard subscriptions that have a matching pattern
+        Object.keys(subscriptions).filter(sub => sub.includes('*')).forEach((sub) => {
+            if (wildcardComparison(sub, channel)) {
+                subscriptions[sub].forEach((id) => {
+                    console.log(`Emitting to ${id} on channel ${sub} with content ${message}; original channel was ${channel}`)
+                    io.to(id).emit(sub, { message, originalChannel: channel });
+                });
+            }
         });
+        
     }
     
 
@@ -28,18 +42,8 @@ const setupRedisAdapter = async (io) => {
                 subscriptions[channel] = [socket.id];
                 //psubscribe is used to be able to handle wildcard subscriptions
                 subClient.pSubscribe(channel, (message, channel) => {
-                    //console.log(`Received message ${message} on channel ${channel}`);
-                    //nonwildcard channels
-                    if (subscriptions[channel] !== undefined) {
-                        emitToSubs(channel, message);
-                    }
-                    //aside from emitting to the specific channel, check the subscriptions diciontary for any
-                    //wildcard subscriptions that have a matching pattern
-                    Object.keys(subscriptions).filter(sub => sub.includes('*')).forEach((sub) => {
-                        if (wildcardComparison(sub, channel)) {
-                            emitToSubs(sub, message);
-                        }
-                    });
+                    console.log(`Received message ${message} on channel ${channel}`);
+                    emitToSubs(channel, message);
                 });
             }
             //othewrise, just add the client to the array

@@ -10,26 +10,64 @@ window.onload = (e) => {document.querySelector("#message-sender-button").onclick
 // Currently tv/channel and tv/filter update the status and the log; depenidn gon how quickly data is received 
 // from observers, might not want to update log. TODO: Hide duplicate messages in log and show number sent instead.
 const messageBus = createBusClient()([
-    /*
-    {
-        channel: '*',
-        callback: (value, channel) => {
-            updateLog(String(channel), JSON.stringify(value));
-        }
-    },
-    {
-        channel: 'projector/*',
-        callback: (value, channel) => {
-            updateStatus(String(channel), JSON.stringify(value));
-        }
-    },*/
     {
         channel: 'projector/tv',
         callback: (value, channel) => {
             updateLog(String(channel), JSON.stringify(value));
             updateStatus('#tv-channel', value.value);
         }
+    },
+    {
+        channel: 'projector/epaper',
+        callback: (value, channel) => {
+            updateLog(String(channel), JSON.stringify(value));
+            updateStatus('#e-paper', value.value);
+        }
+    },
+    {
+        channel: 'projector/lamp',
+        callback: (value, channel) => {
+            updateLog(String(channel), JSON.stringify(value));
+            updateStatus('#lamp', value.value);
+        }
+    },
+    {
+        channel: 'observer/chairs',
+        callback: (value, channel) => {
+            updateLog(String(channel), JSON.stringify(value));
+            updateStatus('#chairs', value.value);
+        }
+    },
+    {
+        channel: 'observer/coffee',
+        callback: (value, channel) => {
+            updateLog(String(channel), JSON.stringify(value));
+            updateStatus('#coffee', value.value);
+        }
+    },
+    {
+        channel: 'observer/rug',
+        callback: (value, channel) => {
+            updateLog(String(channel), JSON.stringify(value));
+            updateStatus('#rug', value.value);
+        }
+    },
+    {
+        channel: 'translator',
+        callback: (value, channel) => {
+            updateLog(String(channel), JSON.stringify(value));
+        }
+    },
+    
+    // Unnecessary for our purposes, might be useful later.
+    {
+        channel: '*',
+        callback: (value, channel) => {
+            updateLog(String(channel), JSON.stringify(value));
+            allChannels.add(channel);
+        }
     }
+    
 ]);
 
 // Fills channel selector dropdown with valid channels. Could just hardcode in HTML but see TODO...
@@ -61,7 +99,19 @@ function sendMessage() {
     let channel = document.querySelector("#channel-selector-input").value;
     let messageType = document.querySelector("#type-selector-input").value;
     let messageCommand = document.querySelector("#command-selector-input").value;
-    let messageValue = document.querySelector("#value-selector-input").value;
+    let messageValue = document.querySelector("#value-selector-input").value
+    if (messageValue.includes('[')) {
+        messageValue = messageValue.replace('[', '');
+        messageValue = messageValue.replace(']', '');
+        messageValue = messageValue.split(',');
+        let newMessage = [];
+        for (let i = 0; i < messageValue.length; i++) {
+            newMessage[i] = parseFloat(messageValue[i]);
+        }
+    }
+    else {
+        messageValue = parseFloat(messageValue);
+    }
 
     /*
     message= message.trim();
@@ -95,9 +145,32 @@ function sendMessage() {
 
 let messageList = document.querySelector("#message-list");
 let numMessages = 0;
+
+/*
+let currentFilters = ['observer/mug', 'projector/tv']
+
+let allMessages = [];
+let filteredMessages = [];
+const passesFilters = msg => {
+    // check everything in currentFilters, if m
+    // return msg passes filter1 && msg passes filter 2
+};
+*/
 function updateLog(channel, message) {
+    //allMessages.push(message);
+    /*
+    // run tbhrough filters to determine if messages hould be added to filteredMessages
+    if (passesFilters(message)) {
+        filteredMessages.push(message);
+    }
+
+    // wherever the code is that happens when I click a checkbox
+    currentFilters.add/remove 
+    filteredMessages = allMessages.filter(passesFilters);
+*/
+
     // Add message to log
-    var newMessage = document.createElement("li");
+    let newMessage = document.createElement("li");
     newMessage.innerHTML += '<p class="message-channel">' + channel + '</p>';
     newMessage.innerHTML += '<p class="message-content">' + message + '</p>';
 
