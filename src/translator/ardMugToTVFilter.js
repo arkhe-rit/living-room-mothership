@@ -2,7 +2,7 @@
 const maxHorizontalFuzzz = 0.008
 const mugToTVFilter = (msgValue) => {
     const blackWhite = msgValue[1];
-    const mugRotationPercent = msgValue[0] / 360.0;
+    const mugRotationPercent = msgValue[0] / 39;
     const horizontalFuzzStrength = mugRotationPercent * maxHorizontalFuzzz;
     const filterSettings = [horizontalFuzzStrength, blackWhite, -1, -1];
     return {
