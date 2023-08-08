@@ -60,8 +60,7 @@
         "parcel": "^2.7.0",
         "redis": "^4.6.7",
         "socket.io": "^4.5.1",
-        "socket.io-client": "^4.5.1",
-        "ts-import": "^5.0.0-beta.0"
+        "socket.io-client": "^4.7.2"
     },
     "jest": {
         "transform": {}
