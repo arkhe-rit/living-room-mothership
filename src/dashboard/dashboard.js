@@ -1,15 +1,34 @@
 import { createBusClient } from "../toolbox/messageBusClient";
+import { presets } from "../dashboard/presets";
 
-// Set-up Functions (called when page is loaded)
-const allChannels = [];
+const allChannels = [
+    "*",
+    "projector/tv",  
+    "projector/epaper",
+    "projector/lamp",
+    "observer/chairs",
+    "observer/coffee",
+    "observer/rug",
+    "translator",
+    "dashboard"
+];
+
+
+// Set-up Functions
 loadChannels();
-window.onload = (e) => {document.querySelector("#message-sender-button").onclick = sendMessage};
+window.onload = (e) => {
+    document.querySelector("#message-sender-button").onclick = sendMessage;
+    document.querySelectorAll(".preset").forEach((element) => element.onclick = presetFill);
+};
+
+
 
 // Create a messageBus to send and receive messages from redis. 
 // Callback functions are called when a message is received from the correspoonding channel.
 // Currently tv/channel and tv/filter update the status and the log; depenidn gon how quickly data is received 
 // from observers, might not want to update log. TODO: Hide duplicate messages in log and show number sent instead.
 const messageBus = createBusClient()([
+    /*
     {
         channel: 'projector/tv',
         callback: (value, channel) => {
@@ -58,7 +77,7 @@ const messageBus = createBusClient()([
             updateLog(String(channel), JSON.stringify(value));
         }
     },
-    
+    */
     // Unnecessary for our purposes, might be useful later.
     {
         channel: '*',
@@ -70,20 +89,11 @@ const messageBus = createBusClient()([
     
 ]);
 
+
+
 // Fills channel selector dropdown with valid channels. Could just hardcode in HTML but see TODO...
 // TODO: See if we can pull channels from redis here. Not sure if possible.
 function loadChannels() {
-    // Until we can pull channels from redis, HARD CODE NEW CHANNELS HERE!!!!
-    allChannels.push("*",
-        "projector/tv",  
-        "projector/epaper",
-        "projector/lamp",
-        "observer/chairs",
-        "observer/coffee",
-        "observer/rug",
-        "translator"
-        );
-
     let channelDropdown = document.querySelector("#channel-selector-input");
     let option;
 
@@ -93,6 +103,8 @@ function loadChannels() {
         channelDropdown.appendChild(option);
     }
 }
+
+
 
 // Checks validity of message and sends to redis. Called when 'Publish' button is clicked.
 function sendMessage() {
@@ -113,29 +125,13 @@ function sendMessage() {
         messageValue = parseFloat(messageValue);
     }
 
-    /*
-    message= message.trim();
-    if(message.length == 0) { 
-        document.querySelector("#message-selector-input").value = "";
-        document.querySelector("#message-selector-input").placeholder = "Invalid Input";
-        return; // Message is blank, so do nothing.
-    }
-    else {
-        // Send message to server
-        messageBus.publish(channel, message);
-    }
-    */
-
     let jsonMessage = {
         type: messageType,
         command: messageCommand,
         value: messageValue
     };
 
-
-    messageBus.publish(channel, JSON.stringify(jsonMessage));
-    // console.log(channel, JSON.stringify(jsonMessage));
-
+    messageBus.publish(channel, JSON.stringify(jsonMessage));[]
 
     // Clear message field
     document.querySelector("#command-selector-input").value = "";
@@ -184,6 +180,14 @@ function updateLog(channel, message) {
 
     // Auto-scroll to bottom. TODO: Only scroll to bottom if user is already scrolled down (like Twitch chat)
     messageList.scrollTop = messageList.scrollHeight; 
+}
+
+function presetFill()
+{
+    document.querySelector("#channel-selector-input").value = presets[this.id].channel;
+    document.querySelector("#type-selector-input").value = presets[this.id].type;
+    document.querySelector("#command-selector-input").value = presets[this.id].command;
+    document.querySelector("#value-selector-input").value = presets[this.id].value;
 }
 
 // Updates the status of projectors/observers.
