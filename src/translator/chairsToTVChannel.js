@@ -1,7 +1,5 @@
-import { interpretCount } from '../algebra/interpret.js';
-
-const chairsToTV = (obs) => {
-    const count = interpretCount(obs);
+const chairsToTV = (msgValue) => {
+    const count = msgValue.reduce((acc, chair) => chair > 0? acc++ : 0, 0);
     return {
         type: 'command',
         command: 'change-video',
