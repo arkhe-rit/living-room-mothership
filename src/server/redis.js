@@ -64,6 +64,12 @@ const setupRedisAdapter = async (io) => {
         socket.on('disconnect', () => {
             for (const channel in subscriptions) {
                 subscriptions[channel] = subscriptions[channel].filter((id) => id !== socket.id);
+                console.log("Client unsubscribed from channel: " + channel);
+                //if the channel is empty, delete it
+                if (subscriptions[channel].length === 0) {
+                    delete subscriptions[channel];
+                    subClient.unsubscribe(channel);
+                }
             }
         });
         socket.on('publish', (data) => {

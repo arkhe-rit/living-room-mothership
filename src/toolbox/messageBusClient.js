@@ -24,7 +24,7 @@ const setupSocket = (socket) => {
         if (details instanceof Error) {
             console.log("--", "Msg: ", details.message);
         }
-        else {
+        else if (details !== undefined) {
             console.log("--", "Desc: ", details.description); // 413 (the HTTP status of the response)
             if (details.context instanceof XMLHttpRequest) {
                 console.log("--", "Status: ", details.context.status); // 413
