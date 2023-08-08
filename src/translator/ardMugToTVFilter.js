@@ -16,5 +16,6 @@ export const ardMugToTVFilterTranslator = {
     name: 'ardMugToTVFilter',
     listeningChannel: 'observer/ardMug',
     publishingChannel: 'projector/tv',
+    description: 'Changes certain filters on the TV based on the rotation of the coaster and whether it is pressed down or now. The rotation controls the strength of the horizontal fuzz and the press controls whether the screen is greyscale or color.',
     callback: mugToTVFilter
 }
