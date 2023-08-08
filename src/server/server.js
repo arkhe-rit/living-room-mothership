@@ -5,6 +5,7 @@ import { networkInterfaces } from 'os';
 import { setupSocketIO } from "./socket/setupSocketIO.js";
 import { setupRedisAdapter } from "./redis.js";
 import { createTranslatorEngine } from '../translator/translatorEngine.js';
+import { chairChordObserver, createRedisInterface } from "../observers/observerEngine.js";
 
 const port = process.env.PORT;
 const isDevEnvironment = process.env.ENV === "DEV" || !process.env.ENV;
@@ -16,6 +17,11 @@ const httpServer = createServer(app.callback());
 
 const { io } = setupSocketIO(httpServer);
 await setupRedisAdapter(io);
+
+// Observer shit
+const observerRedisInterface = await createRedisInterface();
+const chairChord = chairChordObserver(observerRedisInterface);
+//
 
 const translatorEngine = createTranslatorEngine();
 translatorEngine.activateTranslator('ardMugToTVFilter');
