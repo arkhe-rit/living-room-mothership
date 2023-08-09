@@ -83,7 +83,6 @@ const loadFilters = () => {
         filter.value = channel;
         filter.checked = true;
         filter.onchange = e => {
-            const messageList = document.querySelector("#message-list");
             console.log(e.target);
             if (e.target.checked) {
                 activeFilters.add(e.target.value);
@@ -145,7 +144,7 @@ const updateLog = (channel, message) => {
     // Add message to log
     let newMessage = document.createElement("li");
     newMessage.innerHTML += '<p class="message-channel">' + channel + '</p>';
-    newMessage.innerHTML += '<p class="message-content">' + message + '</p>';
+    newMessage.innerHTML += '<p class="message-content" style="height: fit-content">' + message + '</p>';
     newMessage.dataset.channel = channel;
 
     // Alternate background colors of messages
@@ -162,7 +161,7 @@ const updateLog = (channel, message) => {
     messagesDict[channel].push(newMessage);
 
     // Auto-scroll to bottom. TODO: Only scroll to bottom if user is already scrolled down (like Twitch chat)
-    messageList.scrollTop = messageList.scrollHeight; 
+    messageList.scrollTop = messageList.scrollHeight;
 }
 
 const presetFill = (e) => {
