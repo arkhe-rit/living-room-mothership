@@ -100,8 +100,11 @@ const loadFilters = () => {
                 });
             }
         };
-        div.innerHTML += channel;
         div.appendChild(filter);
+        const label = document.createElement("label");
+        label.innerHTML = channel;
+        label.attributes.for = channel;
+        div.appendChild(label);
         filterDiv.appendChild(div);
     });
 }
