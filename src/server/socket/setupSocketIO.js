@@ -35,7 +35,7 @@ const setupSocketIO = (httpServer) => {
     console.log(`Server Connected to socket ${socket.id}`);
 
     socket.on("disconnect", reason => {
-      console.log(`Disconnected from socket ${arkhe_identity}:${id}: ${reason}`);
+      console.log(`Disconnected from socket ${id}: ${reason}`);
       id = null;
 
       let newSockets = {...sockets};
