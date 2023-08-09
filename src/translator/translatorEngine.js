@@ -37,7 +37,7 @@ const createTranslatorEngine = () => {
                 name: translatorName,
                 description: translators[translatorName].description
               }
-            });
+            }).filter(translator => translators[translator.name].enabled);
             const response = {
               type: 'response',
               responseTo: 'get-active-translators',

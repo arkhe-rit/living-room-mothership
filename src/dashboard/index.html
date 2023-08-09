@@ -27,14 +27,14 @@
         <div id="message-sender">
 
             <div id="presets">
-                <button type="button" class="preset" id="0">Help</button>
-                <button type="button" class="preset" id="1">Configure</button>
-                <button type="button" class="preset" id="2">Shutdown</button>
-                <button type="button" class="preset" id="3">Party Mode</button>
-                <button type="button" class="preset" id="4">Change Channel</button>
-                <button type="button" class="preset" id="5">Change Filter</button>
-                <button type="button" class="preset" id="6">Change E-Paper</button>
-                <button type="button" class="preset" id="7">Change Lamps</button>
+                <button type="button" class="preset" data-preset-id="0">Help</button>
+                <button type="button" class="preset" data-preset-id="1">Configure</button>
+                <button type="button" class="preset" data-preset-id="2">Shutdown</button>
+                <button type="button" class="preset" data-preset-id="3">Party Mode</button>
+                <button type="button" class="preset" data-preset-id="4">Change Channel</button>
+                <button type="button" class="preset" data-preset-id="5">Change Filter</button>
+                <button type="button" class="preset" data-preset-id="6">Change E-Paper</button>
+                <button type="button" class="preset" data-preset-id="7">Change Lamps</button>
             </div>
 
             <div id="channel-selector">
@@ -63,37 +63,7 @@
             <button type="button" id="message-sender-button">Publish Message</button>
         </div>
 
-        <div id="message-filter">
-            <div>
-                <input type="checkbox" id="filter-tv" checked="true">
-                <label for="filter-tv">projector/tv</label>
-            </div>
-            <div>
-                <input type="checkbox" id="filter-epaper" checked="true">
-                <label for="filter-epaper">projector/epaper</label>
-            </div>
-            <div>
-                <input type="checkbox" id="filter-lamp" checked="true">
-                <label for="filter-lamp">projector/lamp</label>
-            </div>
-            <div>
-                <input type="checkbox" id="filter-chairs" checked="true">
-                <label for="filter-chairs">observer/chairs</label>
-            </div>
-            <div>
-                <input type="checkbox" id="filter-coffee" checked="true">
-                <label for="filter-coffee">observer/coffee</label>
-            </div>
-            <div>
-                <input type="checkbox" id="filter-rug" checked="true">
-                <label for="filter-rug">observer/rug</label>
-            </div>
-            <div>
-                <input type="checkbox" id="filter-translator" checked="true">
-                <label for="filter-translator">translator</label>
-            </div>
-
-            <button type="button" id="apply-filters">Filter Messages</button>
+        <div id="messages-filter">
         </div>
     </section>
 

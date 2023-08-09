@@ -71,11 +71,23 @@ const createBusClient = (socket = setupSocket(defaultSocket)) => (subscriptions 
         },
         unsubscribe: (channel) => {
             socket.emit('unsubscribe', channel);
+            socket.off(channel);
             return client;
         },
         publish: (channel, message) => {
             socket.emit('publish', { channel, message });
+            //console.log(`Published to ${channel}: ${message}`);
             return client;
+        },
+        once: (channel, outGoingMessage, callback) => {
+            client.publish(channel, outGoingMessage);
+            outGoingMessage = JSON.parse(outGoingMessage);
+            client.subscribe(channel, (message, originalChannel) => {
+                if (message.type === 'response' && message.responseTo === outGoingMessage.command) {
+                    callback(message, originalChannel);
+                    client.unsubscribe(channel);
+                }
+            });
         }
     }
 

@@ -1,7 +1,7 @@
 import { createBusClient } from "../toolbox/messageBusClient";
-import { presets } from "../dashboard/presets";
+import { presets } from "./presets";
 
-const allChannels = [
+const knownChannels = [
     "*",
     "projector/tv",  
     "projector/epaper",
@@ -13,101 +13,99 @@ const allChannels = [
     "dashboard"
 ];
 
-
 // Set-up Functions
-loadChannels();
 window.onload = (e) => {
     document.querySelector("#message-sender-button").onclick = sendMessage;
     document.querySelectorAll(".preset").forEach((element) => element.onclick = presetFill);
+    loadChannels();
+    loadTranslators();
+    loadFilter();
+    console.log(presets);
 };
-
-
 
 // Create a messageBus to send and receive messages from redis. 
 // Callback functions are called when a message is received from the correspoonding channel.
-// Currently tv/channel and tv/filter update the status and the log; depenidn gon how quickly data is received 
-// from observers, might not want to update log. TODO: Hide duplicate messages in log and show number sent instead.
 const messageBus = createBusClient()([
-    /*
-    {
-        channel: 'projector/tv',
-        callback: (value, channel) => {
-            updateLog(String(channel), JSON.stringify(value));
-            updateStatus('#tv-channel', value.value);
-        }
-    },
-    {
-        channel: 'projector/epaper',
-        callback: (value, channel) => {
-            updateLog(String(channel), JSON.stringify(value));
-            updateStatus('#e-paper', value.value);
-        }
-    },
-    {
-        channel: 'projector/lamp',
-        callback: (value, channel) => {
-            updateLog(String(channel), JSON.stringify(value));
-            updateStatus('#lamp', value.value);
-        }
-    },
-    {
-        channel: 'observer/chairs',
-        callback: (value, channel) => {
-            updateLog(String(channel), JSON.stringify(value));
-            updateStatus('#chairs', value.value);
-        }
-    },
-    {
-        channel: 'observer/coffee',
-        callback: (value, channel) => {
-            updateLog(String(channel), JSON.stringify(value));
-            updateStatus('#coffee', value.value);
-        }
-    },
-    {
-        channel: 'observer/rug',
-        callback: (value, channel) => {
-            updateLog(String(channel), JSON.stringify(value));
-            updateStatus('#rug', value.value);
-        }
-    },
     {
         channel: 'translator',
-        callback: (value, channel) => {
-            updateLog(String(channel), JSON.stringify(value));
+        callback: (message, channel) => {
+            if (message.command == 'activate-translator' || message.command == 'deactivate-translator') {
+                loadTranslators();
+            }
         }
     },
-    */
-    // Unnecessary for our purposes, might be useful later.
     {
         channel: '*',
-        callback: (value, channel) => {
-            updateLog(String(channel), JSON.stringify(value));
-            allChannels.add(channel);
+        callback: (message, channel) => {
+            updateLog(String(channel), JSON.stringify(message));
+            if (!knownChannels.includes(channel)) {
+                knownChannels.push(channel);
+                loadChannels();
+            }
         }
     }
-    
 ]);
 
-
-
 // Fills channel selector dropdown with valid channels. Could just hardcode in HTML but see TODO...
-// TODO: See if we can pull channels from redis here. Not sure if possible.
-function loadChannels() {
-    let channelDropdown = document.querySelector("#channel-selector-input");
-    let option;
+const loadChannels = () => {
+    const channelDropdown = document.querySelector("#channel-selector-input");
 
-    for(let i = 0; i < allChannels.length; i++) {
-        option = document.createElement("option");
-        option.value = option.innerHTML = allChannels[i];
+    knownChannels.slice(channelDropdown.childElementCount).forEach((channel) => {
+        const option = document.createElement("option");
+        option.value = option.innerHTML = channel;
         channelDropdown.appendChild(option);
-    }
+    });
 }
 
+const loadTranslators = () => {
+    const translatorRequest = {
+        type: 'command',
+        command: 'get-active-translators'
+    }
+    messageBus.once('translator', JSON.stringify(translatorRequest), (reponse) => {
+        const activeTranslators = reponse.value;
+        console.log(activeTranslators);
+    });
+}
 
+const activeFilters = new Set(knownChannels);
+const loadFilter = () => {
+    const filterDiv = document.querySelector("#messages-filter");
+
+    knownChannels.slice(filterDiv.childElementCount).forEach((channel) => {
+        const div = document.createElement("div");
+        const filter = document.createElement("input");
+        filter.type = "checkbox";
+        filter.value = channel;
+        filter.checked = true;
+        filter.onchange = e => {
+            const messageList = document.querySelector("#message-list");
+            console.log(e.target);
+            if (e.target.checked) {
+                activeFilters.add(e.target.value);
+                messageList.querySelectorAll("li").forEach((message) => {
+                    if (message.dataset.channel === e.target.value) {
+                        message.style.visibility = "visible";
+                    }
+                });
+            }
+            else {
+                activeFilters.delete(e.target.value);
+                messageList.querySelectorAll("li").forEach((message) => {
+                    if (message.dataset.channel === e.target.value) {
+                        message.style.visibility = "hidden";
+                    }
+                });
+            }
+        };
+        div.innerHTML += channel;
+        div.appendChild(filter);
+        filterDiv.appendChild(div);
+    });
+}
 
 // Checks validity of message and sends to redis. Called when 'Publish' button is clicked.
-function sendMessage() {
+const sendMessage = () => {
     let channel = document.querySelector("#channel-selector-input").value;
     let messageType = document.querySelector("#type-selector-input").value;
     let messageCommand = document.querySelector("#command-selector-input").value;
@@ -131,49 +129,30 @@ function sendMessage() {
         value: messageValue
     };
 
-    messageBus.publish(channel, JSON.stringify(jsonMessage));[]
+    messageBus.publish(channel, JSON.stringify(jsonMessage));
 
     // Clear message field
     document.querySelector("#command-selector-input").value = "";
     document.querySelector("#value-selector-input").value = "";
 }
 
-
-let messageList = document.querySelector("#message-list");
+const messageList = document.querySelector("#message-list");
 let numMessages = 0;
-
-/*
-let currentFilters = ['observer/mug', 'projector/tv']
-
-let allMessages = [];
-let filteredMessages = [];
-const passesFilters = msg => {
-    // check everything in currentFilters, if m
-    // return msg passes filter1 && msg passes filter 2
-};
-*/
-function updateLog(channel, message) {
-    //allMessages.push(message);
-    /*
-    // run tbhrough filters to determine if messages hould be added to filteredMessages
-    if (passesFilters(message)) {
-        filteredMessages.push(message);
-    }
-
-    // wherever the code is that happens when I click a checkbox
-    currentFilters.add/remove 
-    filteredMessages = allMessages.filter(passesFilters);
-*/
-
+const updateLog = (channel, message) => {
     // Add message to log
     let newMessage = document.createElement("li");
     newMessage.innerHTML += '<p class="message-channel">' + channel + '</p>';
     newMessage.innerHTML += '<p class="message-content">' + message + '</p>';
+    newMessage.dataset.channel = channel;
 
     // Alternate background colors of messages
     if(numMessages % 2) { newMessage.style.backgroundColor = "white"; }
     else { newMessage.style.backgroundColor = "whitesmoke"; }
     numMessages++;
+
+    if (!activeFilters.has(channel)) {
+        newMessage.style.visibility = "hidden";
+    }
 
     // Add message to list
     messageList.appendChild(newMessage);
@@ -182,18 +161,14 @@ function updateLog(channel, message) {
     messageList.scrollTop = messageList.scrollHeight; 
 }
 
-function presetFill()
-{
-    document.querySelector("#channel-selector-input").value = presets[this.id].channel;
-    document.querySelector("#type-selector-input").value = presets[this.id].type;
-    document.querySelector("#command-selector-input").value = presets[this.id].command;
-    document.querySelector("#value-selector-input").value = presets[this.id].value;
+const presetFill = (e) => {
+    document.querySelector("#channel-selector-input").value = presets[e.target.dataset.presetId].channel;
+    document.querySelector("#type-selector-input").value = presets[e.target.dataset.presetId].type;
+    document.querySelector("#command-selector-input").value = presets[e.target.dataset.presetId].command;
+    document.querySelector("#value-selector-input").value = presets[e.target.dataset.presetId].value;
 }
 
 // Updates the status of projectors/observers.
 const updateStatus = (client, value) => {
     document.querySelector(client).querySelector('.projector-status').innerHTML = "State: " + value; 
 }
-
-
-
