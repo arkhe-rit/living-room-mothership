@@ -48,6 +48,7 @@ const messageBus = createBusClient()([
     }
 ]);
 
+const messagesDict = {};
 // Fills channel selector dropdown with valid channels. Could just hardcode in HTML but see TODO...
 const loadChannels = () => {
     const channelDropdown = document.querySelector("#channel-selector-input");
@@ -56,6 +57,7 @@ const loadChannels = () => {
         const option = document.createElement("option");
         option.value = option.innerHTML = channel;
         channelDropdown.appendChild(option);
+        messagesDict[channel] = [];
     });
 }
 
@@ -85,18 +87,14 @@ const loadFilters = () => {
             console.log(e.target);
             if (e.target.checked) {
                 activeFilters.add(e.target.value);
-                messageList.querySelectorAll("li").forEach((message) => {
-                    if (message.dataset.channel === e.target.value) {
-                        message.style.visibility = "visible";
-                    }
+                messagesDict[channel].forEach((message) => {
+                    message.style.visibility = "visible";
                 });
             }
             else {
                 activeFilters.delete(e.target.value);
-                messageList.querySelectorAll("li").forEach((message) => {
-                    if (message.dataset.channel === e.target.value) {
-                        message.style.visibility = "hidden";
-                    }
+                messagesDict[channel].forEach((message) => {
+                    message.style.visibility = "hidden";
                 });
             }
         };
@@ -161,6 +159,7 @@ const updateLog = (channel, message) => {
 
     // Add message to list
     messageList.appendChild(newMessage);
+    messagesDict[channel].push(newMessage);
 
     // Auto-scroll to bottom. TODO: Only scroll to bottom if user is already scrolled down (like Twitch chat)
     messageList.scrollTop = messageList.scrollHeight; 
