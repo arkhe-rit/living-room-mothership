@@ -4,7 +4,7 @@ import { presets } from "./presets";
 const knownChannels = [
     "*",
     "projector/tv",  
-    "projector/epaper",
+    "projector/eink",
     "projector/lamp",
     "observer/chairs",
     "observer/coffee",
@@ -87,13 +87,15 @@ const loadFilters = () => {
             if (e.target.checked) {
                 activeFilters.add(e.target.value);
                 messagesDict[channel].forEach((message) => {
-                    message.style.visibility = "visible";
+                    message.style.height = "fit-content";
+                    message.style.padding = "4px 2vw";
                 });
             }
             else {
                 activeFilters.delete(e.target.value);
                 messagesDict[channel].forEach((message) => {
-                    message.style.visibility = "hidden";
+                    message.style.height = "0px";
+                    message.style.padding = "0px";
                 });
             }
         };
@@ -146,6 +148,7 @@ const updateLog = (channel, message) => {
     newMessage.innerHTML += '<p class="message-channel">' + channel + '</p>';
     newMessage.innerHTML += '<p class="message-content" style="height: fit-content">' + message + '</p>';
     newMessage.dataset.channel = channel;
+    newMessage.style.overflow = "hidden";
 
     // Alternate background colors of messages
     if(numMessages % 2) { newMessage.style.backgroundColor = "white"; }
@@ -153,7 +156,8 @@ const updateLog = (channel, message) => {
     numMessages++;
 
     if (!activeFilters.has(channel)) {
-        newMessage.style.visibility = "hidden";
+        newMessage.style.height = "0px";
+        newMessage.style.padding = "0px";
     }
 
     // Add message to list
