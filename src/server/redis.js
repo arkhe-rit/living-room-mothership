@@ -33,21 +33,19 @@ const setupRedisAdapter = async (io) => {
                 });
             }
         });
-        
     }
-    
+
+    subClient.pSubscribe('*', (message, channel) => {
+        console.log(`Received message ${shortenMessage(message)} on channel ${channel}`);
+        emitToSubs(channel, message);
+    });
 
     io.on('connection', (socket) => {
         socket.on('subscribe', (channel) => {
             //if this is the first client to the subscribe to the channel, 
-            //create the array for the channel and subscribe through redis
+            //create the array for the channel
             if (subscriptions[channel] === undefined) {
                 subscriptions[channel] = [socket.id];
-                //psubscribe is used to be able to handle wildcard subscriptions
-                subClient.subscribe(channel, (message, channel) => {
-                    console.log(`Received message ${shortenMessage(message)} on channel ${channel}`);
-                    emitToSubs(channel, message);
-                });
             }
             //othewrise, just add the client to the array
             else {

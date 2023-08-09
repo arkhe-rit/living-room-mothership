@@ -19,7 +19,7 @@ window.onload = (e) => {
     document.querySelectorAll(".preset").forEach((element) => element.onclick = presetFill);
     loadChannels();
     loadTranslators();
-    loadFilter();
+    loadFilters();
     console.log(presets);
 };
 
@@ -37,11 +37,13 @@ const messageBus = createBusClient()([
     {
         channel: '*',
         callback: (message, channel) => {
-            updateLog(String(channel), JSON.stringify(message));
             if (!knownChannels.includes(channel)) {
                 knownChannels.push(channel);
                 loadChannels();
+                loadFilters();
+                activeFilters.add(channel);
             }
+            updateLog(String(channel), JSON.stringify(message));
         }
     }
 ]);
@@ -69,7 +71,7 @@ const loadTranslators = () => {
 }
 
 const activeFilters = new Set(knownChannels);
-const loadFilter = () => {
+const loadFilters = () => {
     const filterDiv = document.querySelector("#messages-filter");
 
     knownChannels.slice(filterDiv.childElementCount).forEach((channel) => {
