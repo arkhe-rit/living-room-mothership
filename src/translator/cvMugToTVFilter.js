@@ -15,7 +15,7 @@ const mugsToTVFilter = (msgValue) => {
     return {
         type: 'command',
         command: 'change-filter',
-        filter: filterSettings
+        value: filterSettings
     }
 }
 

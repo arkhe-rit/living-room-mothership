@@ -2,7 +2,7 @@ import { createBusClient } from "../../toolbox/messageBusClient.js";
 import * as shaders from "./shaders";
 
 // Set up socket, connect to server, and identify self
-const messageBus = createBusClient()();
+const messageBus = createBusClient();
 messageBus.subscribe('projector/tv', (message) => {
     switch (message.type) {
         case 'command':
@@ -41,13 +41,19 @@ gl.viewport(0, 0, canvas.width, canvas.height);
 
 const video = document.getElementById('content');
 const videos = [
-    new URL('../media/heroquest.mp4', import.meta.url),
-    new URL('../media/luckyStrike.mp4', import.meta.url),
-    new URL('../media/roc_commercials.mp4', import.meta.url),
     new URL('../media/static.mp4', import.meta.url),
+    new URL('../media/luckyStrike.mp4', import.meta.url),
+    new URL('../media/heroquest.mp4', import.meta.url),
+    new URL('../media/roc_commercials.mp4', import.meta.url),
     new URL('../media/travis.mov', import.meta.url)
 ]
+let currentVideo = 0;
 const changeVideo = (index) => {
+    if (index === currentVideo) {
+        return videos[currentVideo];
+    }
+    currentVideo = index;
+
     const newVid = videos[index];
     video.play();
     video.src = newVid;
@@ -111,7 +117,7 @@ const render = () => {
     gl.drawArrays(gl.TRIANGLES, 0, 6);
     setTimeout(() => {
         requestAnimationFrame(render);
-    }, 1000 / 24);
+    }, 1000 / 60);
 }
 
 //init

@@ -13,7 +13,7 @@
         "test": "cross-env NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest --passWithNoTests",
         "prestart-translator": "npm install",
         "pretest": "npm install",
-        "start": "docker image prune -a -f && docker-compose up -d --build && docker compose logs --follow",
+        "start": "docker image prune -a -f && docker-compose up -d --build && docker compose logs --follow --tail 1000",
         "setup": "docker volume create nodemodules && docker-compose -f docker-compose.builder.yml run --rm install",
         "start_insideDocker": "cross-env ENV=DEV PORT=5555 NODE_OPTIONS='--experimental-specifier-resolution=node' nodemon -L src/server/server.js",
         "start-tv_insideDocker": "cross-env ENV=DEV PORT=4321 parcel src/tv/index.html --dist-dir ./dist/tv --hmr-port 1235",

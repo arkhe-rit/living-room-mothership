@@ -14,36 +14,56 @@ const rawTranslators = [
 ]
 
 // Create a dictionary of translators for easier reference later
-const translators = {};
-rawTranslators.forEach(translator => {
-  translators[translator.name] = translator;
-});
+// const translators = {};
+// rawTranslators.forEach(translator => {
+//   translators[translator.name] = translator;
+// });
 
-const createTranslatorEngine = () => {
-  const messageBus = createBusClient()();
-  messageBus.subscribe('translator', (msg) => {
+const createTranslatorEngine = (messageBus) => {
+  // const messageBus = createBusClient();
+  const translators = {};
+
+  // Queries
+  messageBus.subscribe('translator/*', (msg, channel) => {
+    const reply = (responseData) => {
+      const response = {
+        type: 'response',
+        value: responseData
+      };
+      messageBus.publish(
+        `${channel}/response`, 
+        JSON.stringify(response)
+      );
+    };
+
     switch (msg.type) {
-      case 'command':
-        switch (msg.command) {
-          case 'activate-translator':
-            activateTranslator(msg.value);
-            break;
-          case 'deactivate-translator':
-            deactivateTranslator(msg.value);
-            break;
-          case 'get-active-translators':
+      case 'query':
+        switch (msg.query) {
+          case 'active-translators': 
             const activeTranslators = Object.keys(translators).map(translatorName => {
               return {
                 name: translatorName,
                 description: translators[translatorName].description
               }
             }).filter(translator => translators[translator.name].enabled);
-            const response = {
-              type: 'response',
-              responseTo: 'get-active-translators',
-              value: activeTranslators
-            }
-            messageBus.publish('translator', JSON.stringify(response));
+            
+            reply(activeTranslators);
+            break;
+        }
+        break;
+      }
+  });
+
+  // Commands
+  messageBus.subscribe('translator', (msg) => {
+    switch (msg.type) {
+      case 'command':
+        switch (msg.command) {
+          case 'activate-translator':
+            activate(msg.value);
+            break;
+          case 'deactivate-translator':
+            deactivate(msg.value);
             break;
           default:
             console.log(`Unknown command: ${msg.command}`)
@@ -56,7 +76,19 @@ const createTranslatorEngine = () => {
     }
   });
 
-  const activateTranslator = (translatorName) => {
+  const register = (translator, shouldActivate = true) => {
+    translators[translator.name] = translator;
+
+    if (shouldActivate) {
+      activate(translator.name);
+    }
+  };
+
+  const registerWithoutActivation = (translator) => {
+    register(translator, false);
+  };
+
+  const activate = (translatorName) => {
     if (!Object.keys(translators).includes(translatorName)) {
       console.log(`Unknown translator: ${translatorName}`);
       return;
@@ -75,7 +107,7 @@ const createTranslatorEngine = () => {
     desiredTranslator.enabled = true;
   };
 
-  const deactivateTranslator = (translatorName) => {
+  const deactivate = (translatorName) => {
     if (!Object.keys(translators).includes(translatorName)) {
       console.log(`Unknown translator: ${translatorName}`);
       return;
@@ -89,10 +121,14 @@ const createTranslatorEngine = () => {
   };
 
   return {
-    messageBus,
-    activateTranslator,
-    deactivateTranslator
+    register,
+    registerWithoutActivation,
+    activate,
+    deactivate
   }
 }
 
-export { createTranslatorEngine }
+export { 
+  createTranslatorEngine,
+  rawTranslators
+}

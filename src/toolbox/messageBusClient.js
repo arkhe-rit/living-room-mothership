@@ -16,7 +16,9 @@ const setupSocket = (socket) => {
             s === 0 ? `${ms}ms` : `${s}s ${ms > 0 ? `${ms}ms` : ""}`.trim();
 
         console.log(`Attempting reconnection in ${timeoutStr}...`);
-        setTimeout(socket.connect, reconnectionTimeout);
+        setTimeout(() => {
+            socket.connect();
+        }, reconnectionTimeout);
     };
 
     socket.on("disconnect", (reason, details) => {
@@ -52,7 +54,7 @@ const defaultSocket = io(
     }
 );
 
-const createBusClient = (socket = setupSocket(defaultSocket)) => (subscriptions = []) => {
+const createBusClient = (socket = setupSocket(defaultSocket)) => {
     const client = {
         socket,
         subscribe: (channel, callback) => {
@@ -79,22 +81,26 @@ const createBusClient = (socket = setupSocket(defaultSocket)) => (subscriptions 
             //console.log(`Published to ${channel}: ${message}`);
             return client;
         },
-        once: (channel, outGoingMessage, callback) => {
+        once: (channel, callback) => {
+            client.subscribe(channel, (message, originalChannel) => {
+                client.unsubscribe(channel);
+                callback(message, originalChannel);
+            });
+        },
+        request: async (channel, outGoingMessage) => {
             client.publish(channel, outGoingMessage);
             outGoingMessage = JSON.parse(outGoingMessage);
-            client.subscribe(channel, (message, originalChannel) => {
-                if (message.type === 'response' && message.responseTo === outGoingMessage.command) {
-                    callback(message, originalChannel);
-                    client.unsubscribe(channel);
-                }
+            
+            return new Promise(resolve => {
+                client.subscribe(`${channel}/response`, (message) => {
+                    client.unsubscribe(`${channel}/response`);
+                    resolve(message.value);
+                });
             });
-        }
-    }
 
-    // Subscribe to all channels passed in as default subscriptions
-    subscriptions.forEach(subscription => {
-        client.subscribe(subscription.channel, subscription.callback);
-    });
+            
+        }
+    };
 
     return client;
 }

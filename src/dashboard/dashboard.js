@@ -20,33 +20,27 @@ window.onload = (e) => {
     loadChannels();
     loadTranslators();
     loadFilters();
-    console.log(presets);
+    console.log('Presets:', presets);
 };
 
 // Create a messageBus to send and receive messages from redis. 
 // Callback functions are called when a message is received from the correspoonding channel.
-const messageBus = createBusClient()([
-    {
-        channel: 'translator',
-        callback: (message, channel) => {
-            if (message.command == 'activate-translator' || message.command == 'deactivate-translator') {
-                loadTranslators();
-            }
-        }
-    },
-    {
-        channel: '*',
-        callback: (message, channel) => {
-            if (!knownChannels.includes(channel)) {
-                knownChannels.push(channel);
-                loadChannels();
-                loadFilters();
-                activeFilters.add(channel);
-            }
-            updateLog(String(channel), JSON.stringify(message));
-        }
+const messageBus = createBusClient();
+messageBus.subscribe('translator', (message, channel) => {
+    if (message.command == 'activate-translator' || message.command == 'deactivate-translator') {
+        loadTranslators();
     }
-]);
+});
+messageBus.subscribe('*', (message, channel) => {
+    if (!knownChannels.includes(channel)) {
+        knownChannels.push(channel);
+        loadChannels();
+        loadFilters();
+        activeFilters.add(channel);
+    }
+    updateLog(String(channel), JSON.stringify(message));
+});
+    
 
 const messagesDict = {};
 // Fills channel selector dropdown with valid channels. Could just hardcode in HTML but see TODO...
@@ -61,15 +55,16 @@ const loadChannels = () => {
     });
 }
 
-const loadTranslators = () => {
-    const translatorRequest = {
-        type: 'command',
-        command: 'get-active-translators'
-    }
-    messageBus.once('translator', JSON.stringify(translatorRequest), (reponse) => {
-        const activeTranslators = reponse.value;
-        console.log(activeTranslators);
-    });
+const loadTranslators = async () => {
+    const activeTranslators = await messageBus.request(
+        'translator/active-translators', 
+        JSON.stringify({
+            type: 'query',
+            query: 'active-translators'
+        })
+    );
+    console.log('Active translators:', activeTranslators);
+
 }
 
 const activeFilters = new Set(knownChannels);
@@ -113,6 +108,7 @@ const sendMessage = () => {
     let channel = document.querySelector("#channel-selector-input").value;
     let messageType = document.querySelector("#type-selector-input").value;
     let messageCommand = document.querySelector("#command-selector-input").value;
+    let messageQuery = document.querySelector("#query-selector-input").value;
     let messageValue = document.querySelector("#value-selector-input").value
     if (messageValue.includes('[')) {
         messageValue = messageValue.replace('[', '');
@@ -130,6 +126,7 @@ const sendMessage = () => {
     let jsonMessage = {
         type: messageType,
         command: messageCommand,
+        query: messageQuery,
         value: messageValue
     };
 
@@ -137,6 +134,7 @@ const sendMessage = () => {
 
     // Clear message field
     document.querySelector("#command-selector-input").value = "";
+    document.querySelector("#query-selector-input").value = "";
     document.querySelector("#value-selector-input").value = "";
 }
 
