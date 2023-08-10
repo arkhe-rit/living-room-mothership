@@ -86,12 +86,11 @@ h1 {
         padding: 0px;
 
         border-color: dimgrey;
-        background-color:gainsboro[];
+        background-color:white;
         border-style: solid;
 
         overflow: auto;
     }
-
     #message-list li {
         display:flex;
         flex-direction: row;
