@@ -25,8 +25,8 @@ const setupRedisAdapter = async (io) => {
         }
         //aside from emitting to the specific channel, check the subscriptions diciontary for any
         //wildcard subscriptions that have a matching pattern
-        Object.keys(subscriptions).filter(sub => sub.includes('*')).forEach((sub) => {
-            if (wildcardComparison(sub, channel)) {
+        Object.keys(subscriptions).filter(sub => sub !== channel).forEach((sub) => {
+            if (wildcardComparison(sub, channel) || wildcardComparison(channel, sub)) {
                 subscriptions[sub].forEach((id) => {
                     // console.log(`Emitting to ${id} on channel ${sub} with content ${shortenMessage(message) }; original channel was ${channel}`)
                     io.to(id).emit(sub, { message, originalChannel: channel });

@@ -66,13 +66,13 @@ const createTranslatorEngine = (messageBus) => {
             deactivate(msg.value);
             break;
           default:
-            console.log(`Unknown command: ${msg.command}`)
+            console.log(`Translator recieved unknown command: ${msg.command}`)
             break;
         }
         break;
       case 'response': break;
       default:
-        console.log(`Unknown message type: ${msg.type}`)
+        console.log(`Translator recieved unknown message type: ${msg.type}`)
     }
   });
 
