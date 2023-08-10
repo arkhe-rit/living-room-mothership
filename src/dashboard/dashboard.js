@@ -44,6 +44,11 @@ const messageBus = createBusClient()([
                 activeFilters.add(channel);
             }
             updateLog(String(channel), JSON.stringify(message));
+            
+            if (message.command == "partytime")
+            {
+                partyTime(message.value);
+            }
         }
     }
 ]);
@@ -178,4 +183,14 @@ const presetFill = (e) => {
 // Updates the status of projectors/observers.
 const updateStatus = (client, value) => {
     document.querySelector(client).querySelector('.projector-status').innerHTML = "State: " + value; 
+}
+
+// It's party time motherfucker
+const partyTime = (e) => {
+    if(e==1) {
+        document.body.style.backgroundImage = "url(https://tenor.com/view/cat-dj-party-lit-turnt-gif-8761414.gif)";
+    }
+    else {
+        document.body.style.backgroundImage = "";
+    }
 }
