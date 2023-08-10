@@ -30,7 +30,7 @@ describe('createBusClient', () => {
         };
 
         // Initialize the busClient
-        busClient = createBusClient(mockSocket)();
+        busClient = createBusClient(mockSocket);
     });
 
     it('should return an object with socket, subscribe, unsubscribe, and publish methods', () => {

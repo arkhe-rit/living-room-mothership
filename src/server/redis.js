@@ -19,7 +19,7 @@ const setupRedisAdapter = async (io) => {
         //nonwildcard channels
         if (subscriptions[channel] !== undefined) {
             subscriptions[channel].forEach((id) => {
-                console.log(`Emitting to ${id} on channel ${channel} with content ${shortenMessage(message)}`)
+                // console.log(`Emitting to ${id} on channel ${channel} with content ${shortenMessage(message)}`)
                 io.to(id).emit(channel, { message, originalChannel: channel });
             });
         }
@@ -28,7 +28,7 @@ const setupRedisAdapter = async (io) => {
         Object.keys(subscriptions).filter(sub => sub.includes('*')).forEach((sub) => {
             if (wildcardComparison(sub, channel)) {
                 subscriptions[sub].forEach((id) => {
-                    console.log(`Emitting to ${id} on channel ${sub} with content ${shortenMessage(message) }; original channel was ${channel}`)
+                    // console.log(`Emitting to ${id} on channel ${sub} with content ${shortenMessage(message) }; original channel was ${channel}`)
                     io.to(id).emit(sub, { message, originalChannel: channel });
                 });
             }
@@ -36,7 +36,7 @@ const setupRedisAdapter = async (io) => {
     }
 
     subClient.pSubscribe('*', (message, channel) => {
-        console.log(`Received message ${shortenMessage(message)} on channel ${channel}`);
+        // console.log(`Received message ${shortenMessage(message)} on channel ${channel}`);
         emitToSubs(channel, message);
     });
 
@@ -91,4 +91,39 @@ const setupRedisAdapter = async (io) => {
     });
 }
 
-export { setupRedisAdapter };
+const createPlainRedisInterface = async () => {
+  const pubClient = createClient({
+    url: "redis://redis:6379"
+  });
+  const subClient = pubClient.duplicate();
+
+  await pubClient.connect();
+  await subClient.connect();
+
+  return {
+    publish: (channel, message) => {
+      pubClient.publish(channel, message);
+    },
+    subscribe: (channel, callback) => {
+      subClient.pSubscribe(channel, (msg, receivedChannel) => {
+        try {
+          // parse message
+          const message = JSON.parse(msg);
+
+          callback(message, receivedChannel);
+        } catch (e) {
+          console.error('Cannot parse message, passing forward as string');
+          callback(msg, receivedChannel);
+        }
+      });
+    },
+    unsubscribe: (channel) => {
+      subClient.unsubscribe(channel);
+    }
+  };
+};
+
+export { 
+    setupRedisAdapter,
+    createPlainRedisInterface
+};

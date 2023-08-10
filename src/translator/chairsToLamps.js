@@ -2,7 +2,7 @@ const chairsToLamps = (msgValue) => {
     return {
         type: 'command',
         command: 'set-lamps',
-        lamps: [msgValue[2] > 0 || msgValue[3] > 0, msgValue[0] > 0 || msgValue[1] > 0]
+        value: [msgValue[2] > 0 || msgValue[3] > 0, msgValue[0] > 0 || msgValue[1] > 0]
     }
 }
 

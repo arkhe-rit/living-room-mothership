@@ -3,9 +3,9 @@ import Router from '@koa/router';
 import { createServer } from "http";
 import { networkInterfaces } from 'os';
 import { setupSocketIO } from "./socket/setupSocketIO.js";
-import { setupRedisAdapter } from "./redis.js";
-import { createTranslatorEngine } from '../translator/translatorEngine.js';
-import { chairChordObserver, createRedisInterface } from "../observers/observerEngine.js";
+import { createPlainRedisInterface, setupRedisAdapter } from "./redis.js";
+import { createTranslatorEngine, rawTranslators } from '../translator/translatorEngine.js';
+import { createObserverEngine, rawObservers } from "../observers/observerEngine.js";
 
 const port = process.env.PORT;
 const isDevEnvironment = process.env.ENV === "DEV" || !process.env.ENV;
@@ -19,14 +19,18 @@ const { io } = setupSocketIO(httpServer);
 await setupRedisAdapter(io);
 
 // Observer shit
-const observerRedisInterface = await createRedisInterface();
-const chairChord = chairChordObserver(observerRedisInterface);
-//
+const redisInterface = await createPlainRedisInterface();
+const observerEngine = createObserverEngine(redisInterface);
+rawObservers(redisInterface).forEach(observer => {
+  observerEngine.register(observer);
+});
+observerEngine.start();
 
-const translatorEngine = createTranslatorEngine();
-translatorEngine.activateTranslator('ardMugToTVFilter');
-translatorEngine.activateTranslator('cvMugToTVFilter');
-translatorEngine.activateTranslator('rugToTVChannel');
+// Translator shit
+const translatorEngine = createTranslatorEngine(redisInterface);
+rawTranslators.forEach(translator => {
+  translatorEngine.register(translator)
+});
 
 httpServer.listen(port, () => {
   const hotspotIpAddress = networkInterfaces()?.['Local Area Connection* 2']
