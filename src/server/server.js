@@ -21,7 +21,7 @@ await setupRedisAdapter(io);
 // Observer shit
 const redisInterface = await createPlainRedisInterface();
 const observerEngine = createObserverEngine(redisInterface);
-rawObservers(redisInterface).forEach(observer => {
+(await rawObservers(redisInterface)).forEach(observer => {
   observerEngine.register(observer);
 });
 observerEngine.start();

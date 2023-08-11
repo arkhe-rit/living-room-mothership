@@ -157,6 +157,8 @@ h1 {
     #message-sender #presets {
         display:flex;
         flex-direction: row;
+        flex-wrap: wrap;
+        font-size: 1rem;
     }
     #message-sender #presets button {
         width: 10%;

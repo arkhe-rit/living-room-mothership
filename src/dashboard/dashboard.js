@@ -19,6 +19,13 @@ window.onload = (e) => {
     document.querySelector("#filter-select-none").onclick = () => selectAllFilters(false);
     document.querySelector("#filter-select-all").onclick = () => selectAllFilters(true);
 
+    document.querySelectorAll(".preset").forEach((element) => {
+        element.onclick = (e) => {
+            const pre = presets[e.target.dataset.presetId];
+            presetFill(pre.channel, pre.type, pre.command, pre.query, pre.value);
+        };
+    });
+
     loadChannels();
     loadTranslators();
     loadFilters();
@@ -239,6 +246,17 @@ const updateLog = (channel, message) => {
         newMessage.style.padding = "0px";
     }
 
+    newMessage.addEventListener('click', (e) => {
+        try {
+            const parsed = JSON.parse(message);
+            if (parsed.type === undefined) return;
+
+            presetFill(channel, parsed.type, parsed.command, parsed.query, parsed.value);
+        } catch (e) {
+            console.log('Error:', e);
+        }
+    });
+
     // Add message to list
     messageList.appendChild(newMessage);
     messagesDict[channel].push(newMessage);
@@ -247,6 +265,14 @@ const updateLog = (channel, message) => {
     if (shouldScroll) {
         messageList.scrollTop = messageList.scrollHeight;
     }
+}
+
+const presetFill = (channel, type, command, query, value) => {
+    document.querySelector("#channel-selector-input").value = channel;
+    document.querySelector("#type-selector-input").value = type;
+    document.querySelector("#command-selector-input").value = command || '';
+    document.querySelector("#query-selector-input").value = query || '';
+    document.querySelector("#value-selector-input").value = value || '';
 }
 
 const projectorList = document.querySelector("#projector-list");

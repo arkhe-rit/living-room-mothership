@@ -1,8 +1,8 @@
 import { createTranslatorEngine } from "../translator/translatorEngine.js";
 import { makeChairChordObserver } from "./chairChord.js";
 
-const rawObservers = (redisInterface) => [
-  makeChairChordObserver(redisInterface)
+const rawObservers = async (redisInterface) => [
+  await makeChairChordObserver(redisInterface)
 ];
 
 const createObserverEngine = (messageBus) => {
