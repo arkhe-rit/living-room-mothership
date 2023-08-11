@@ -351,8 +351,9 @@ const parseArray = (arrayString) => {
 };
 
 const debug = () => {
-    messageBus.publish('observer/chairs', JSON.stringify({ "type": "algebra", "value": [Math.round(Math.random()), Math.round(Math.random()), Math.round(Math.random()), Math.round(Math.random())] }));
-    messageBus.publish('observer/ardMug', JSON.stringify({ "type": "algebra","value": [Math.floor(Math.random() * 39), Math.round(Math.random())] }));
+    //messageBus.publish('observer/chairs', JSON.stringify({ "type": "algebra", "value": [Math.round(Math.random()), Math.round(Math.random()), Math.round(Math.random()), Math.round(Math.random())] }));
+    //messageBus.publish('observer/ardMug', JSON.stringify({ "type": "algebra", "value": [Math.floor(Math.random() * 39), Math.round(Math.random())] }));
+    messageBus.publish('observer/rug', JSON.stringify({ "type": "algebra", "value": [[0.2,0.2],[0.2,0.2]] }));
     setTimeout(debug, 500);
 }
-//debug();
+debug();
