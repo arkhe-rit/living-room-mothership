@@ -45,7 +45,7 @@ const videos = [
     new URL('../media/CommercialLoopColor.mp4', import.meta.url),
     new URL('../media/CommercialLoopBW.mp4', import.meta.url),
     new URL('../media/CommercialLoopHalfColor.mp4', import.meta.url),
-    new URL('../media/roc_commercials', import.meta.url)
+    new URL('../media/roc_commercials.mp4', import.meta.url)
 ]
 let currentVideo = 0;
 const changeVideo = (index) => {
