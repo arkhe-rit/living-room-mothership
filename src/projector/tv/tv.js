@@ -57,7 +57,10 @@ const changeVideo = (index) => {
     const newVid = videos[index];
     video.play();
     video.src = newVid;
-    video.play();
+    video.addEventListener('loadedmetadata', () => {
+        video.currentTime = (frameCount / 60) % video.duration;
+        video.play();
+    });
     return newVid;
 }
 
