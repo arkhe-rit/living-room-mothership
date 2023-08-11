@@ -1,0 +1,615 @@
+<?xml version="1.0" standalone="no"?>
+<mlt LC_NUMERIC="C" version="7.17.0" title="Shotcut version 23.06.14" producer="main_bin">
+  <profile description="automatic" width="480" height="360" progressive="1" sample_aspect_num="4" sample_aspect_den="3" display_aspect_num="16" display_aspect_den="9" frame_rate_num="25000000" frame_rate_den="1000000" colorspace="709"/>
+  <chain id="chain0" out="00:00:28.120">
+    <property name="length">00:00:28.160</property>
+    <property name="eof">pause</property>
+    <property name="resource">Videos/kinderegg.mp4</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="shotcut:hash">4868150e9aef00de1338ac4bd19d1dec</property>
+    <property name="ignore_points">0</property>
+    <property name="creation_time">2021-07-14T00:07:15</property>
+    <property name="xml">was here</property>
+  </chain>
+  <chain id="chain1" out="00:01:00.720">
+    <property name="length">00:01:00.760</property>
+    <property name="eof">pause</property>
+    <property name="resource">Videos/knorrsoup.mp4</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">622fa17b999f8f9b96cb0b516591fb04</property>
+  </chain>
+  <chain id="chain2" out="00:01:04.520">
+    <property name="length">00:01:04.560</property>
+    <property name="eof">pause</property>
+    <property name="resource">Videos/luckyStrike.mp4</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">fdf6c608ddb1255496a900e2f1806e5d</property>
+  </chain>
+  <chain id="chain3" out="00:08:50.680">
+    <property name="length">00:08:50.720</property>
+    <property name="eof">pause</property>
+    <property name="resource">Videos/roc_commercials.mp4</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">f0210bef1c74f4d308f5c480be0cb299</property>
+  </chain>
+  <chain id="chain4" out="00:00:30.200">
+    <property name="length">00:00:30.240</property>
+    <property name="eof">pause</property>
+    <property name="resource">Videos/smokeythebear.mp4</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">beb735289114d15cd19fc12de4a46d1a</property>
+  </chain>
+  <chain id="chain5" out="00:00:14.960">
+    <property name="length">00:00:15.000</property>
+    <property name="eof">pause</property>
+    <property name="resource">Videos/static.mp4</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">e55dfa28547f314f656bff49a722cad2</property>
+  </chain>
+  <chain id="chain6" out="00:00:59.120">
+    <property name="length">00:00:59.160</property>
+    <property name="eof">pause</property>
+    <property name="resource">Videos/sugarricekrinkles.mp4</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">55b91ad390f427c2879a742b9b47a0e5</property>
+    <property name="shotcut:caption">sugarricekrinkles.mp4</property>
+    <property name="ignore_points">1</property>
+  </chain>
+  <chain id="chain7" out="00:00:14.720">
+    <property name="length">00:00:14.760</property>
+    <property name="eof">pause</property>
+    <property name="resource">Videos/travis.mov</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">0</property>
+    <property name="video_index">1</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">ef497efc4600a651fe4c23d2bf767120</property>
+    <property name="ignore_points">1</property>
+    <property name="shotcut:caption">travis.mov</property>
+  </chain>
+  <chain id="chain8" in="00:00:01.240" out="00:00:01.560">
+    <property name="length">00:00:01.600</property>
+    <property name="eof">pause</property>
+    <property name="resource">Videos/TV Static and Color Bars Effect_Transition (4K).mp4</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">0183fe27f9952dfc7163082885d9ab26</property>
+    <property name="ignore_points">1</property>
+    <property name="shotcut:caption">TV Static and Color Bars Effect_Transition (4K).mp4</property>
+  </chain>
+  <chain id="chain9" out="00:00:46.680">
+    <property name="length">00:00:46.720</property>
+    <property name="eof">pause</property>
+    <property name="resource">Videos/witchdoctor.mp4</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">710dbfba0b4761fada762e594c0316b3</property>
+  </chain>
+  <chain id="chain10" out="00:00:30.080">
+    <property name="length">00:00:30.120</property>
+    <property name="eof">pause</property>
+    <property name="resource">Videos/gushers.mp4</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">ab8533fa9b267d040c71c69835fe75e5</property>
+    <property name="ignore_points">1</property>
+    <property name="shotcut:caption">gushers.mp4</property>
+  </chain>
+  <chain id="chain11" out="00:00:30.360">
+    <property name="length">00:00:30.400</property>
+    <property name="eof">pause</property>
+    <property name="resource">Videos/laughingdoll.mp4</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">4ef46adcb781ab5e49dcd70e6aab659b</property>
+    <property name="ignore_points">1</property>
+    <property name="shotcut:caption">laughingdoll.mp4</property>
+  </chain>
+  <chain id="chain12" out="00:00:30.080">
+    <property name="length">00:00:30.120</property>
+    <property name="eof">pause</property>
+    <property name="resource">Videos/gushers.mp4</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">ab8533fa9b267d040c71c69835fe75e5</property>
+    <property name="ignore_points">1</property>
+    <property name="shotcut:caption">gushers.mp4</property>
+  </chain>
+  <chain id="chain13" out="00:00:16.400">
+    <property name="length">00:00:20.120</property>
+    <property name="eof">pause</property>
+    <property name="resource">Videos/nose.mp4</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">886f42233d56886700416004f4556e3b</property>
+    <property name="ignore_points">1</property>
+    <property name="shotcut:caption">nose.mp4</property>
+  </chain>
+  <chain id="chain14" out="00:01:27.560">
+    <property name="length">00:01:27.600</property>
+    <property name="eof">pause</property>
+    <property name="resource">Videos/rejuveniquemask.mp4</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">8143b91effb5bb2bb07b71dd969b5851</property>
+    <property name="ignore_points">1</property>
+    <property name="shotcut:caption">rejuveniquemask.mp4</property>
+  </chain>
+  <chain id="chain15" out="00:00:30.600">
+    <property name="length">00:00:30.640</property>
+    <property name="eof">pause</property>
+    <property name="resource">Videos/heroquest.mp4</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">2b088353e8920ee336804f26734d73c9</property>
+    <property name="ignore_points">1</property>
+    <property name="shotcut:caption">heroquest.mp4</property>
+  </chain>
+  <chain id="chain16" out="00:00:29.880">
+    <property name="length">00:00:29.920</property>
+    <property name="eof">pause</property>
+    <property name="resource">Videos/ampm.mp4</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="creation_time">2023-03-27T14:26:41</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">be91887a8180367a02e67674fa5c8fac</property>
+  </chain>
+  <chain id="chain17" out="00:00:30.440">
+    <property name="length">00:00:30.480</property>
+    <property name="eof">pause</property>
+    <property name="resource">Videos/snickershalloween.mp4</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="creation_time">2022-09-15T07:42:53</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">19d50313ae1703e8b52c084197f7a003</property>
+    <property name="shotcut:caption">snickershalloween.mp4</property>
+    <property name="ignore_points">1</property>
+    <filter id="filter7" out="00:00:30.440">
+      <property name="oversaturate_cr">190</property>
+      <property name="oversaturate_cb">190</property>
+      <property name="mlt_service">tcolor</property>
+    </filter>
+    <filter id="filter8" out="00:00:30.440">
+      <property name="mlt_service">avfilter.hue</property>
+      <property name="av.h">0</property>
+      <property name="av.b">0</property>
+      <property name="av.s">1.36</property>
+      <property name="disable">0</property>
+    </filter>
+    <filter id="filter0" out="00:00:30.440">
+      <property name="rect">61 0 359 363 1</property>
+      <property name="circle">0</property>
+      <property name="color">#ff000000</property>
+      <property name="radius">0</property>
+      <property name="mlt_service">qtcrop</property>
+      <property name="shotcut:filter">cropRectangle</property>
+    </filter>
+  </chain>
+  <chain id="chain18" out="00:00:22.840">
+    <property name="length">00:00:22.880</property>
+    <property name="eof">pause</property>
+    <property name="resource">Videos/skittles.mp4</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="creation_time">2022-12-03T18:10:00</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">8a8a92c8fc1b2e7fedb3452fe157aa64</property>
+  </chain>
+  <chain id="chain19" out="00:00:14.960">
+    <property name="length">00:00:15.000</property>
+    <property name="eof">pause</property>
+    <property name="resource">Videos/bonkers.mp4</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">0</property>
+    <property name="video_index">1</property>
+    <property name="creation_time">2008-07-21T05:09:05</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">7dba05a587adfa91630e15b3c5c8968a</property>
+  </chain>
+  <chain id="chain20" in="00:01:00.800" out="00:01:24.400">
+    <property name="length">00:08:26.520</property>
+    <property name="eof">pause</property>
+    <property name="resource">Videos/roc_commercials07.mp4</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="creation_time">2021-04-23T08:27:45</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">d2f6826ef3a4047b45c398c023e23936</property>
+    <property name="shotcut:caption">roc_commercials07.mp4</property>
+    <property name="ignore_points">1</property>
+  </chain>
+  <playlist id="main_bin">
+    <property name="xml_retain">1</property>
+    <entry producer="chain0" in="00:00:00.000" out="00:00:28.120"/>
+    <entry producer="chain1" in="00:00:00.000" out="00:01:00.720"/>
+    <entry producer="chain2" in="00:00:00.000" out="00:01:04.520"/>
+    <entry producer="chain3" in="00:00:00.000" out="00:08:50.680"/>
+    <entry producer="chain4" in="00:00:00.000" out="00:00:30.200"/>
+    <entry producer="chain5" in="00:00:00.000" out="00:00:14.960"/>
+    <entry producer="chain6" in="00:00:00.000" out="00:00:59.120"/>
+    <entry producer="chain7" in="00:00:00.000" out="00:00:14.720"/>
+    <entry producer="chain8" in="00:00:01.240" out="00:00:01.560"/>
+    <entry producer="chain9" in="00:00:00.000" out="00:00:46.680"/>
+    <entry producer="chain10" in="00:00:00.000" out="00:00:30.080"/>
+    <entry producer="chain11" in="00:00:00.000" out="00:00:30.360"/>
+    <entry producer="chain12" in="00:00:00.000" out="00:00:30.080"/>
+    <entry producer="chain13" in="00:00:00.000" out="00:00:16.400"/>
+    <entry producer="chain14" in="00:00:00.000" out="00:01:27.560"/>
+    <entry producer="chain15" in="00:00:00.000" out="00:00:30.600"/>
+    <entry producer="chain16" in="00:00:00.000" out="00:00:29.880"/>
+    <entry producer="chain17" in="00:00:00.000" out="00:00:30.440"/>
+    <entry producer="chain18" in="00:00:00.000" out="00:00:22.840"/>
+    <entry producer="chain19" in="00:00:00.000" out="00:00:14.960"/>
+    <entry producer="chain20" in="00:01:00.800" out="00:01:24.400"/>
+  </playlist>
+  <producer id="black" in="00:00:00.000" out="00:04:54.800">
+    <property name="length">00:04:54.840</property>
+    <property name="eof">pause</property>
+    <property name="resource">0</property>
+    <property name="aspect_ratio">1</property>
+    <property name="mlt_service">color</property>
+    <property name="mlt_image_format">rgba</property>
+    <property name="set.test_audio">0</property>
+  </producer>
+  <playlist id="background">
+    <entry producer="black" in="00:00:00.000" out="00:04:54.800"/>
+  </playlist>
+  <chain id="chain21" out="00:00:30.080">
+    <property name="length">00:00:30.120</property>
+    <property name="eof">pause</property>
+    <property name="resource">Videos/gushers.mp4</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">ab8533fa9b267d040c71c69835fe75e5</property>
+    <property name="shotcut:caption">gushers.mp4</property>
+    <filter id="filter1" out="00:00:30.080">
+      <property name="oversaturate_cr">190</property>
+      <property name="oversaturate_cb">190</property>
+      <property name="mlt_service">tcolor</property>
+    </filter>
+  </chain>
+  <chain id="chain22" out="00:00:30.600">
+    <property name="length">00:00:30.640</property>
+    <property name="eof">pause</property>
+    <property name="resource">Videos/heroquest.mp4</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">2b088353e8920ee336804f26734d73c9</property>
+    <property name="ignore_points">0</property>
+    <property name="shotcut:caption">heroquest.mp4</property>
+    <filter id="filter2" out="00:00:30.600">
+      <property name="oversaturate_cr">190</property>
+      <property name="oversaturate_cb">190</property>
+      <property name="mlt_service">tcolor</property>
+    </filter>
+  </chain>
+  <chain id="chain24" out="00:00:30.360">
+    <property name="length">00:00:30.400</property>
+    <property name="eof">pause</property>
+    <property name="resource">Videos/laughingdoll.mp4</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">4ef46adcb781ab5e49dcd70e6aab659b</property>
+    <property name="ignore_points">0</property>
+    <property name="shotcut:caption">laughingdoll.mp4</property>
+    <property name="shotcut:defaultAudioIndex">1</property>
+    <filter id="filter3" out="00:00:30.360">
+      <property name="oversaturate_cr">190</property>
+      <property name="oversaturate_cb">190</property>
+      <property name="mlt_service">tcolor</property>
+    </filter>
+    <filter id="filter4" out="00:00:30.360">
+      <property name="window">75</property>
+      <property name="max_gain">20dB</property>
+      <property name="level">-22</property>
+      <property name="mlt_service">volume</property>
+    </filter>
+  </chain>
+  <chain id="chain26" out="00:01:27.560">
+    <property name="length">00:01:27.600</property>
+    <property name="eof">pause</property>
+    <property name="resource">Videos/rejuveniquemask.mp4</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="mute_on_pause">0</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">8143b91effb5bb2bb07b71dd969b5851</property>
+    <property name="ignore_points">1</property>
+    <property name="shotcut:caption">rejuveniquemask.mp4</property>
+    <filter id="filter5" out="00:01:22.360">
+      <property name="oversaturate_cr">190</property>
+      <property name="oversaturate_cb">190</property>
+      <property name="mlt_service">tcolor</property>
+    </filter>
+    <filter id="filter6" out="00:01:22.360">
+      <property name="background">color:#00000000</property>
+      <property name="mlt_service">affine</property>
+      <property name="shotcut:filter">affineSizePosition</property>
+      <property name="transition.fill">1</property>
+      <property name="transition.distort">0</property>
+      <property name="transition.rect">27.2355 -29.4881 423.345 423.345 1</property>
+      <property name="transition.valign">middle</property>
+      <property name="transition.halign">center</property>
+      <property name="shotcut:animIn">00:00:00.000</property>
+      <property name="shotcut:animOut">00:00:00.000</property>
+      <property name="transition.threads">0</property>
+    </filter>
+    <filter id="filter9" out="00:01:22.360">
+      <property name="rect">65 0 352 360 1</property>
+      <property name="circle">0</property>
+      <property name="color">#ff000000</property>
+      <property name="radius">0</property>
+      <property name="mlt_service">qtcrop</property>
+      <property name="shotcut:filter">cropRectangle</property>
+    </filter>
+    <filter id="filter10" out="00:01:22.360">
+      <property name="window">75</property>
+      <property name="max_gain">20dB</property>
+      <property name="level">-6.8</property>
+      <property name="mlt_service">volume</property>
+    </filter>
+  </chain>
+  <chain id="chain28" out="00:00:29.880">
+    <property name="length">00:00:29.920</property>
+    <property name="eof">pause</property>
+    <property name="resource">Videos/ampm.mp4</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="creation_time">2023-03-27T14:26:41</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">be91887a8180367a02e67674fa5c8fac</property>
+    <property name="shotcut:caption">ampm.mp4</property>
+    <filter id="filter11" out="00:00:29.880">
+      <property name="oversaturate_cr">190</property>
+      <property name="oversaturate_cb">190</property>
+      <property name="mlt_service">tcolor</property>
+    </filter>
+  </chain>
+  <chain id="chain30" out="00:00:30.440">
+    <property name="length">00:00:30.480</property>
+    <property name="eof">pause</property>
+    <property name="resource">Videos/snickershalloween.mp4</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="creation_time">2022-09-15T07:42:53</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">19d50313ae1703e8b52c084197f7a003</property>
+    <property name="shotcut:caption">snickershalloween.mp4</property>
+    <property name="ignore_points">1</property>
+    <filter id="filter12" out="00:00:30.440">
+      <property name="oversaturate_cr">190</property>
+      <property name="oversaturate_cb">190</property>
+      <property name="mlt_service">tcolor</property>
+    </filter>
+    <filter id="filter13" out="00:00:30.440">
+      <property name="mlt_service">avfilter.hue</property>
+      <property name="av.h">0</property>
+      <property name="av.b">0</property>
+      <property name="av.s">1.36</property>
+      <property name="disable">0</property>
+    </filter>
+    <filter id="filter14" out="00:00:30.440">
+      <property name="rect">61 0 359 363 1</property>
+      <property name="circle">0</property>
+      <property name="color">#ff000000</property>
+      <property name="radius">0</property>
+      <property name="mlt_service">qtcrop</property>
+      <property name="shotcut:filter">cropRectangle</property>
+    </filter>
+  </chain>
+  <chain id="chain32" out="00:00:22.840">
+    <property name="length">00:00:22.880</property>
+    <property name="eof">pause</property>
+    <property name="resource">Videos/skittles.mp4</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="creation_time">2022-12-03T18:10:00</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">8a8a92c8fc1b2e7fedb3452fe157aa64</property>
+    <property name="shotcut:caption">skittles.mp4</property>
+    <filter id="filter15" out="00:00:22.000">
+      <property name="oversaturate_cr">190</property>
+      <property name="oversaturate_cb">190</property>
+      <property name="mlt_service">tcolor</property>
+    </filter>
+    <filter id="filter16" out="00:00:22.000">
+      <property name="noise">40</property>
+      <property name="contrast">100</property>
+      <property name="brightness">83</property>
+      <property name="mlt_service">grain</property>
+      <property name="disable">1</property>
+    </filter>
+    <filter id="filter17" out="00:00:22.000">
+      <property name="mlt_service">avfilter.hue</property>
+      <property name="av.h">0</property>
+      <property name="av.b">0</property>
+      <property name="av.s">1.45</property>
+    </filter>
+  </chain>
+  <chain id="chain34" out="00:00:14.960">
+    <property name="length">00:00:15.000</property>
+    <property name="eof">pause</property>
+    <property name="resource">Videos/bonkers.mp4</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">0</property>
+    <property name="video_index">1</property>
+    <property name="creation_time">2008-07-21T05:09:05</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">7dba05a587adfa91630e15b3c5c8968a</property>
+    <property name="shotcut:caption">bonkers.mp4</property>
+    <filter id="filter18" out="00:00:14.960">
+      <property name="oversaturate_cr">190</property>
+      <property name="oversaturate_cb">190</property>
+      <property name="mlt_service">tcolor</property>
+    </filter>
+    <filter id="filter19" out="00:00:14.960">
+      <property name="window">75</property>
+      <property name="max_gain">20dB</property>
+      <property name="level">-23.5</property>
+      <property name="mlt_service">volume</property>
+    </filter>
+  </chain>
+  <chain id="chain23" out="00:08:26.480">
+    <property name="length">00:08:26.520</property>
+    <property name="eof">pause</property>
+    <property name="resource">Videos/roc_commercials07.mp4</property>
+    <property name="mlt_service">avformat-novalidate</property>
+    <property name="seekable">1</property>
+    <property name="audio_index">1</property>
+    <property name="video_index">0</property>
+    <property name="creation_time">2021-04-23T08:27:45</property>
+    <property name="xml">was here</property>
+    <property name="shotcut:hash">d2f6826ef3a4047b45c398c023e23936</property>
+    <property name="shotcut:caption">roc_commercials07.mp4</property>
+    <property name="ignore_points">1</property>
+    <filter id="filter20" in="00:01:00.800" out="00:01:24.400">
+      <property name="oversaturate_cr">190</property>
+      <property name="oversaturate_cb">190</property>
+      <property name="mlt_service">tcolor</property>
+    </filter>
+    <filter id="filter21" in="00:01:00.800" out="00:01:24.400">
+      <property name="window">75</property>
+      <property name="max_gain">20dB</property>
+      <property name="level">0</property>
+      <property name="mlt_service">volume</property>
+    </filter>
+  </chain>
+  <playlist id="playlist0">
+    <property name="shotcut:video">1</property>
+    <property name="shotcut:name">V1</property>
+    <entry producer="chain21" in="00:00:00.000" out="00:00:30.080"/>
+    <entry producer="chain22" in="00:00:00.000" out="00:00:30.600"/>
+    <entry producer="chain24" in="00:00:00.000" out="00:00:30.360"/>
+    <entry producer="chain26" in="00:00:00.000" out="00:01:22.360"/>
+    <entry producer="chain28" in="00:00:00.000" out="00:00:29.880"/>
+    <entry producer="chain30" in="00:00:00.000" out="00:00:30.440"/>
+    <entry producer="chain32" in="00:00:00.000" out="00:00:22.000"/>
+    <entry producer="chain34" in="00:00:00.000" out="00:00:14.960"/>
+    <blank length="00:00:00.200"/>
+    <entry producer="chain23" in="00:01:00.800" out="00:01:24.400"/>
+  </playlist>
+  <tractor id="tractor0" title="Shotcut version 23.06.14" in="00:00:00.000" out="00:04:54.800">
+    <property name="shotcut">1</property>
+    <property name="shotcut:trackHeight">49</property>
+    <property name="shotcut:projectAudioChannels">2</property>
+    <property name="shotcut:projectFolder">1</property>
+    <property name="shotcut:scaleFactor">3.59158</property>
+    <track producer="background"/>
+    <track producer="playlist0"/>
+    <transition id="transition0">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="mlt_service">mix</property>
+      <property name="always_active">1</property>
+      <property name="sum">1</property>
+    </transition>
+    <transition id="transition1">
+      <property name="a_track">0</property>
+      <property name="b_track">1</property>
+      <property name="version">0.1</property>
+      <property name="mlt_service">frei0r.cairoblend</property>
+      <property name="threads">0</property>
+      <property name="disable">1</property>
+    </transition>
+  </tractor>
+</mlt>

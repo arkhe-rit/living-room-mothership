@@ -1,26 +1,20 @@
-import { createBusClient } from '../toolbox/messageBusClient.js';
 import { chairsToLampsTranslator } from './chairsToLamps.js';
 import { chairsToTVTranslator } from './chairsToTVChannel.js';
 import { cvMugToTVFilterTranslator } from './cvMugToTVFilter.js';
 import { ardMugToTVFilterTranslator } from './ardMugToTVFilter.js';
 import { rugToTVChannelTranslator } from './rugToTVChannel.js';
+import { cvMugToEinkImageTranslator } from './cvMugToEinkImage.js';
 
 const rawTranslators = [
   chairsToLampsTranslator,
   chairsToTVTranslator,
   cvMugToTVFilterTranslator,
   ardMugToTVFilterTranslator,
-  rugToTVChannelTranslator
+  rugToTVChannelTranslator,
+  cvMugToEinkImageTranslator
 ]
 
-// Create a dictionary of translators for easier reference later
-// const translators = {};
-// rawTranslators.forEach(translator => {
-//   translators[translator.name] = translator;
-// });
-
 const createTranslatorEngine = (messageBus) => {
-  // const messageBus = createBusClient();
   const translators = {};
 
   // Queries
@@ -39,13 +33,11 @@ const createTranslatorEngine = (messageBus) => {
     switch (msg.type) {
       case 'query':
         switch (msg.query) {
-          case 'active-translators': 
+          case 'registered-translators': 
             const activeTranslators = Object.keys(translators).map(translatorName => {
-              return {
-                name: translatorName,
-                description: translators[translatorName].description
-              }
-            }).filter(translator => translators[translator.name].enabled);
+              let translator = translators[translatorName];
+              return translator;
+            });
             
             reply(activeTranslators);
             break;
@@ -66,13 +58,13 @@ const createTranslatorEngine = (messageBus) => {
             deactivate(msg.value);
             break;
           default:
-            console.log(`Unknown command: ${msg.command}`)
+            console.log(`Translator recieved unknown command: ${msg.command}`)
             break;
         }
         break;
       case 'response': break;
       default:
-        console.log(`Unknown message type: ${msg.type}`)
+        console.log(`Translator recieved unknown message type: ${msg.type}`)
     }
   });
 
@@ -116,7 +108,7 @@ const createTranslatorEngine = (messageBus) => {
     if (!desiredTranslator.enabled) {
       console.log(`Translator ${translatorName} is already disabled`);
     }
-    messageBus.unsubscribe(translatorName);
+    messageBus.unsubscribe(desiredTranslator.listeningChannel);
     desiredTranslator.enabled = false;
   };
 
