@@ -355,4 +355,4 @@ const debug = () => {
     messageBus.publish('observer/ardMug', JSON.stringify({ "type": "algebra","value": [Math.floor(Math.random() * 39), Math.round(Math.random())] }));
     setTimeout(debug, 500);
 }
-debug();
+//debug();
