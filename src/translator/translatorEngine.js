@@ -4,6 +4,7 @@ import { cvMugToTVFilterTranslator } from './cvMugToTVFilter.js';
 import { ardMugToTVFilterTranslator } from './ardMugToTVFilter.js';
 import { rugToTVChannelTranslator } from './rugToTVChannel.js';
 import { cvMugToEinkImageTranslator } from './cvMugToEinkImage.js';
+import { rugToEinkImageTranslator } from './rugToEinkImage.js';
 
 const rawTranslators = [
   chairsToLampsTranslator,
@@ -11,7 +12,8 @@ const rawTranslators = [
   cvMugToTVFilterTranslator,
   ardMugToTVFilterTranslator,
   rugToTVChannelTranslator,
-  cvMugToEinkImageTranslator
+  cvMugToEinkImageTranslator,
+  rugToEinkImageTranslator
 ]
 
 const createTranslatorEngine = (messageBus) => {
@@ -92,7 +94,11 @@ const createTranslatorEngine = (messageBus) => {
     }
     messageBus.subscribe(desiredTranslator.listeningChannel, (msg) => {
       if (msg.type === 'algebra') {
-        const translatedMessage = JSON.stringify(desiredTranslator.callback(msg.value));
+        const translatorResponse = desiredTranslator.callback(msg.value);
+        if (translatorResponse === undefined) {
+          return;
+        }
+        const translatedMessage = JSON.stringify(translatorResponse);
         messageBus.publish(desiredTranslator.publishingChannel, translatedMessage);
       }
     });
