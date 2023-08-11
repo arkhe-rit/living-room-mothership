@@ -1,26 +1,20 @@
-import { createBusClient } from '../toolbox/messageBusClient.js';
 import { chairsToLampsTranslator } from './chairsToLamps.js';
 import { chairsToTVTranslator } from './chairsToTVChannel.js';
 import { cvMugToTVFilterTranslator } from './cvMugToTVFilter.js';
 import { ardMugToTVFilterTranslator } from './ardMugToTVFilter.js';
 import { rugToTVChannelTranslator } from './rugToTVChannel.js';
+import { cvMugToEinkImageTranslator } from './cvMugToEinkImage.js';
 
 const rawTranslators = [
   chairsToLampsTranslator,
   chairsToTVTranslator,
   cvMugToTVFilterTranslator,
   ardMugToTVFilterTranslator,
-  rugToTVChannelTranslator
+  rugToTVChannelTranslator,
+  cvMugToEinkImageTranslator
 ]
 
-// Create a dictionary of translators for easier reference later
-// const translators = {};
-// rawTranslators.forEach(translator => {
-//   translators[translator.name] = translator;
-// });
-
 const createTranslatorEngine = (messageBus) => {
-  // const messageBus = createBusClient();
   const translators = {};
 
   // Queries
