@@ -3,7 +3,7 @@ import * as defaultPresets from "./presets";
 
 const knownChannels = [
     "*",
-    "projector/tv",  
+    "projector/tv",
     "projector/eink",
     "projector/lamp",
     "observer/chairs",
@@ -16,7 +16,7 @@ const knownChannels = [
 // Set-up Functions
 window.onload = (e) => {
     document.querySelector("#message-sender-button").onclick = sendMessage;
-    document.querySelector("#add-preset-button").onclick = addPreset;
+    document.querySelector("#add-preset-button").onclick = createPreset;
     document.querySelector("#filter-select-none").onclick = () => selectAllFilters(false);
     document.querySelector("#filter-select-all").onclick = () => selectAllFilters(true);
 
@@ -46,7 +46,10 @@ messageBus.subscribe('*', (message, channel) => {
     }
 });
 messageBus.subscribe('projector/*', (message, channel) => {
-    updateProjectorStatus(`${channel.split('/')[1]}-${message.command.replace('change-', '')}`, message.value);
+    updateClientStatus("projector", `${channel.split('/')[1]}-${message.command.split('-')[1]}`, message.value);
+});
+messageBus.subscribe('observer/*', (message, channel) => {
+    updateClientStatus("observer", `${channel.split('/')[1]}`, message.value);
 });
 
 const messagesDict = {};
@@ -64,7 +67,7 @@ const loadChannels = () => {
 
 const loadTranslators = async () => {
     const activeTranslators = await messageBus.request(
-        'translator/active-translators', 
+        'translator/active-translators',
         JSON.stringify({
             type: 'query',
             query: 'active-translators'
@@ -134,8 +137,8 @@ const selectAllFilters = (enableAll) => {
 
 //#region Presets
 let presets = defaultPresets.presets;
+const presetDiv = document.querySelector("#preset-buttons");
 const loadPresets = () => {
-    const presetDiv = document.querySelector("#preset-buttons");
 
     // Load presets from local storage
     let storedPresets = JSON.parse(localStorage.getItem('presets'));
@@ -143,17 +146,10 @@ const loadPresets = () => {
         presets = storedPresets;
     }
 
-    Object.keys(presets).forEach((presetName) => {
-        const newPresetButton = document.createElement("button");
-        newPresetButton.classList.add("preset");
-        newPresetButton.innerHTML = presetName;
-        newPresetButton.dataset.presetName = presetName;
-        newPresetButton.onclick = presetFill;
-        presetDiv.appendChild(newPresetButton);
-    });
+    Object.keys(presets).forEach((presetName) => addPreset(presetName));
 }
 
-const addPreset = (e) => {
+const createPreset = (e) => {
     //create a popup that prompts the user for a name for the preset
     const name = prompt("Enter a name for the preset");
 
@@ -174,6 +170,16 @@ const addPreset = (e) => {
 
     //write the presets to the user's local storage
     localStorage.setItem('presets', JSON.stringify(presets));
+    addPreset(name);
+}
+
+const addPreset = (presetName) => {
+    const newPresetButton = document.createElement("button");
+    newPresetButton.classList.add("preset");
+    newPresetButton.innerHTML = presetName;
+    newPresetButton.dataset.presetName = presetName;
+    newPresetButton.onclick = presetFill;
+    presetDiv.appendChild(newPresetButton);
 }
 
 const presetFill = (e) => {
@@ -225,7 +231,7 @@ const updateLog = (channel, message) => {
     newMessage.style.overflow = "hidden";
 
     // Alternate background colors of messages
-    if(numMessages % 2) { newMessage.style.backgroundColor = "white"; }
+    if (numMessages % 2) { newMessage.style.backgroundColor = "white"; }
     else { newMessage.style.backgroundColor = "whitesmoke"; }
     numMessages++;
 
@@ -245,21 +251,37 @@ const updateLog = (channel, message) => {
 }
 
 const projectorList = document.querySelector("#projector-list");
-const updateProjectorStatus = (client, value) => {
-    let projector = projectorList.querySelector(`#${client}`);
-    if (!projector) {
-        const newProjector = document.createElement("projector-desc");
-        newProjector.id = client;
-        newProjector.setAttribute("name", client);
-        projector = newProjector;
-        projectorList.appendChild(projector);
+const observerList = document.querySelector("#observer-list");
+const updateClientStatus = (clientType, client, value) => {
+    let list;
+    switch (clientType) {
+        case "projector":
+            list = projectorList;
+            break;
+        case "observer":
+            list = observerList;
+            break;
+        default:
+            return;
     }
-    projector.setAttribute("state", value);
+    let clientElement = list.querySelector(`#${client}`);
+    if (!clientElement) {
+        const newClient = document.createElement("li");
+        newClient.innerHTML = `
+            <p class="client-name">Name: ${client}</p>
+            <p class="client-status">State: ${value}</p>
+        `;
+        newClient.id = client;
+        clientElement = newClient;
+        list.appendChild(newClient);
+        return;
+    }
+    clientElement.querySelector(".client-status").innerHTML = `State: ${value}`;
 }
 
 // It's party time motherfucker
 const partyTime = (e) => {
-    if(e==1) {
+    if (e == 1) {
         document.body.style.backgroundImage = "url(https://tenor.com/view/cat-dj-party-lit-turnt-gif-8761414.gif)";
     }
     else {
