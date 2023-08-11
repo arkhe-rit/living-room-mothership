@@ -2,7 +2,6 @@ import { createBusClient } from "../toolbox/messageBusClient";
 import * as defaultPresets from "./presets";
 
 const knownChannels = [
-    "*",
     "projector/tv",
     "projector/eink",
     "projector/lamp",
@@ -54,7 +53,7 @@ messageBus.subscribe('observer/*', (message, channel) => {
 
 const messagesDict = {};
 // Fills channel selector dropdown with valid channels. Could just hardcode in HTML but see TODO...
-const channelDropdown = document.querySelector("#channel-selector-input");
+const channelDropdown = document.querySelector("#channel-selector-list");
 const loadChannels = () => {
 
     knownChannels.slice(channelDropdown.childElementCount).forEach((channel) => {
