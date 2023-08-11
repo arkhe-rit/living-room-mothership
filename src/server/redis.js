@@ -92,38 +92,38 @@ const setupRedisAdapter = async (io) => {
 }
 
 const createPlainRedisInterface = async () => {
-  const pubClient = createClient({
-    url: "redis://redis:6379"
-  });
-  const subClient = pubClient.duplicate();
+    const pubClient = createClient({
+        url: "redis://redis:6379"
+    });
+    const subClient = pubClient.duplicate();
 
-  await pubClient.connect();
-  await subClient.connect();
+    await pubClient.connect();
+    await subClient.connect();
 
-  return {
-    publish: (channel, message) => {
-      pubClient.publish(channel, message);
-    },
-    subscribe: (channel, callback) => {
-      subClient.pSubscribe(channel, (msg, receivedChannel) => {
-        try {
-          // parse message
-          const message = JSON.parse(msg);
+    return {
+        publish: (channel, message) => {
+            pubClient.publish(channel, message);
+        },
+        subscribe: (channel, callback) => {
+            subClient.pSubscribe(channel, (msg, receivedChannel) => {
+                try {
+                    // parse message
+                    const message = JSON.parse(msg);
 
-          callback(message, receivedChannel);
-        } catch (e) {
-          console.error('Cannot parse message, passing forward as string');
-          callback(msg, receivedChannel);
+                    callback(message, receivedChannel);
+                } catch (e) {
+                    console.error('Cannot parse message, passing forward as string');
+                    callback(msg, receivedChannel);
+                }
+            });
+        },
+        unsubscribe: (channel) => {
+            subClient.unsubscribe(channel);
         }
-      });
-    },
-    unsubscribe: (channel) => {
-      subClient.unsubscribe(channel);
-    }
-  };
+    };
 };
 
-export { 
+export {
     setupRedisAdapter,
     createPlainRedisInterface
 };

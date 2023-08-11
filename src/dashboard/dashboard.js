@@ -68,7 +68,6 @@ const loadTranslators = async () => {
         })
     );
     console.log('Active translators:', activeTranslators);
-
 }
 
 const activeFilters = new Set(knownChannels);
