@@ -1,12 +1,15 @@
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css"
+        integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="style.css">
     <title>Living Room Dashboard</title>
 </head>
+
 <body>
     <span>
         <img id="logo" src="arkhe-logo-wide.png" alt="Arkhe Logo">
@@ -14,27 +17,26 @@
     </span>
 
     <section id="redis-log">
-        <div>
-            <h2>Redis Messages</h2>
+        <h2>Redis Messages</h2>
+        <div id="message-div">
             <ul id="message-list">
                 <!-- Messages dynamically added with JS -->
             </ul>
+            <div id="messages-filter">
+                <button class="filter-button" id="filter-select-none">Select None</button>
+                <button class="filter-button" id="filter-select-all">Select All</button>
+            </div>
         </div>
     </section>
 
     <section id="control-panel">
-
         <div id="message-sender">
-
             <div id="preset-buttons">
-                
             </div>
-
             <div id="channel-selector">
                 <label for="channel-selector-input">Channel:</label>
                 <select id="channel-selector-input"></select>
             </div>
-
             <div id="type-selector">
                 <label for="type-selector-input">Type:</label>
                 <select id="type-selector-input">
@@ -43,27 +45,20 @@
                     <option value="algebra">Algebra</option>
                 </select>
             </div>
-
             <div id="command-selector">
                 <label for="command-selector-input">Command:</label>
                 <input type="text" id="command-selector-input" placeholder="(If applicable)">
             </div>
-
             <div id="query-selector">
                 <label for="query-selector-input">Query:</label>
                 <input type="text" id="query-selector-input" placeholder="(If applicable)">
             </div>
-
             <div id="value-selector">
                 <label for="value-selector-input">Value:</label>
                 <input type="text" id="value-selector-input">
             </div>
-
             <button type="button" style="width: 82%" id="message-sender-button">Publish Message</button>
             <button type="button" style="width: 15%" id="add-preset-button">Add As Preset</button>
-        </div>
-
-        <div id="messages-filter">
         </div>
     </section>
 
@@ -87,7 +82,6 @@
                 </li>
             </ul>
         </div>
-
         <div class="right">
             <h2>Projectors</h2>
             <ul id="projector-list">
@@ -110,13 +104,8 @@
             </ul>
         </div>
     </section>
-    
     <hr>
-
-    <!--<section>
-        <img src="hunke.png">
-    </section>-->
-
-    <script type="module" src="dashboard.js"></script></script>
+    <script type="module" src="dashboard.js"></script>
+    </script>
 </body>
 </html>

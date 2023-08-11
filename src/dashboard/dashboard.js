@@ -17,6 +17,9 @@ const knownChannels = [
 window.onload = (e) => {
     document.querySelector("#message-sender-button").onclick = sendMessage;
     document.querySelector("#add-preset-button").onclick = addPreset;
+    document.querySelector("#filter-select-none").onclick = () => selectAllFilters(false);
+    document.querySelector("#filter-select-all").onclick = () => selectAllFilters(true);
+
     loadChannels();
     loadTranslators();
     loadFilters();
@@ -46,8 +49,8 @@ messageBus.subscribe('*', (message, channel) => {
 
 const messagesDict = {};
 // Fills channel selector dropdown with valid channels. Could just hardcode in HTML but see TODO...
+const channelDropdown = document.querySelector("#channel-selector-input");
 const loadChannels = () => {
-    const channelDropdown = document.querySelector("#channel-selector-input");
 
     knownChannels.slice(channelDropdown.childElementCount).forEach((channel) => {
         const option = document.createElement("option");
@@ -68,8 +71,10 @@ const loadTranslators = async () => {
     console.log('Active translators:', activeTranslators);
 }
 
-let activeFilters = {};
+//#region Filters
+
 const filterDiv = document.querySelector("#messages-filter");
+let activeFilters = {};
 const loadFilters = () => {
     let storedFilters = JSON.parse(localStorage.getItem('activeFilters'));
     if (storedFilters) {
@@ -116,6 +121,16 @@ const addFilter = (channel) => {
     filterDiv.appendChild(div);
 }
 
+const selectAllFilters = (enableAll) => {
+    filterDiv.querySelectorAll("input").forEach((filter) => {
+        if (filter.checked != enableAll) {
+            filter.click();
+        }
+    });
+}
+//#endregion
+
+//#region Presets
 let presets = defaultPresets.presets;
 const loadPresets = () => {
     const presetDiv = document.querySelector("#preset-buttons");
@@ -135,6 +150,40 @@ const loadPresets = () => {
         presetDiv.appendChild(newPresetButton);
     });
 }
+
+const addPreset = (e) => {
+    //create a popup that prompts the user for a name for the preset
+    const name = prompt("Enter a name for the preset");
+
+    //get the rest of the preset information from the inputs on the page and add it the presets array
+    const channel = document.querySelector("#channel-selector-input").value;
+    const type = document.querySelector("#type-selector-input").value;
+    const command = document.querySelector("#command-selector-input").value;
+    const query = document.querySelector("#query-selector-input").value;
+    const value = document.querySelector("#value-selector-input").value;
+
+    presets[name] = {
+        channel,
+        type,
+        command,
+        query,
+        value
+    };
+
+    //write the presets to the user's local storage
+    localStorage.setItem('presets', JSON.stringify(presets));
+}
+
+const presetFill = (e) => {
+    const { channel = "", type = "", query = "", command = "", value = "" } = presets[e.target.dataset.presetName];
+
+    document.querySelector("#channel-selector-input").value = channel;
+    document.querySelector("#type-selector-input").value = type;
+    document.querySelector("#command-selector-input").value = command;
+    document.querySelector("#query-selector-input").value = query;
+    document.querySelector("#value-selector-input").value = value;
+}
+//#endregion
 
 // Checks validity of message and sends to redis. Called when 'Publish' button is clicked.
 const sendMessage = () => {
@@ -209,17 +258,6 @@ const updateLog = (channel, message) => {
     }
 }
 
-const presetFill = (e) => {
-    const { channel = "", type = "", query = "", command = "", value = "" } = presets[e.target.dataset.presetName];
-
-
-    document.querySelector("#channel-selector-input").value = channel;
-    document.querySelector("#type-selector-input").value = type;
-    document.querySelector("#command-selector-input").value = command;
-    document.querySelector("#query-selector-input").value = query;
-    document.querySelector("#value-selector-input").value = value;
-}
-
 // Updates the status of projectors/observers.
 const updateStatus = (client, value) => {
     document.querySelector(client).querySelector('.projector-status').innerHTML = "State: " + value; 
@@ -235,25 +273,3 @@ const partyTime = (e) => {
     }
 }
 
-const addPreset = (e) => {
-    //create a popup that prompts the user for a name for the preset
-    const name = prompt("Enter a name for the preset");
-
-    //get the rest of the preset information from the inputs on the page and add it the presets array
-    const channel = document.querySelector("#channel-selector-input").value;
-    const type = document.querySelector("#type-selector-input").value;
-    const command = document.querySelector("#command-selector-input").value;
-    const query = document.querySelector("#query-selector-input").value;
-    const value = document.querySelector("#value-selector-input").value;
-    
-    presets[name] = {
-        channel,
-        type,
-        command,
-        query,
-        value
-    };
-
-    //write the presets to the user's local storage
-    localStorage.setItem('presets', JSON.stringify(presets));
-}
