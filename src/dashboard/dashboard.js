@@ -315,3 +315,9 @@ const parseArray = (arrayString) => {
     });
     return parsedElements;
 };
+
+const debug = () => {
+    messageBus.publish('observer/chairs', JSON.stringify({ "type": "algebra", "command": "", "query": "", "value": [Math.round(Math.random()), Math.round(Math.random()), Math.round(Math.random()), Math.round(Math.random())] }));
+    setTimeout(debug, 100);
+}
+//debug();
