@@ -45,7 +45,9 @@ messageBus.subscribe('*', (message, channel) => {
         partyTime(message.value);
     }
 });
-    
+messageBus.subscribe('projector/*', (message, channel) => {
+    updateProjectorStatus(`${channel.split('/')[1]}-${message.command.replace('change-', '')}`, message.value);
+});
 
 const messagesDict = {};
 // Fills channel selector dropdown with valid channels. Could just hardcode in HTML but see TODO...
@@ -192,23 +194,7 @@ const sendMessage = () => {
     let messageCommand = document.querySelector("#command-selector-input").value;
     let messageQuery = document.querySelector("#query-selector-input").value;
     let messageValue = document.querySelector("#value-selector-input").value
-    if (messageValue.includes('[')) {
-        messageValue = messageValue.replace('[', '');
-        messageValue = messageValue.replace(']', '');
-        messageValue = messageValue.split(',');
-        let newMessage = [];
-        for (let i = 0; i < messageValue.length; i++) {
-            if (!isNaN(Number(messageValue[i]))) {
-                newMessage.push(Number(messageValue[i]));
-            }
-            else {
-                newMessage.push(messageValue[i]);
-            }
-        }
-    }
-    else if (!isNaN(Number(messageValue))) {
-        messageValue = Number(messageValue);
-    }
+    messageValue = parseValue(messageValue);
 
     let jsonMessage = {
         type: messageType,
@@ -258,9 +244,17 @@ const updateLog = (channel, message) => {
     }
 }
 
-// Updates the status of projectors/observers.
-const updateStatus = (client, value) => {
-    document.querySelector(client).querySelector('.projector-status').innerHTML = "State: " + value; 
+const projectorList = document.querySelector("#projector-list");
+const updateProjectorStatus = (client, value) => {
+    let projector = projectorList.querySelector(`#${client}`);
+    if (!projector) {
+        const newProjector = document.createElement("projector-desc");
+        newProjector.id = client;
+        newProjector.setAttribute("name", client);
+        projector = newProjector;
+        projectorList.appendChild(projector);
+    }
+    projector.setAttribute("state", value);
 }
 
 // It's party time motherfucker
@@ -273,3 +267,30 @@ const partyTime = (e) => {
     }
 }
 
+const parseValue = (value) => {
+    let parsedValue;
+
+    if (!isNaN(parsedValue = Number(value))) {
+        return parsedValue;
+    } else if (value.startsWith('[') && value.endsWith(']')) {
+        return parseArray(value.slice(1, -1));
+    } else if (value === 'true') {
+        return true;
+    } else if (value === 'false') {
+        return false;
+    } else {
+        return value;
+    }
+};
+
+const parseArray = (arrayString) => {
+    const elements = arrayString.split(',');
+    const parsedElements = elements.map(element => {
+        if (element.startsWith('[') && element.endsWith(']')) {
+            return parseArray(element.slice(1, -1));
+        } else {
+            return parseValue(element);
+        }
+    });
+    return parsedElements;
+};

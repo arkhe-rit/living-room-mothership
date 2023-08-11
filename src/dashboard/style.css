@@ -15,7 +15,8 @@ h1 {
 
 #messages-filter {
     width: 10%;
-    margin: 2%;
+    margin-left: 2%;
+    margin-top: 0;
 }
 
 .filter-button {

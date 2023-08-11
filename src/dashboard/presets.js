@@ -6,5 +6,5 @@ export let presets = {
     "Change TV Channel": {channel: "projector/tv", type: "command", command: "change-video", value: 0 },
     "Change TV Filter": {channel: "projector/tv", type: "command", command: "change-filter", value: 0 },
     "Change E-Ink Image": {channel: "projector/eink", type: "command", command: "change-image", value: 0 },
-    "Change Lamps": {channel: "projector/lamp", type: "command", command: "change-lamps", value: 0 }
+    "Change Lamps": {channel: "projector/lamp", type: "command", command: "change-lamps", value: [false,false] }
 };
