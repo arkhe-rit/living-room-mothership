@@ -42,10 +42,10 @@ gl.viewport(0, 0, canvas.width, canvas.height);
 const video = document.getElementById('content');
 const videos = [
     new URL('../media/static.mp4', import.meta.url),
-    new URL('../media/luckyStrike.mp4', import.meta.url),
-    new URL('../media/heroquest.mp4', import.meta.url),
-    new URL('../media/roc_commercials.mp4', import.meta.url),
-    new URL('../media/travis.mov', import.meta.url)
+    new URL('../media/CommercialLoopColor.mp4', import.meta.url),
+    new URL('../media/CommercialLoopBW.mp4', import.meta.url),
+    new URL('../media/CommercialLoopHalfColor.mp4', import.meta.url),
+    new URL('../media/roc_commercials', import.meta.url)
 ]
 let currentVideo = 0;
 const changeVideo = (index) => {
