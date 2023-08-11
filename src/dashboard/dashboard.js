@@ -177,9 +177,9 @@ const updateLog = (channel, message) => {
 const presetFill = (channel, type, command, query, value) => {
     document.querySelector("#channel-selector-input").value = channel;
     document.querySelector("#type-selector-input").value = type;
-    document.querySelector("#command-selector-input").value = command;
-    document.querySelector("#query-selector-input").value = query;
-    document.querySelector("#value-selector-input").value = value;
+    document.querySelector("#command-selector-input").value = command || '';
+    document.querySelector("#query-selector-input").value = query || '';
+    document.querySelector("#value-selector-input").value = value || '';
 }
 
 // Updates the status of projectors/observers.
