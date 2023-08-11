@@ -1,10 +1,73 @@
-const makeChairChordObserver = (redisInterface) => {
-  let chairs = {
-    chair_1: 0,
-    chair_2: 0,
-    chair_3: 0,
-    chair_4: 0
+
+const validateIsOneOf = (validValuesArray) => (value) => {
+  if (validValuesArray.indexOf(value) === -1) {
+    throw new Error(`Invalid: ${value} is not one of ${validValuesArray}`);
+  }
+};
+
+const makeChairChordObserver = async (redisInterface) => {
+  let chairs = await redisInterface.fetch('observer/chairs', {
+    chair_1: { value: 0, zero: 0, high: 1 },
+    chair_2: { value: 0, zero: 0, high: 1 },
+    chair_3: { value: 0, zero: 0, high: 1 },
+    chair_4: { value: 0, zero: 0, high: 1 },
+    threshold: 0.5
+  }); 
+
+  console.log(chairs);
+
+  const validateChairName = validateIsOneOf(Object.keys(chairs));
+
+  const commands = {
+    'set-zero': (chair) => {
+      console.log('set-zero', chair)
+      validateChairName(chair);
+      chairs[chair].zero = chairs[chair].value;
+    },
+    'set-high': (chair) => {
+      validateChairName(chair);
+      chairs[chair].high = chairs[chair].value;
+    },
+    'set-threshold': (threshold) => {
+      chairs.threshold = threshold;
+    }
   };
+
+  const queries = {
+    value: (chair) => {
+      validateChairName(chair);
+      return chairs[chair].value;
+    },
+    zero: (chair) => {
+      validateChairName(chair);
+      return chairs[chair].zero;
+    },
+    high: (chair) => {
+      validateChairName(chair);
+      return chairs[chair].high;
+    },
+    threshold: () => {
+      return chairs.threshold;
+    }
+  };
+
+  // on a observer/chairs message with type = query, do thing
+  redisInterface.subscribe('observer/chairs', (message) => {
+    // { type: 'command', command: 'zero', value: 'chair_1 }
+    
+    if (message.type === 'command') {
+      commands[message.command](message.value);
+      redisInterface.store('observer/chairs', chairs);
+    } else if (message.type === 'query') {
+      const chairName = message.value;
+
+      const response = {
+        type: 'response',
+        value: queries[message.query](chairName)
+      };
+      redisInterface.publish(`observer/chairs/response`, response);
+    }
+  });
 
   return {
     name: 'observer_chairChord',

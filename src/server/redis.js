@@ -101,20 +101,28 @@ const createPlainRedisInterface = async () => {
   await subClient.connect();
 
   return {
+    fetch: async (key, defaultVal) => {
+        const val = await pubClient.get(key);
+        return val === null ? defaultVal : JSON.parse(val);
+    },
+    store: async (key, val) => {
+        await pubClient.set(key, JSON.stringify(val));
+    },
     publish: (channel, message) => {
       pubClient.publish(channel, message);
     },
     subscribe: (channel, callback) => {
       subClient.pSubscribe(channel, (msg, receivedChannel) => {
+        console.log('msg', msg);
+        let message = msg;
         try {
           // parse message
-          const message = JSON.parse(msg);
-
-          callback(message, receivedChannel);
+          message = JSON.parse(msg);
         } catch (e) {
           console.error('Cannot parse message, passing forward as string');
-          callback(msg, receivedChannel);
         }
+
+        callback(message, receivedChannel);
       });
     },
     unsubscribe: (channel) => {

@@ -81,24 +81,20 @@ const createBusClient = (socket = setupSocket(defaultSocket)) => {
             //console.log(`Published to ${channel}: ${message}`);
             return client;
         },
-        once: (channel, callback) => {
-            client.subscribe(channel, (message, originalChannel) => {
-                client.unsubscribe(channel);
-                callback(message, originalChannel);
+        once: (channel) => {
+            return new Promise(resolve => {
+                client.subscribe(channel, (message, originalChannel) => {
+                    client.unsubscribe(channel);
+                    resolve(message);
+                });
             });
         },
         request: async (channel, outGoingMessage) => {
             client.publish(channel, outGoingMessage);
             outGoingMessage = JSON.parse(outGoingMessage);
             
-            return new Promise(resolve => {
-                client.subscribe(`${channel}/response`, (message) => {
-                    client.unsubscribe(`${channel}/response`);
-                    resolve(message.value);
-                });
-            });
-
-            
+            const response = await client.once(`${channel}/response`);
+            return response.value;            
         }
     };
 
