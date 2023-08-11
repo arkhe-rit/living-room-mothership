@@ -9,12 +9,27 @@ h1 {
     font-style: italic;
 }
 
+#message-div {
+    display: flex;
+}
+
+#messages-filter {
+    width: 10%;
+    margin-left: 2%;
+    margin-top: 0;
+}
+
+.filter-button {
+    width: 45%;
+}
+
 #message-list {
     padding: 0px;
     border-color: dimgrey;
     background-color:gainsboro[];
     border-style: solid;
     overflow: auto;
+    width: 90%;
 }
 
 #message-list li {
@@ -38,8 +53,6 @@ h1 {
     display:flex;
     align-items: center;
 }
-
-
 
 #client-list {
     display: flex;
@@ -67,7 +80,7 @@ h1 {
 /* DESKTOP */
 @media screen and (min-width: 993px) {
     body {
-        width: 60%;
+        width: 75%;
     }
     hr {
         height: 1px;

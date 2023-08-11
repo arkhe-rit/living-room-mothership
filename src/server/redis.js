@@ -25,8 +25,8 @@ const setupRedisAdapter = async (io) => {
         }
         //aside from emitting to the specific channel, check the subscriptions diciontary for any
         //wildcard subscriptions that have a matching pattern
-        Object.keys(subscriptions).filter(sub => sub.includes('*')).forEach((sub) => {
-            if (wildcardComparison(sub, channel)) {
+        Object.keys(subscriptions).filter(sub => sub !== channel).forEach((sub) => {
+            if (wildcardComparison(sub, channel) || wildcardComparison(channel, sub)) {
                 subscriptions[sub].forEach((id) => {
                     // console.log(`Emitting to ${id} on channel ${sub} with content ${shortenMessage(message) }; original channel was ${channel}`)
                     io.to(id).emit(sub, { message, originalChannel: channel });
@@ -59,7 +59,6 @@ const setupRedisAdapter = async (io) => {
             //if the channel is empty, delete it
             if (subscriptions[channel].length === 0) {
                 delete subscriptions[channel];
-                subClient.unsubscribe(channel);
             }
         });
         socket.on('disconnect', () => {
@@ -69,7 +68,6 @@ const setupRedisAdapter = async (io) => {
                 //if the channel is empty, delete it
                 if (subscriptions[channel].length === 0) {
                     delete subscriptions[channel];
-                    subClient.unsubscribe(channel);
                 }
             }
         });
@@ -92,13 +90,13 @@ const setupRedisAdapter = async (io) => {
 }
 
 const createPlainRedisInterface = async () => {
-  const pubClient = createClient({
-    url: "redis://redis:6379"
-  });
-  const subClient = pubClient.duplicate();
+    const pubClient = createClient({
+        url: "redis://redis:6379"
+    });
+    const subClient = pubClient.duplicate();
 
-  await pubClient.connect();
-  await subClient.connect();
+    await pubClient.connect();
+    await subClient.connect();
 
   return {
     fetch: async (key, defaultVal) => {
@@ -126,12 +124,12 @@ const createPlainRedisInterface = async () => {
       });
     },
     unsubscribe: (channel) => {
-      subClient.unsubscribe(channel);
+      subClient.pUnsubscribe(channel);
     }
   };
 };
 
-export { 
+export {
     setupRedisAdapter,
     createPlainRedisInterface
 };
