@@ -29,8 +29,8 @@ window.onload = (e) => {
 // Callback functions are called when a message is received from the correspoonding channel.
 const messageBus = createBusClient();
 messageBus.subscribe('translator', (message, channel) => {
-    if (message.command == 'activate-translator' || message.command == 'deactivate-translator') {
-        loadTranslators();
+    if (message.command == 'registered-translator' || message.command == 'deactivate-translator') {
+        //loadTranslators();
     }
 });
 messageBus.subscribe('*', (message, channel) => {
@@ -64,19 +64,19 @@ const loadChannels = () => {
     });
 }
 
+let registeredTranslators = [];
 const loadTranslators = async () => {
-    const activeTranslators = await messageBus.request(
-        'translator/active-translators',
+    registeredTranslators = await messageBus.request(
+        'translator/registered-translators',
         JSON.stringify({
             type: 'query',
-            query: 'active-translators'
+            query: 'registered-translators'
         })
     );
-    console.log('Active translators:', activeTranslators);
+    registeredTranslators.forEach(translator => addTranslator(translator));
 }
 
 //#region Filters
-
 const filterDiv = document.querySelector("#messages-filter");
 let activeFilters = {};
 const loadFilters = () => {
@@ -230,8 +230,8 @@ const updateLog = (channel, message) => {
     newMessage.style.overflow = "hidden";
 
     // Alternate background colors of messages
-    if (numMessages % 2) { newMessage.style.backgroundColor = "white"; }
-    else { newMessage.style.backgroundColor = "whitesmoke"; }
+    if (numMessages % 2 === 0) { newMessage.style.backgroundColor = "white"; }
+    else { newMessage.style.backgroundColor = "lightgrey"; }
     numMessages++;
 
     if (!activeFilters[channel]) {
@@ -278,6 +278,40 @@ const updateClientStatus = (clientType, client, value) => {
     clientElement.querySelector(".client-status").innerHTML = `State: ${value}`;
 }
 
+const translatorList = document.querySelector("#translator-list");
+const addTranslator = (translator) => {
+    const newTranslator = document.createElement("li");
+    newTranslator.innerHTML = `
+        <span class="translator-name">Name: ${translator.name}</span>
+        <span class="translator-status">${translator.enabled ? "Enabled" : "Disabled"}</span>
+        <span class="translator-toggle"><button>${translator.enabled ? "Disable" : "Enable"}</button></span>
+    `;
+    newTranslator.querySelector(".translator-toggle button").onclick = (e) => {
+        switch (translator.enabled) {
+            case true:
+                messageBus.publish('translator', JSON.stringify({
+                    type: 'command',
+                    command: 'deactivate-translator',
+                    value: translator.name
+                }));
+                e.target.innerHTML = "Enable";
+                registeredTranslators.find(t => t.name === translator.name).enabled = false;
+                break;
+            case false:
+                messageBus.publish('translator', JSON.stringify({
+                    type: 'command',
+                    command: 'activate-translator',
+                    value: translator.name
+                }));
+                e.target.innerHTML = "Disable";
+                registeredTranslators.find(t => t.name === translator.name).enabled = true;
+                break;
+        }
+    };
+    newTranslator.id = translator.name;
+    translatorList.appendChild(newTranslator);
+}
+
 // It's party time motherfucker
 const partyTime = (e) => {
     if (e == 1) {
@@ -317,7 +351,8 @@ const parseArray = (arrayString) => {
 };
 
 const debug = () => {
-    messageBus.publish('observer/chairs', JSON.stringify({ "type": "algebra", "command": "", "query": "", "value": [Math.round(Math.random()), Math.round(Math.random()), Math.round(Math.random()), Math.round(Math.random())] }));
-    setTimeout(debug, 100);
+    messageBus.publish('observer/chairs', JSON.stringify({ "type": "algebra", "value": [Math.round(Math.random()), Math.round(Math.random()), Math.round(Math.random()), Math.round(Math.random())] }));
+    messageBus.publish('observer/ardMug', JSON.stringify({ "type": "algebra","value": [Math.floor(Math.random() * 39), Math.round(Math.random())] }));
+    setTimeout(debug, 500);
 }
-//debug();
+debug();

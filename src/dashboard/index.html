@@ -8,6 +8,7 @@
         integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="style.css">
     <title>Living Room Dashboard</title>
+    <script type="module" src="dashboard.js"></script>
 </head>
 
 <body>
@@ -67,6 +68,17 @@
 
     <hr>
 
+    <section id="translators">
+        <h2>Translators</h2>
+        <div>
+            <ul id="translator-list">
+                <!-- Translators dynamically added with JS -->
+            </ul>
+        </div>
+    </section>
+
+    <hr>
+
     <section id="client-list">
         <div class="left">
             <h2>Observers</h2>
@@ -81,8 +93,7 @@
             </ul>
         </div>
     </section>
+
     <hr>
-    <script type="module" src="dashboard.js"></script>
-    </script>
 </body>
 </html>

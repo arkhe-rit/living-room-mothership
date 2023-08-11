@@ -39,13 +39,11 @@ const createTranslatorEngine = (messageBus) => {
     switch (msg.type) {
       case 'query':
         switch (msg.query) {
-          case 'active-translators': 
+          case 'registered-translators': 
             const activeTranslators = Object.keys(translators).map(translatorName => {
-              return {
-                name: translatorName,
-                description: translators[translatorName].description
-              }
-            }).filter(translator => translators[translator.name].enabled);
+              let translator = translators[translatorName];
+              return translator;
+            });
             
             reply(activeTranslators);
             break;
@@ -116,7 +114,7 @@ const createTranslatorEngine = (messageBus) => {
     if (!desiredTranslator.enabled) {
       console.log(`Translator ${translatorName} is already disabled`);
     }
-    messageBus.unsubscribe(translatorName);
+    messageBus.unsubscribe(desiredTranslator.listeningChannel);
     desiredTranslator.enabled = false;
   };
 

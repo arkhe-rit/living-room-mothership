@@ -59,7 +59,6 @@ const setupRedisAdapter = async (io) => {
             //if the channel is empty, delete it
             if (subscriptions[channel].length === 0) {
                 delete subscriptions[channel];
-                subClient.unsubscribe(channel);
             }
         });
         socket.on('disconnect', () => {
@@ -69,7 +68,6 @@ const setupRedisAdapter = async (io) => {
                 //if the channel is empty, delete it
                 if (subscriptions[channel].length === 0) {
                     delete subscriptions[channel];
-                    subClient.unsubscribe(channel);
                 }
             }
         });
@@ -112,13 +110,13 @@ const createPlainRedisInterface = async () => {
 
                     callback(message, receivedChannel);
                 } catch (e) {
-                    console.error('Cannot parse message, passing forward as string');
+                    console.error('Cannot parse message, passing forward as string', channel);
                     callback(msg, receivedChannel);
                 }
             });
         },
         unsubscribe: (channel) => {
-            subClient.unsubscribe(channel);
+            subClient.pUnsubscribe(channel);
         }
     };
 };
