@@ -1,5 +1,5 @@
 import { createBusClient } from "../toolbox/messageBusClient";
-import { presets } from "./presets";
+import * as defaultPresets from "./presets";
 
 const knownChannels = [
     "*",
@@ -16,11 +16,11 @@ const knownChannels = [
 // Set-up Functions
 window.onload = (e) => {
     document.querySelector("#message-sender-button").onclick = sendMessage;
-    document.querySelectorAll(".preset").forEach((element) => element.onclick = presetFill);
+    document.querySelector("#add-preset-button").onclick = addPreset;
     loadChannels();
     loadTranslators();
     loadFilters();
-    console.log('Presets:', presets);
+    loadPresets();
 };
 
 // Create a messageBus to send and receive messages from redis. 
@@ -34,12 +34,10 @@ messageBus.subscribe('translator', (message, channel) => {
 messageBus.subscribe('*', (message, channel) => {
     if (!knownChannels.includes(channel)) {
         knownChannels.push(channel);
+        addFilter(channel);
         loadChannels();
-        loadFilters();
-        activeFilters.add(channel);
     }
     updateLog(String(channel), JSON.stringify(message));
-  
     if (message.command === "partytime") {
         partyTime(message.value);
     }
@@ -70,39 +68,71 @@ const loadTranslators = async () => {
     console.log('Active translators:', activeTranslators);
 }
 
-const activeFilters = new Set(knownChannels);
+let activeFilters = {};
+const filterDiv = document.querySelector("#messages-filter");
 const loadFilters = () => {
-    const filterDiv = document.querySelector("#messages-filter");
+    let storedFilters = JSON.parse(localStorage.getItem('activeFilters'));
+    if (storedFilters) {
+        activeFilters = storedFilters;
+    }
+    else {
+        knownChannels.forEach((channel) => activeFilters[channel] = true);
+    }
 
-    knownChannels.slice(filterDiv.childElementCount).forEach((channel) => {
-        const div = document.createElement("div");
-        const filter = document.createElement("input");
-        filter.type = "checkbox";
-        filter.value = channel;
-        filter.checked = true;
-        filter.onchange = e => {
-            console.log(e.target);
-            if (e.target.checked) {
-                activeFilters.add(e.target.value);
-                messagesDict[channel].forEach((message) => {
-                    message.style.height = "fit-content";
-                    message.style.padding = "4px 2vw";
-                });
-            }
-            else {
-                activeFilters.delete(e.target.value);
-                messagesDict[channel].forEach((message) => {
-                    message.style.height = "0px";
-                    message.style.padding = "0px";
-                });
-            }
-        };
-        div.appendChild(filter);
-        const label = document.createElement("label");
-        label.innerHTML = channel;
-        label.attributes.for = channel;
-        div.appendChild(label);
-        filterDiv.appendChild(div);
+    knownChannels.forEach((channel) => addFilter(channel));
+}
+
+const addFilter = (channel) => {
+    if (activeFilters[channel] === undefined) {
+        activeFilters[channel] = true;
+    }
+    const div = document.createElement("div");
+    const filter = document.createElement("input");
+    filter.type = "checkbox";
+    filter.value = channel;
+    filter.checked = activeFilters[channel];
+    filter.onchange = e => {
+        if (e.target.checked) {
+            activeFilters[e.target.value] = true;
+            messagesDict[channel].forEach((message) => {
+                message.style.height = "fit-content";
+                message.style.padding = "4px 2vw";
+            });
+        }
+        else {
+            activeFilters[e.target.value] = false;
+            messagesDict[channel].forEach((message) => {
+                message.style.height = "0px";
+                message.style.padding = "0px";
+            });
+        }
+        localStorage.setItem('activeFilters', JSON.stringify(activeFilters));
+    };
+    div.appendChild(filter);
+    const label = document.createElement("label");
+    label.innerHTML = channel;
+    label.attributes.for = channel;
+    div.appendChild(label);
+    filterDiv.appendChild(div);
+}
+
+let presets = defaultPresets.presets;
+const loadPresets = () => {
+    const presetDiv = document.querySelector("#preset-buttons");
+
+    // Load presets from local storage
+    let storedPresets = JSON.parse(localStorage.getItem('presets'));
+    if (storedPresets) {
+        presets = storedPresets;
+    }
+
+    Object.keys(presets).forEach((presetName) => {
+        const newPresetButton = document.createElement("button");
+        newPresetButton.classList.add("preset");
+        newPresetButton.innerHTML = presetName;
+        newPresetButton.dataset.presetName = presetName;
+        newPresetButton.onclick = presetFill;
+        presetDiv.appendChild(newPresetButton);
     });
 }
 
@@ -119,11 +149,16 @@ const sendMessage = () => {
         messageValue = messageValue.split(',');
         let newMessage = [];
         for (let i = 0; i < messageValue.length; i++) {
-            newMessage[i] = parseFloat(messageValue[i]);
+            if (!isNaN(Number(messageValue[i]))) {
+                newMessage.push(Number(messageValue[i]));
+            }
+            else {
+                newMessage.push(messageValue[i]);
+            }
         }
     }
-    else {
-        messageValue = parseFloat(messageValue);
+    else if (!isNaN(Number(messageValue))) {
+        messageValue = Number(messageValue);
     }
 
     let jsonMessage = {
@@ -144,6 +179,9 @@ const sendMessage = () => {
 const messageList = document.querySelector("#message-list");
 let numMessages = 0;
 const updateLog = (channel, message) => {
+    //check if the message list is scrolled to bottom to konw if we should autoscroll
+    let shouldScroll = messageList.scrollTop + messageList.clientHeight === messageList.scrollHeight;
+
     // Add message to log
     let newMessage = document.createElement("li");
     newMessage.innerHTML += '<p class="message-channel">' + channel + '</p>';
@@ -156,7 +194,7 @@ const updateLog = (channel, message) => {
     else { newMessage.style.backgroundColor = "whitesmoke"; }
     numMessages++;
 
-    if (!activeFilters.has(channel)) {
+    if (!activeFilters[channel]) {
         newMessage.style.height = "0px";
         newMessage.style.padding = "0px";
     }
@@ -166,14 +204,20 @@ const updateLog = (channel, message) => {
     messagesDict[channel].push(newMessage);
 
     // Auto-scroll to bottom. TODO: Only scroll to bottom if user is already scrolled down (like Twitch chat)
-    messageList.scrollTop = messageList.scrollHeight;
+    if (shouldScroll) {
+        messageList.scrollTop = messageList.scrollHeight;
+    }
 }
 
 const presetFill = (e) => {
-    document.querySelector("#channel-selector-input").value = presets[e.target.dataset.presetId].channel;
-    document.querySelector("#type-selector-input").value = presets[e.target.dataset.presetId].type;
-    document.querySelector("#command-selector-input").value = presets[e.target.dataset.presetId].command;
-    document.querySelector("#value-selector-input").value = presets[e.target.dataset.presetId].value;
+    const { channel = "", type = "", query = "", command = "", value = "" } = presets[e.target.dataset.presetName];
+
+
+    document.querySelector("#channel-selector-input").value = channel;
+    document.querySelector("#type-selector-input").value = type;
+    document.querySelector("#command-selector-input").value = command;
+    document.querySelector("#query-selector-input").value = query;
+    document.querySelector("#value-selector-input").value = value;
 }
 
 // Updates the status of projectors/observers.
@@ -189,4 +233,27 @@ const partyTime = (e) => {
     else {
         document.body.style.backgroundImage = "";
     }
+}
+
+const addPreset = (e) => {
+    //create a popup that prompts the user for a name for the preset
+    const name = prompt("Enter a name for the preset");
+
+    //get the rest of the preset information from the inputs on the page and add it the presets array
+    const channel = document.querySelector("#channel-selector-input").value;
+    const type = document.querySelector("#type-selector-input").value;
+    const command = document.querySelector("#command-selector-input").value;
+    const query = document.querySelector("#query-selector-input").value;
+    const value = document.querySelector("#value-selector-input").value;
+    
+    presets[name] = {
+        channel,
+        type,
+        command,
+        query,
+        value
+    };
+
+    //write the presets to the user's local storage
+    localStorage.setItem('presets', JSON.stringify(presets));
 }
