@@ -13,7 +13,14 @@ messageBus.subscribe('projector/tv', (message) => {
                     break;
                 case 'change-filter':
                     //shader filter settings: [horizontalTearStrength, blackWhite, verticalJerk, chromaticAberration]
-                    shaders.switchShader(message.value, gl);
+                    // shaders.switchShader(message.value, gl);
+                    console.log(message.value.vertical_jerk);
+                    shaders.switchShader(gl, {
+                        horizontalTearStrength: message.value.horizontal_tear_strength,
+                        blackWhite: message.value.black_white,
+                        verticalJerk: message.value.vertical_jerk,
+                        chromaticAberration: message.value.chromatic_aberration
+                    });
                     //console.log(`Now using filter: ${shaders.shaderProgramIndex}`)
                     break;
             }

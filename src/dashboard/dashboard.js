@@ -46,7 +46,7 @@ messageBus.subscribe('*', (message, channel) => {
         addFilter(channel);
         loadChannels();
     }
-    updateLog(String(channel), JSON.stringify(message));
+    // updateLog(String(channel), JSON.stringify(message));
     if (message.command === "partytime") {
         partyTime(message.value);
     }
@@ -184,19 +184,13 @@ const addPreset = (presetName) => {
     newPresetButton.classList.add("preset");
     newPresetButton.innerHTML = presetName;
     newPresetButton.dataset.presetName = presetName;
-    newPresetButton.onclick = presetFill;
+    newPresetButton.onclick = (e) => {
+        const { channel = "", type = "", query = "", command = "", value = "" } = presets[e.target.dataset.presetName];
+        presetFill(channel, type, command, query, value);
+    };
     presetDiv.appendChild(newPresetButton);
 }
 
-const presetFill = (e) => {
-    const { channel = "", type = "", query = "", command = "", value = "" } = presets[e.target.dataset.presetName];
-
-    document.querySelector("#channel-selector-input").value = channel;
-    document.querySelector("#type-selector-input").value = type;
-    document.querySelector("#command-selector-input").value = command;
-    document.querySelector("#query-selector-input").value = query;
-    document.querySelector("#value-selector-input").value = value;
-}
 //#endregion
 
 // Checks validity of message and sends to redis. Called when 'Publish' button is clicked.
@@ -382,4 +376,4 @@ const debug = () => {
     messageBus.publish('observer/rug', JSON.stringify({ "type": "algebra", "value": [[0.2,0.2],[0.2,0.2]] }));
     setTimeout(debug, 500);
 }
-debug();
+// debug();

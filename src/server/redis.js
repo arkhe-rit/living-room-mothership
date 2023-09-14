@@ -111,7 +111,6 @@ const createPlainRedisInterface = async () => {
     },
     subscribe: (channel, callback) => {
       subClient.pSubscribe(channel, (msg, receivedChannel) => {
-        console.log('msg', msg);
         let message = msg;
         try {
           // parse message

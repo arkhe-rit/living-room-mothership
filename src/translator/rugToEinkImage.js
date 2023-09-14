@@ -1,7 +1,7 @@
 let doneThrottling = true;
 
 const rugToEinkImage = (msgValue) => {
-    const image = (msgValue.length / 2) % 5;
+    const image = Math.floor(msgValue.length) % 5;
     if (doneThrottling) {
         doneThrottling = false;
         setTimeout(() => {

@@ -19,6 +19,11 @@ uniform float u_greyScaleOpt;
 uniform float u_vertMovementOpt;
 uniform float u_bottomStaticOpt;
 
+float maxHorizontalFuzz = 0.01;
+
+float fuzzStrength = maxHorizontalFuzz * u_horizontalFuzzStr;
+
+
 // Noise generation functions borrowed from: 
 // https://github.com/ashima/webgl-noise/blob/master/src/noise2D.glsl
 
@@ -95,8 +100,8 @@ void main() {
     
     float jerkOffset = (1.0 - step(snoise(vec2(u_time * 1.3, 5.0)), 0.8)) * 0.05;
 
-    float fuzzOffset = snoise(vec2(u_time * 15.0, uv.y * 80.0)) * u_horizontalFuzzStr;
-    float largeFuzzOffset = snoise(vec2(u_time * 1.0, uv.y * 25.0)) * u_horizontalFuzzStr;
+    float fuzzOffset = snoise(vec2(u_time * 15.0, uv.y * 80.0)) * fuzzStrength;
+    float largeFuzzOffset = snoise(vec2(u_time * 1.0, uv.y * 25.0)) * fuzzStrength;
   
     float vertMovementOn = (1.0 - step(snoise(vec2(u_time * u_jerkFreq, 8.0)), 0.4)) * u_vertMovementOpt;
     float vertJerk = (1.0 - step(snoise(vec2(u_time * 1.5, 5.0)), 0.6)) * u_vertJerkOpt;

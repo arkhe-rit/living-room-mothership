@@ -88,25 +88,25 @@ const loadShaders = async (gl) => {
 }
 
 //shader filter settings: [horizontalFuzzStrength, blackWhite, verticalJerkStrength, static]
-const switchShader = (filterSettings, gl) => {
-    if (filterSettings[0] !== -1) {
+const switchShader = (gl, {horizontalTearStrength = -1, blackWhite = -1, verticalJerk = -1, chromaticAberration = -1}) => {
+    if (horizontalTearStrength !== -1) {
         const u_horizontalTear = gl.getUniformLocation(getShaderProgram(), 'u_horizontalFuzzStr');
-        gl.uniform1f(u_horizontalTear, filterSettings[0]);
+        gl.uniform1f(u_horizontalTear, horizontalTearStrength);
     }
 
-    if (filterSettings[1] !== -1) {
+    if (blackWhite !== -1) {
         const u_blackWhite = gl.getUniformLocation(getShaderProgram(), 'u_greyScaleOpt');
-        gl.uniform1f(u_blackWhite, filterSettings[1]);
+        gl.uniform1f(u_blackWhite, blackWhite);
     }
 
-    if (filterSettings[2] !== -1) {
+    if (verticalJerk !== -1) {
         const u_verticalJerk = gl.getUniformLocation(getShaderProgram(), 'u_vertMovementOpt');
-        gl.uniform1f(u_verticalJerk, filterSettings[2]);
+        gl.uniform1f(u_verticalJerk, verticalJerk);
     }
 
-    if (filterSettings[3] !== -1) {
+    if (chromaticAberration !== -1) {
         const u_chromaticAberration = gl.getUniformLocation(getShaderProgram(), 'u_bottomStaticOpt');
-        gl.uniform1f(u_chromaticAberration, filterSettings[3]);
+        gl.uniform1f(u_chromaticAberration, chromaticAberration);
     }
 }
 

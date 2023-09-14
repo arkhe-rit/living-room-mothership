@@ -1,5 +1,6 @@
 import { chairsToLampsTranslator } from './chairsToLamps.js';
 import { chairsToTVTranslator } from './chairsToTVChannel.js';
+import { coastersToTVFilterTranslator } from './coastersToTVFilter.js';
 import { cvMugToTVFilterTranslator } from './cvMugToTVFilter.js';
 import { ardMugToTVFilterTranslator } from './ardMugToTVFilter.js';
 import { rugToTVChannelTranslator } from './rugToTVChannel.js';
@@ -10,8 +11,9 @@ const rawTranslators = [
   chairsToLampsTranslator,
   chairsToTVTranslator,
   cvMugToTVFilterTranslator,
-  ardMugToTVFilterTranslator,
-  rugToTVChannelTranslator,
+  // ardMugToTVFilterTranslator,
+  //rugToTVChannelTranslator,
+  coastersToTVFilterTranslator,
   cvMugToEinkImageTranslator,
   rugToEinkImageTranslator
 ]
